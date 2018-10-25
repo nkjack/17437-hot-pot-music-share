@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ebe034b-7301-4cab-a899-29cb30e46043" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/static/hot_spot_music_share/bootstrap.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/create_room.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/discover_base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/discover_places.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/discover_rooms.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/forgot_password.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/logged_in_base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/logged_out_base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_created_rooms.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_dj_rooms.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_favorites.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_space_base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_as_dj.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_as_listener.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hot_spot_music_share/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/hot_spot_music_share/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hot_spot_music_share/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/music_share_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/music_share_app/urls.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,24 +24,24 @@
         <counts>
           <entry key="css" value="1" />
           <entry key="html" value="16" />
-          <entry key="py" value="1" />
+          <entry key="py" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="1" />
           <entry key="HTML" value="16" />
-          <entry key="Python" value="1" />
+          <entry key="Python" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="5" />
+          <entry key="py" value="157" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="5" />
+          <entry key="Python" value="157" />
         </counts>
       </usages-collector>
     </session>
@@ -65,91 +49,46 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/discover_places.html">
+        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
+            <state relative-caret-position="-324">
+              <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
+              <folding>
+                <element signature="e#1270#1298#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/discover_rooms.html">
+        <entry file="file://$PROJECT_DIR$/music_share_app/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
+            <state relative-caret-position="684">
+              <caret line="137" column="57" selection-start-line="137" selection-start-column="57" selection-end-line="137" selection-end-column="57" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_space_base.html">
+        <entry file="file://$PROJECT_DIR$/music_share_app/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_favorites.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_created_rooms.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/my_dj_rooms.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_as_dj.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_as_listener.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
+            <state relative-caret-position="603">
+              <caret line="27" lean-forward="true" selection-start-line="27" selection-start-column="1" selection-end-line="31" selection-end-column="67" />
+              <folding>
+                <element signature="e#639#671#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/models.py">
+        <entry file="file://$PROJECT_DIR$/hot_spot_music_share/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-180">
-              <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
+            <state relative-caret-position="108">
+              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+              <folding>
+                <element signature="e#1#38#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -161,6 +100,7 @@
       <list>
         <option value="CSS File" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -188,6 +128,9 @@
         <option value="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_as_dj.html" />
         <option value="$PROJECT_DIR$/hot_spot_music_share/templates/hot_spot_music_share/room_as_listener.html" />
         <option value="$PROJECT_DIR$/hot_spot_music_share/models.py" />
+        <option value="$PROJECT_DIR$/music_share_app/settings.py" />
+        <option value="$PROJECT_DIR$/music_share_app/urls.py" />
+        <option value="$PROJECT_DIR$/hot_spot_music_share/urls.py" />
       </list>
     </option>
   </component>
@@ -232,13 +175,6 @@
               <item name="music_share_app" type="462c0819:PsiDirectoryNode" />
               <item name="hot_spot_music_share" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="music_share_app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="music_share_app" type="462c0819:PsiDirectoryNode" />
-              <item name="hot_spot_music_share" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="hot_spot_music_share" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="music_share_app" type="b2602c69:ProjectViewProjectNode" />
@@ -475,8 +411,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hot_spot_music_share/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-180">
-          <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
+        <state relative-caret-position="-324">
+          <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
+          <folding>
+            <element signature="e#1270#1298#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/music_share_app/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="684">
+          <caret line="137" column="57" selection-start-line="137" selection-start-column="57" selection-end-line="137" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/music_share_app/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-start-column="1" selection-end-line="31" selection-end-column="67" />
+          <folding>
+            <element signature="e#639#671#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_spot_music_share/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+          <folding>
+            <element signature="e#1#38#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
