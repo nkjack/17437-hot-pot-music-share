@@ -6,7 +6,7 @@
 - [Sam][2 hours] With Spotify API, synchronize playback across 2 concurrent users
 
 ### Views Html Templates
-- [Rui][1 hour] Create wireframe sketches and get feedback from team (user story)   
+- [Rui][2 hour] Design UI/UX with wireframes, and get feedback of the user story from team, then confirm the UI concept keywords(such as:  *playful *,  *hich-tech *,  *simple & elegant *)
 - [Rui][6 hours] Implement necessary static file(s) (HTML/CSS/JS); focusing on extensibility for future changes (e.g. more settings, different room modes). implement the following static page drafts: 
 	- Login/Register
 	- Room(with current playlist, room information, settings of the room)
