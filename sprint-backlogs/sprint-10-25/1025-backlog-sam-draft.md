@@ -27,5 +27,8 @@
 ### 'My' Rooms View
 - [Noam][3 hours] Implement a page to be able to see all rooms a user can: manage, DJ for, and recently joined (Django code, bare-bones HTML)
 
+### MVP Completion
+- [Noam/Rui/Sam][2 hours] Meet and clean up project to make a presentable minimal viable product
+
 ## Backlog (Future Sprints)
 - [?][? hours] Implement 'Discover' rooms
