@@ -20,9 +20,9 @@
 	- All the rest
 
 ### Modelize the app
--[Sam][1 hour] Profile User and suggest models updates according to spotify behavior (songs, playlists) 
--[Rui][1 hour] Suggest models updates according to design issues she is encountring with.
--[Noam][2 hours] How to represent all of the models of our app that will be used in our different views. Makse sure our basic models.py is working fluently.
+- [Sam][1 hour] Profile User and suggest models updates according to spotify behavior (songs, playlists)
+- [Rui][1 hour] Suggest models updates according to design issues she is encountring with.
+- [Noam][2 hours] How to represent all of the models of our app that will be used in our different views. Makse sure our basic models.py is working fluently.
 
 ### Room Views
 Using the model structure we construct early in the sprint we can now implement the following views.
