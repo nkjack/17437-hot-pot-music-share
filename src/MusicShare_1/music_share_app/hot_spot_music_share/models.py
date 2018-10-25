@@ -1,5 +1,3 @@
-from django.db import models
-
 # Create your models here.
 """
 Models
@@ -30,27 +28,8 @@ HotSpot Music Share will have 7 main models:
     - Extension of ProfileUser with ability to save a playlist for a particular room
 Below is a rough Python draft of the above models.
 """
-
-
-class ProfileUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    spotify_id =  ## foreginKey to spotify profile user
-    picture = models.ImageField(upload_to="profile-photos", blank=True)
-
-    favorite_rooms = models.ManyToManyField(room, related_name='favorite')
-    my_rooms = models.ManyToManyField(Room, related_name='my_room')
-
-    def __str__(self):
-        return self.user.username
-
-
-class DjUser(models.Model):
-    user = models.OneToOneField(ProfileUser, on_delete=models.CASCADE)
-    current_playlist = models.ForeignKey(Playlist)
-    room = models.ForeignKey(Room)
-
-    def __str__(self):
-        return "{}, {}".format(user.username, room.name)
+from django.db import models
+from django.contrib.auth.models import User
 
 
 class Room(models.Model):
@@ -62,7 +41,6 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Song(models.Model):
     spotify_song_id = models.CharField(max_length=100)  # song will probably have id link to a Spotify API
@@ -97,5 +75,28 @@ class Vote(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class ProfileUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # spotify_id =  ## foreginKey to spotify profile user
+    picture = models.ImageField(upload_to="profile-photos", blank=True)
+
+    favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
+    my_rooms = models.ManyToManyField(Room, related_name='my_room')
+
+    def __str__(self):
+        return self.user.username
+
+
+class DjUser(models.Model):
+    user = models.OneToOneField(ProfileUser, on_delete=models.CASCADE)
+    current_playlist = models.ForeignKey(Playlist)
+    room = models.ForeignKey(Room)
+
+    def __str__(self):
+        return "{}, {}".format(self.user.username, self.room.name)
+
+
+
 
 
