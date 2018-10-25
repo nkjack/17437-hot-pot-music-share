@@ -39,7 +39,7 @@ Using the model structure we construct early in the sprint we can now implement 
 - [Noam][2 hours] Implement voting up/down for a currently played song (Django code, bare-bones HTML)
 - [Noam][] Make sure Rui knows what *context* from DJ room views contains.
 
-### 'My' Rooms View
+#### 'My' Rooms View
 - [Noam][3 hours] Implement a page to be able to see all rooms a user can: manage, DJ for, and recently joined (Django code, bare-bones HTML)
 
 ### MVP Completion
