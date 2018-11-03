@@ -30,7 +30,8 @@ Below is a rough Python draft of the above models.
 """
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class Room(models.Model):
     name = models.CharField(max_length=42)
@@ -38,22 +39,57 @@ class Room(models.Model):
     location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
     place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
 
-
     def __str__(self):
         return self.name
 
+
+# cited from https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    spotify_id = models.IntegerField(default=0)
+    # short_bio = models.TextField(max_length=420,default="")
+    # age = models.IntegerField(default=0)
+    # picture = models.ImageField(upload_to="profile-photos", blank=True)
+    # follows = models.ManyToManyField(User, related_name='follow')
+
+    favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
+    my_rooms = models.ManyToManyField(Room, related_name='my_room')
+
+    def __str__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
+# class DjUser(models.Model):
+#     user = models.OneToOneField(ProfileUser, on_delete=models.CASCADE)
+#     current_playlist = models.ForeignKey(Playlist)
+#     room = models.ForeignKey(Room)
+#
+#     def __str__(self):
+#         return "{}, {}".format(self.user.username, self.room.name)
+#
+
+
 class Song(models.Model):
     spotify_song_id = models.CharField(max_length=100)  # song will probably have id link to a Spotify API
-
     song_name = models.CharField(max_length=42)
     votes_score = models.IntegerField()
 
     belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE)
     is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
-
-def __str__(self):
-    return self.song_name
+    def __str__(self):
+        return self.song_name
 
 
 class Playlist(models.Model):
@@ -76,25 +112,6 @@ class Vote(models.Model):
     def __str__(self):
         return self.user.username
 
-class ProfileUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # spotify_id =  ## foreginKey to spotify profile user
-    picture = models.ImageField(upload_to="profile-photos", blank=True)
-
-    favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
-    my_rooms = models.ManyToManyField(Room, related_name='my_room')
-
-    def __str__(self):
-        return self.user.username
-
-
-class DjUser(models.Model):
-    user = models.OneToOneField(ProfileUser, on_delete=models.CASCADE)
-    current_playlist = models.ForeignKey(Playlist)
-    room = models.ForeignKey(Room)
-
-    def __str__(self):
-        return "{}, {}".format(self.user.username, self.room.name)
 
 
 
