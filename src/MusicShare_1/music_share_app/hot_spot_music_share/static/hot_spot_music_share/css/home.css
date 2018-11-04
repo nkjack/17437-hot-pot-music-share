@@ -1,0 +1,34 @@
+canvas{
+  position:absolute;
+top:-20px;
+}
+
+body {
+  overflow: hidden;
+  background: #EDEDED;
+  padding-top: 100px;
+  font-family: arial;
+}
+p{margin:15px 0px;}
+.navbar {
+  min-height:50px;
+  background-color:  #eedd82;
+}
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn{
+    border-color: #FFA500;
+    color:black;
+}
+
+.row{
+    padding-top: 340px;
+}
+.intro{
+      align-items: center;
+}

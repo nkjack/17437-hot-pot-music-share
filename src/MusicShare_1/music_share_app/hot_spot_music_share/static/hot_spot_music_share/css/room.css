@@ -5,11 +5,13 @@ body {
 
 body {
   padding-top: 100px;
-  background-color: #9370DB;
+  background-image:url("../img/welcome screen_-06.png");
+  background-size:cover;
 }
 
  .navbar {
   min-height:50px;
+  background-color: #eedd82;
 }
 
 .navbar-brand {
@@ -32,6 +34,9 @@ body {
   padding: 9px 10px !important;
 }
 
+.btn{
+    background-color: #FFA500;
+}
 @media (min-width: 768px) {
   .navbar-nav > li > a {
     /* (80px - line-height of 27px) / 2 = 26.5px */
@@ -85,3 +90,14 @@ body {
   margin-bottom: 15px;
   margin-top: 15px;
 }
+
+.box-shadow{
+  min-height:400px;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
+
+.people{
+  background-color: 
+}
+

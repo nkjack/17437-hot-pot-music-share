@@ -16,7 +16,7 @@
   <body>
 
   	<!-- This part should be in navbar.html which extends this -->
-  	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  	<nav class="navbar navbar-expand-md navbar-light fixed-top">
       <a class="navbar-brand" href="#">Navbar</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -53,7 +53,7 @@
 	  <div class="row">
 	    <div class="col">
 	     	<audio src='Kiss_the_Sky.mp3' controls preload='auto'></audio>
-			<div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="dj_list">
+			<div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
 				
 				<div class="media pt-3" id = "song_0">
         			<img src="../../static/hot_spot_music_share/img/hearts.png" alt="" class="mr-2 rounded" width="25">
@@ -85,13 +85,11 @@
 			        </div>
 			    </div>
 
-			 <button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-plus"></span> 
-        	</button>
+
 			</div>
 	    </div>
 	    <div class="col">
-	      <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id = "panel">
+	      <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "panel">
 				DJ: Your Spotify List
 				Should be extended by DJ view
 
@@ -99,7 +97,7 @@
 			</div>
 	    </div>
 	    <div class="col">
-	       <div class="my-3 p-3 bg-dark text-light rounded box-shadow" id = "people">
+	       <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "people">
         		<h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
         		<div class="media text-muted pt-3" id = "user_1">
         			<img src="../../static/hot_spot_music_share/img/user_1.png" alt="" class="mr-2 rounded" width="25">
@@ -127,9 +125,14 @@
 			            </div>
 			        </div>
 			    </div>
+
+			    <button type="button" class=" float-right btn btn-lg">
+          			<span class="glyphicon">&#x2b;</span> 
+        	</button>
 	    </div>
 	  </div>
 	</div>
+
     <!-- Bootstrap JS -->
       <script src="../../static/hot_spot_music_share/js/popper.min.js"></script>
       <script src = "../../static/hot_spot_music_share/js/jquery-3.3.1.min.js"></script>
