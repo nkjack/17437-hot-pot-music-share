@@ -2,7 +2,7 @@ from django.test import TestCase
 # from django.test import Client
 
 from django.contrib.auth.models import User
-from hot_spot_music_share.models import Room, Song, Playlist, Vote, Profile # , DjUser
+from hot_pot_music_share.models import Room, Song, Playlist, Vote, Profile # , DjUser
 
 
 
@@ -24,16 +24,16 @@ class ProfileTestCase(TestCase):
         self.assertEqual(p.last_name, "kahan")
         self.assertEqual(p.email, "n@gmail.com")
 
-#
-# class Room(TestCase):
-#     def setUp(self):
-#         Room.objects.create(name="room_1", location="test_1", place="test_1",)
-#         # Student.objects.create(name="cat", sound="meow")
-#         # self.client = Client()
-#
-#         def test_create_room(self):
-#             nkahan = Room.objects.get(name="room_1")
-#
-#             self.assertEqual(nkahan.name, "room_1")
-#             self.assertEqual(nkahan.location, "test_1")
-#             self.assertEqual(nkahan.place, "test_1")
+
+class Room(TestCase):
+    def setUp(self):
+        Room.objects.create(name="room_1", location="test_1", place="test_1",)
+        # Student.objects.create(name="cat", sound="meow")
+        # self.client = Client()
+
+        def test_create_room(self):
+            nkahan = Room.objects.get(name="room_1")
+
+            self.assertEqual(nkahan.name, "room_1")
+            self.assertEqual(nkahan.location, "test_1")
+            self.assertEqual(nkahan.place, "test_1")

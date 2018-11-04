@@ -28,10 +28,23 @@ HotSpot Music Share will have 7 main models:
     - Extension of ProfileUser with ability to save a playlist for a particular room
 Below is a rough Python draft of the above models.
 """
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+
+import os
+from json import JSONDecodeError
+import spotipy.util as util
+
+SPOTIPY_CLIENT_ID = '04fb29de4495438aa354af4a57fd47a4'
+SPOTIPY_CLIENT_SECRET = '38378c5d52dc467da1feeac2f53cc6fc'
+SCOPE = 'user-read-private user-read-playback-state user-modify-playback-state' + \
+        ' streaming user-read-birthdate user-read-email user-read-private' # Needed for web playback SDK
+WEB_PLAYBACK_TOKEN = 'BQA6z3s0KVEriyG89oB5UMI9g3p7ldOeMyN6aEMBqOFNZKkI7Hgfkhn1o4cGl13UwkoHiYW4kg3vgZGmexv4KCU_u9c2JrA6hSawyuAJ_QlxOJkMW4fR7pB5sTyDWUv4Hsm59W60w8RJaepgbeMPNPLi_kLJVYWMl3YN'
+
+
 
 class Room(models.Model):
     name = models.CharField(max_length=42)
@@ -52,11 +65,36 @@ class Profile(models.Model):
     # picture = models.ImageField(upload_to="profile-photos", blank=True)
     # follows = models.ManyToManyField(User, related_name='follow')
 
-    favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
-    my_rooms = models.ManyToManyField(Room, related_name='my_room')
+    # favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
+    # my_rooms = models.ManyToManyField(Room, related_name='my_room')
+
+    spotify_username = models.TextField(max_length=30, default="")
+    token = models.TextField(max_length=420, default="")
+    web_play_back_token = models.TextField(max_length=420, default="")
+
 
     def __str__(self):
         return self.user.username
+
+    # Get a Spotify auth token
+    def spotify_get_token(self):
+
+        username = self.spotify_username
+        # Erase cache and prompt for user permission
+        try:
+            token = util.prompt_for_user_token(username,
+                                               scope=SCOPE,
+                                               client_id=SPOTIPY_CLIENT_ID,
+                                               client_secret=SPOTIPY_CLIENT_SECRET,
+                                               redirect_uri='http://localhost:8000/spotify-callback/')  # add scope
+        except (AttributeError, JSONDecodeError):  # If reading from cache went bad
+            os.remove(f".cache-{username}")
+            token = util.prompt_for_user_token(username,
+                                               scope=SCOPE,
+                                               client_id=SPOTIPY_CLIENT_ID,
+                                               client_secret=SPOTIPY_CLIENT_SECRET,
+                                               redirect_uri='http://localhost:8000/spotify-callback/')  # add scope
+        return token
 
 
 @receiver(post_save, sender=User)
@@ -81,12 +119,12 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class Song(models.Model):
-    spotify_song_id = models.CharField(max_length=100)  # song will probably have id link to a Spotify API
+    song_id = models.CharField(max_length=100)  # song will probably have id link to a Spotify API
     song_name = models.CharField(max_length=42)
-    votes_score = models.IntegerField()
+    # votes_score = models.IntegerField(default=0)
 
     belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
+    # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     def __str__(self):
         return self.song_name
@@ -94,7 +132,7 @@ class Song(models.Model):
 
 class Playlist(models.Model):
     belongs_to_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
+    # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
 
