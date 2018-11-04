@@ -37,3 +37,26 @@ class Room(TestCase):
             self.assertEqual(nkahan.name, "room_1")
             self.assertEqual(nkahan.location, "test_1")
             self.assertEqual(nkahan.place, "test_1")
+
+class Playlist(TestCase):
+    playlist = None
+
+    def setUp(self):
+        global playlist
+
+        # Create a dummy room
+        Room.objects.create(name="room_1", location="test_1", place="test_1",)
+
+        # Create the playlist
+        playlist = Playlist(belongs_to_room=Room.objects.get(name="room_1"))
+        playlist.save()
+
+    def test_create_simple(self):
+        global playlist
+
+        expected = ['66kQ7wr4d2LwwSjr7HXcyr']
+        playlist.set_songs(expected)
+
+        result = playlist.get_songs()
+
+        self.assertEquals(expected, result)

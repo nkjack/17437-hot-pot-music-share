@@ -12,5 +12,7 @@ urlpatterns = [
 
     # Spotify stuff
     path('get-spotify-username', views.get_spotify_username),
-    path('spotify-auth', views.get_spotify_username),
+    path('spotify-post-auth', views.spotify_post_auth),
+    path('spotify-callback', views.spotify_callback),
+    path('create-demo-room', views.create_demo_room),
 ]

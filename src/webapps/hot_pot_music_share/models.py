@@ -28,6 +28,7 @@ HotSpot Music Share will have 7 main models:
     - Extension of ProfileUser with ability to save a playlist for a particular room
 Below is a rough Python draft of the above models.
 """
+import json
 
 from django.db import models
 from django.contrib.auth.models import User

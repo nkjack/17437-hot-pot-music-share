@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spotify Room</title>
+</head>
+<body>
+{# Display room name #}
+<h1>{{ room.name }}</h1>
+
+{# TODO: Playlist #}
+<ol>
+{% for song in playlist.songs.all %}
+    <li>{{ song.song_name }} ({{ song.song_id }})</li>
+{% endfor %}
+</ol>
+
+{# TODO: Search request #}
+{# TODO: Search results #}
+
+{# TODO: Currently playing #}
+{# TODO: Playback controls #}
+</body>
+</html>
