@@ -1,10 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../static/hot_spot_music_share/img/logo.png"> 
+    <title>Hot Pot Signin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/hot_spot_music_share/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/hot_spot_music_share/css/login.css" rel="stylesheet">
+
+
+  </head>
+
+  <body>
+    <form class="form-signin">
+      <img class="center" src="../../static/hot_spot_music_share/img/logo.png" alt="" height="100" >
+      <ul class = "nav nav-tabs">
+        <li class ="nav-item">
+          <a class = "nav-link active" id = "login-tab" data-toggle = "tab" href = "#login" aria-controls = "login" aria-selected = "true">Login</a>
+        </li>
+        <li class ="nav-item">
+          <a class = "nav-link" id = "register-tab" data-toggle = "tab" href = "#register" aria-controls = "register" aria-selected = "false">Register</a>
+        </li>
+      </ul>
+
+
+      <div class = "tab-content" id = "TabContent">
+        <div class = "tab-pane fade show active" id ="login" role = "tabpanel" aria-labelledby="login-tab">
+          
+          <!-- login -->
+          <label for="inputEmail" class="sr-only">User Name</label>
+          <input type="username" id="username" class="form-control" placeholder="Username" required autofocus>
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me"> Remember me
+            </label>
+          </div>
+          <a href = "./Home.html"class="btn btn-lg btn-secondary btn-block" type="submit" >Sign in</a>
+        </div>
+
+        <div class = "tab-pane fade" id = "register" role = "tabpanel" aria-labelledby="register-tab">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="firstName">First Name</label>
+              <input type="text" class="form-control" id = "reg_firstName" placeholder="Sarah" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" id = "reg_lastName" placeholder="Connor" required>
+             </div> 
+          </div>
+          
+          <div class = "form-group">
+            <label for = "inputEmail">Email</label>
+            <input type ="email" class = "form-control" id = "reg_email" placeholder="executeOrder66@gmail.com"required>
+          </div>
+
+          <div class = "form-group">
+            <label for = "inputGroup">Username</label>
+            <input type ="username" class = "form-control" id = "reg_username" placeholder="myUsername"required>  
+          </div>
+
+          <div class = "form-group">
+            <label for="inputPassword5">Password</label>
+            <input type="password" id="reg_password" class="form-control" aria-describedby="passwordHelpBlock" placeholder= "123456" required>
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+            </small>           
+          </div>
+
+        <a href = "Explore.html" type="submit" class="btn btn-secondary" >Register</a>
+        </div>
+      </div>
+    </form>
+
+    <!-- Bootstrap JS -->
+
+	  <script src="../../static/hot_spot_music_share/js/popper.min.js"></script>
+      <script src = "../../static/hot_spot_music_share/js/jquery-3.3.1.min.js"></script>
+      <script src="../../static/hot_spot_music_share/js/bootstrap.min.js"></script>
+   
+  </body>
 </html>
