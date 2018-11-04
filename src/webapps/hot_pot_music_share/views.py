@@ -36,7 +36,6 @@ def spotify_post_auth(request):
 
     # Get token
     token = spotify_get_token(username)
-
     # Create User here, if it doesn't exist
     if not User.objects.filter(username=username).exists():
         user = User.objects.create_user(username=username) # Same username as spotify username for now
@@ -76,7 +75,7 @@ def spotify_post_auth(request):
         user_playlists.append((searchResult['name'], searchResult['id']))
 
     context = {'username':displayName, 'currently_playing':currently_playing, 'user_playlists':user_playlists}
-
+    print(context)
     return render(request, 'hot_pot_music_share/spotify/spotify-post-auth.html', context)
 
 # SPOTIFY DEMO (STEP 3) - Create a simple room
@@ -84,7 +83,7 @@ def create_demo_room(request):
     room_name = request.GET['room-name']  # FIXME: Catch key error
 
     # Create the room
-    room = Room(name=room_name, user_manager=User.objects.get(username='sampromises')) # FIXME: Who to set user_manager to?
+    room = Room(name=room_name, user_manager=User.objects.get(username='nkjack84')) # FIXME: Who to set user_manager to?
     room.save()
 
     # Create the playlist
@@ -134,14 +133,18 @@ def spotify_get_token(username):
                                            client_id=SPOTIPY_CLIENT_ID,
                                            client_secret=SPOTIPY_CLIENT_SECRET,
                                            redirect_uri='http://localhost:8000/spotify-callback')  # add scope
+
+
+
     except (AttributeError, JSONDecodeError):  # If reading from cache went bad
         os.remove(f".cache-{username}")
+        print("blablabla")
         token = util.prompt_for_user_token(username,
                                            scope=SCOPE,
                                            client_id=SPOTIPY_CLIENT_ID,
                                            client_secret=SPOTIPY_CLIENT_SECRET,
                                            redirect_uri='http://localhost:8000/spotify-callback')  # add scope
-
+        print("blablabla2")
     return token
 
 # Transfer Spotify playback to specified device ID
@@ -155,6 +158,41 @@ def spotify_transfer_playback(device_id, username='sampromises'):
     # Get current device
     spotify.transfer_playback(device_id, force_play=True)
 
+
+#search song in spotify
+def search_song(request):
+    context = {}
+    room = request.GET['room']
+    search_song = request.GET['spotify-song']
+
+    import spotipy
+    import pprint
+
+    # if len(sys.argv) > 1:
+    #     search_str = sys.argv[1]
+    # else:
+    #     search_str = 'Radiohead'
+    user = User.objects.get(username='nkjack84')
+    print(user)
+    sp = spotipy.Spotify(auth=user.profile.spotify_get_token())
+    result = sp.search(search_song)
+    pprint.pprint(result)
+
+    search_results = []
+    context['room'] = room
+    context['search_results'] = search_results
+    return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
+
+
+def add_song_to_room_playlist(request):
+    context = {}
+    room = request.GET['room']
+    searched_song_id = request.GET['song']
+
+    playlist = Playlist.objects.get(belongs_to_room=room)
+    song = Song(song_id=searched_song_id, song_name='All The Stars', belongs_to_room=room)
+
+    playlist.songs.add(song)
 
 
 

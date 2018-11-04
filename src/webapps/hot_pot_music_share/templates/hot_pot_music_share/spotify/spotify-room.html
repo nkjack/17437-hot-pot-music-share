@@ -16,9 +16,114 @@
 </ol>
 
 {# TODO: Search request #}
+<form action="/search-song">
+    <label>
+        Spotify username:
+        <input type="text" name="spotify-song">
+        <button type="submit">Submit</button>
+    </label>
+
+    <input type="hidden" name="room" value="{{ room }}">
+</form>
 {# TODO: Search results #}
+<ul>
+    {% for song in search_results %}
+        <li>{{ song }}</li>
+    {% endfor %}
+</ul>
+
 
 {# TODO: Currently playing #}
+<button onclick="resumePlayback()">Resume</button>
+<button onclick="togglePlayback()">Play/Pause</button>
+<button onclick="toggleMute()">Mute/Unmute</button>
+<button onclick="getState()">Get state</button>
+
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+<script>
+    var player;
+    var preMuteVolume;
+    var deviceId;
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        const token = 'BQBUjQHHM19iIA-0SRku74-0lLFNpm5NSIKrupRevSyqN1-hMxhz31QtZ2I4DQ3Bekj98fMVa6LO3Lt6iTvSM5NXS4NaGele0fQSdjUYeuaXrNPUrNKWw38lsVZIDOzT9r9R71kr4uivmJrXV187lJxAvrp-M7LAd7ky';
+        player = new Spotify.Player({
+            name: 'Web Playback SDK Quick Start Player',
+            getOAuthToken: cb => {
+                cb(token);
+            }
+        });
+        // Error handling
+        player.addListener('initialization_error', ({message}) => {
+            console.error(message);
+        });
+        player.addListener('authentication_error', ({message}) => {
+            console.error(message);
+        });
+        player.addListener('account_error', ({message}) => {
+            console.error(message);
+        });
+        player.addListener('playback_error', ({message}) => {
+            console.error(message);
+        });
+        // Playback status updates
+        player.addListener('player_state_changed', state => {
+            console.log(state);
+        });
+        // Ready
+        player.addListener('ready', ({device_id}) => {
+            deviceId = device_id;
+            console.log('Ready with Device ID', device_id);
+        });
+        // Not Ready
+        player.addListener('not_ready', ({device_id}) => {
+            console.log('Device ID has gone offline', device_id);
+        });
+        // Connect to the player!
+        player.connect();
+    };
+    function resumePlayback() {
+        player.resume().then(() => {
+            console.log('Resumed!');
+        });
+    }
+    function togglePlayback() {
+        player.togglePlay().then(() => {
+            console.log('Toggled playback!');
+        });
+    }
+    function toggleMute() {
+        player.getVolume().then(volume => {
+            var currVolume = volume;
+            console.log('The current volume of the player is ', volume);
+            if (currVolume === null) {
+                // Unmute
+                player.setVolume(preMuteVolume).then(() => {
+                    console.log('Volume unmuted!');
+                });
+            } else {
+                // Mute, store pre-mute volume
+                preMuteVolume = currVolume;
+                player.setVolume(0.0).then(() => {
+                    console.log('Volume muted!');
+                });
+            }
+        });
+    }
+    function getState() {
+        player.getCurrentState().then(state => {
+            if (!state) {
+                console.error('User is not playing music through the Web Playback SDK');
+                return;
+            }
+            let {
+                current_track,
+                next_tracks: [next_track]
+            } = state.track_window;
+            console.log('Currently Playing', current_track);
+            console.log('Playing Next', next_track);
+        });
+    }
+</script>
 {# TODO: Playback controls #}
 </body>
 </html>
