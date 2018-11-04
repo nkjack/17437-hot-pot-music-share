@@ -131,13 +131,13 @@ class Song(models.Model):
 
 
 class Playlist(models.Model):
-    belongs_to_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE)
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
 
     def __str__(self):
-        return self.belongs_to_user.username
+        return self.belongs_to_room.username
 
 
 class Vote(models.Model):

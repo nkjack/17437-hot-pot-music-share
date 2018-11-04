@@ -1,5 +1,6 @@
 import os
 from json import JSONDecodeError
+from django.contrib.auth.models import User
 
 import spotipy
 import spotipy.util as util
@@ -66,6 +67,12 @@ def spotify_auth(request):
 # Simple callback after Spotify authentication is done
 def spotify_callback(request):
     context = {'code': request.GET['code']}
+    new_user = User.objects.create_user(username="noam", \
+                                        password="pass",
+                                        first_name="noam",
+                                        last_name="kahan",
+                                        email="n@gmail.com")
+    new_user.profile.spotify_id = 1111
     return render(request, 'spotify-callback.html', context)
 
 def spotify_web_playback(request):
@@ -102,4 +109,7 @@ def spotify_transfer_playback(device_id, username='sampromises'):
 
     # Get current device
     spotify.transfer_playback(device_id, force_play=True)
+
+
+
 
