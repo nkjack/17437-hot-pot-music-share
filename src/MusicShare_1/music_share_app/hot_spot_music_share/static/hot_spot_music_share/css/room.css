@@ -4,14 +4,17 @@ body {
 }
 
 body {
+  
   padding-top: 100px;
   background-image:url("../img/welcome screen_-06.png");
   background-size:cover;
+    font-family: 'Megrim', cursive;
 }
 
  .navbar {
   min-height:50px;
   background-color: #eedd82;
+    font-family: 'Megrim', cursive;
 }
 
 .navbar-brand {
@@ -36,6 +39,7 @@ body {
 
 .btn{
     background-color: #FFA500;
+
 }
 @media (min-width: 768px) {
   .navbar-nav > li > a {
