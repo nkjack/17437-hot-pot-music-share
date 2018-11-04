@@ -1,10 +1,16 @@
-from django.urls import path, re_path
-from hot_pot_music_share import views
-from django.contrib.auth.views import LoginView, logout_then_login
+from django.urls import path
 
-# urlpatterns = [
-#     path('', views.global_stream, name='global_stream'),
-#     path('login', LoginView.as_view(template_name="grumblr/login.html"), name='login'),
-#     path('logout', logout_then_login, name='logout'),
-#     path('register', views.register, name='register'),
-# ]
+from hot_pot_music_share import views
+
+urlpatterns = [
+    # path('', views.global_stream, name='global_stream'),
+    # path('login', LoginView.as_view(template_name="grumblr/login.html"), name='login'),
+    # path('logout', logout_then_login, name='logout'),
+    # path('register', views.register, name='register'),
+    path('', views.home, name='home'),
+    path('login', views.login, name='login'),
+
+    # Spotify stuff
+    path('get-spotify-username', views.get_spotify_username),
+    path('spotify-auth', views.get_spotify_username),
+]
