@@ -48,6 +48,7 @@ WEB_PLAYBACK_TOKEN = 'BQA6z3s0KVEriyG89oB5UMI9g3p7ldOeMyN6aEMBqOFNZKkI7Hgfkhn1o4
 
 
 class Room(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=42)
     user_manager = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)

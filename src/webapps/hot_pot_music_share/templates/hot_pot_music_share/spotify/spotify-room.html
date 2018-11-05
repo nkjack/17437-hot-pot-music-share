@@ -16,8 +16,38 @@
 </ol>
 
 {# TODO: Search request #}
-{# TODO: Search results #}
+<form action="/search-song">
+    <label>
+        Search songs:
+        <input type="text" name="spotify-song">
+        <button type="submit">Submit</button>
+    </label>
 
+    <input type="hidden" name="room" value="{{ room.id }}">
+</form>
+{# TODO: Search results #}
+<ul>
+    {% for id, song in search_results.items %}
+        <li>
+            <form action="/add-song-to-room-playlist" method="post">
+                <input type="hidden" name="room_id" value="{{ room.id }}">
+                <input type="hidden" name="song_id" value="{{ id }}">
+                <input type="hidden" name="song_name" value="{{ song }}">
+                <input type="submit" value="Add song"> {{ song }}
+                {% csrf_token %}
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+{# TODO: play song#}
+<form action="/play-song" method="get">
+    <input type="text" name="spotify-song" value="0n4bITAu0Y0nigrz3MFJMb">
+    <button type="submit" value="play song">play song</button>
+    </label>
+
+    <input type="hidden" name="room" value="{{ room.id }}">
+</form>
 {# TODO: Currently playing #}
 <h4 id="current-state"></h4>
 
@@ -44,7 +74,9 @@
     var access_token = '{{ token }}';
 
     window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = 'BQBGGFAqDpCx7uOA4IpIo0v9ZjQtZFql76HyO2yI5lHO-LhCgbPnmCbrJHt_6jK3xt0vZH83seF4hyK8CGzlSpRRUOA618-hURUg3NI7bi1Zt-D_CTA-AbH3Y39mb3Cnu_pCzXpy674MeLELwKiiFCwigeSfZrYr5IJv';
+        {#const token = 'BQBGGFAqDpCx7uOA4IpIo0v9ZjQtZFql76HyO2yI5lHO-LhCgbPnmCbrJHt_6jK3xt0vZH83seF4hyK8CGzlSpRRUOA618-hURUg3NI7bi1Zt-D_CTA-AbH3Y39mb3Cnu_pCzXpy674MeLELwKiiFCwigeSfZrYr5IJv';#}
+        const token = '{{ user.profile.spotify_get_token }}';
+        console.log(token);
         player = new Spotify.Player({
             name: 'Web Playback SDK Quick Start Player',
             getOAuthToken: cb => {
@@ -79,6 +111,11 @@
             // Change HTML to display current state
             var currState = document.getElementById('current-state');
             currState.innerHTML = current_track['name'] + '(' + current_track['uri'] + ')';
+        });
+
+        // Playback status updates
+        player.addListener('player_state_changed', state => {
+            console.log(state);
         });
 
         // Ready
@@ -120,6 +157,7 @@
         // Connect to the player!
         player.connect();
     };
+
 
     function resumePlayback() {
         player.resume().then(() => {
