@@ -33,3 +33,6 @@ nosetests.xml
 
 # Mac OS file
 .DS_Store
+
+# JetBrains project folder
+.idea
