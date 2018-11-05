@@ -18,22 +18,39 @@
 {# TODO: Search request #}
 <form action="/search-song">
     <label>
-        Spotify username:
+        Search songs:
         <input type="text" name="spotify-song">
         <button type="submit">Submit</button>
     </label>
 
-    <input type="hidden" name="room" value="{{ room }}">
+    <input type="hidden" name="room" value="{{ room.id }}">
 </form>
 {# TODO: Search results #}
 <ul>
-    {% for song in search_results %}
-        <li>{{ song }}</li>
+    {% for id, song in search_results.items %}
+        <li>
+            <form action="/add-song-to-room-playlist" method="post">
+                <input type="hidden" name="room_id" value="{{ room.id }}">
+                <input type="hidden" name="song_id" value="{{ id }}">
+                <input type="hidden" name="song_name" value="{{ song }}">
+               <input type="submit" value="Add song"> {{ song }}
+              {% csrf_token %}
+            </form>
+        </li>
     {% endfor %}
 </ul>
 
+{# TODO: play song#}
+<form action="/play-song" method="get">
+        <input type="text" name="spotify-song" value="0n4bITAu0Y0nigrz3MFJMb">
+        <button type="submit" value="play song">play song</button>
+    </label>
 
+    <input type="hidden" name="room" value="{{ room.id }}">
+</form>
 {# TODO: Currently playing #}
+
+{# TODO: Playback controls #}
 <button onclick="resumePlayback()">Resume</button>
 <button onclick="togglePlayback()">Play/Pause</button>
 <button onclick="toggleMute()">Mute/Unmute</button>
@@ -45,7 +62,9 @@
     var preMuteVolume;
     var deviceId;
     window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = 'BQBUjQHHM19iIA-0SRku74-0lLFNpm5NSIKrupRevSyqN1-hMxhz31QtZ2I4DQ3Bekj98fMVa6LO3Lt6iTvSM5NXS4NaGele0fQSdjUYeuaXrNPUrNKWw38lsVZIDOzT9r9R71kr4uivmJrXV187lJxAvrp-M7LAd7ky';
+        {#const token = 'BQBUjQHHM19iIA-0SRku74-0lLFNpm5NSIKrupRevSyqN1-hMxhz31QtZ2I4DQ3Bekj98fMVa6LO3Lt6iTvSM5NXS4NaGele0fQSdjUYeuaXrNPUrNKWw38lsVZIDOzT9r9R71kr4uivmJrXV187lJxAvrp-M7LAd7ky';#}
+        const token = '{{ user.profile.spotify_get_token }}';
+        console.log(token);
         player = new Spotify.Player({
             name: 'Web Playback SDK Quick Start Player',
             getOAuthToken: cb => {
@@ -123,7 +142,9 @@
             console.log('Playing Next', next_track);
         });
     }
+    function changeSong(){
+        player.
+    }
 </script>
-{# TODO: Playback controls #}
 </body>
 </html>

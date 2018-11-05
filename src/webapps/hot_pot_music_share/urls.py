@@ -16,4 +16,7 @@ urlpatterns = [
     path('spotify-callback', views.spotify_callback),
     path('create-demo-room', views.create_demo_room),
     path('search-song', views.search_song),
+    path('add-song-to-room-playlist', views.add_song_to_room_playlist),
+    path('play-song', views.play_song),
+
 ]

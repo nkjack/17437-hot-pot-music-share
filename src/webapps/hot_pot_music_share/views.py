@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 import spotipy
 import spotipy.util as util
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+
 from hot_pot_music_share import models
 from django.shortcuts import render
 
@@ -75,6 +77,7 @@ def spotify_post_auth(request):
         user_playlists.append((searchResult['name'], searchResult['id']))
 
     context = {'username':displayName, 'currently_playing':currently_playing, 'user_playlists':user_playlists}
+    context['user'] = user
     print(context)
     return render(request, 'hot_pot_music_share/spotify/spotify-post-auth.html', context)
 
@@ -91,13 +94,13 @@ def create_demo_room(request):
     playlist_obj.save()
 
     # Create a single song
-    song1 = Song(song_id='66kQ7wr4d22LwwSjr7HXcyr', song_name='All The Stars', belongs_to_room=room)
-    song2 = Song(song_id='6TaqooOXAEcijL6G1AWS2K', song_name='All My Friends', belongs_to_room=room)
-    song1.save()
-    song2.save()
-
-    playlist_obj.songs.add(song1)
-    playlist_obj.songs.add(song2)
+    # song1 = Song(song_id='66kQ7wr4d22LwwSjr7HXcyr', song_name='All The Stars', belongs_to_room=room)
+    # song2 = Song(song_id='6TaqooOXAEcijL6G1AWS2K', song_name='All My Friends', belongs_to_room=room)
+    # song1.save()
+    # song2.save()
+    #
+    # playlist_obj.songs.add(song1)
+    # playlist_obj.songs.add(song2)
 
     # Debug set just one song
     # one_song = ['66kQ7wr4d2LwwSjr7HXcyr']
@@ -107,11 +110,6 @@ def create_demo_room(request):
     # TODO: Create an empty room
     return render(request, 'hot_pot_music_share/spotify/spotify-room.html',
                   {'room':room, 'playlist':playlist_obj})
-
-def get_search_results(request):
-    # TODO: Fill in code here to return search results
-    return render()
-
 
 
 # Simple callback after Spotify authentication is done
@@ -138,13 +136,11 @@ def spotify_get_token(username):
 
     except (AttributeError, JSONDecodeError):  # If reading from cache went bad
         os.remove(f".cache-{username}")
-        print("blablabla")
         token = util.prompt_for_user_token(username,
                                            scope=SCOPE,
                                            client_id=SPOTIPY_CLIENT_ID,
                                            client_secret=SPOTIPY_CLIENT_SECRET,
                                            redirect_uri='http://localhost:8000/spotify-callback')  # add scope
-        print("blablabla2")
     return token
 
 # Transfer Spotify playback to specified device ID
@@ -161,38 +157,63 @@ def spotify_transfer_playback(device_id, username='sampromises'):
 
 #search song in spotify
 def search_song(request):
+    user = User.objects.get(username="nkjack84")
+
     context = {}
-    room = request.GET['room']
+    room_id = request.GET['room']
+    print(room_id)
+    room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
+    playlist_obj = Playlist.objects.get(belongs_to_room=room)
+
     search_song = request.GET['spotify-song']
 
-    import spotipy
-    import pprint
-
-    # if len(sys.argv) > 1:
-    #     search_str = sys.argv[1]
-    # else:
-    #     search_str = 'Radiohead'
     user = User.objects.get(username='nkjack84')
-    print(user)
     sp = spotipy.Spotify(auth=user.profile.spotify_get_token())
-    result = sp.search(search_song)
-    pprint.pprint(result)
+    result = sp.search(search_song, limit=10, type="track")
+    # pprint.pprint(result)
 
-    search_results = []
+    # print(type(result))
+    items = result['tracks']['items']
+
+    dic_songs = {}
+    for item in items:
+        dic_songs[item['id']] = item['name']
+
+    # print(dic_songs)
+
     context['room'] = room
-    context['search_results'] = search_results
+    context['search_results'] = dic_songs
+    context['playlist'] = playlist_obj
+    context['user'] = user
     return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
 
 
 def add_song_to_room_playlist(request):
-    context = {}
-    room = request.GET['room']
-    searched_song_id = request.GET['song']
+    user = User.objects.get(username='nkjack84')
 
+    context = {}
+    room_id = request.POST['room_id']
+    searched_song_id = request.POST['song_id']
+    searched_song_name = request.POST['song_name']
+
+    room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
     playlist = Playlist.objects.get(belongs_to_room=room)
-    song = Song(song_id=searched_song_id, song_name='All The Stars', belongs_to_room=room)
+
+    song = Song(song_id=searched_song_id, song_name=searched_song_name, belongs_to_room=room)
+    song.save()
 
     playlist.songs.add(song)
+    context['room'] = room
+    context['playlist'] = playlist
+    context['user'] = user
+    return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
+
+def play_song(request):
+    user = User.objects.get(username='nkjack84')
+    sp = spotipy.Spotify(auth=user.profile.spotify_get_token())
+    sp.start_playback(device_id='1171ce229321475f1c5729dfcc56265ca787d51b', uris=['spotify:track:' + request.GET['spotify-song']])
+
+    return HttpResponse('')
 
 
 
