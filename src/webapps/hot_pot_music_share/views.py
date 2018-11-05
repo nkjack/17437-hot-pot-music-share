@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 import spotipy
 import spotipy.util as util
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+
 from hot_pot_music_share import models
 from django.shortcuts import render
 
@@ -33,9 +35,11 @@ def get_spotify_username(request):
 # SPOTIFY DEMO (STEP 2) Redirect after successfully authenticating with Spotify
 def spotify_post_auth(request):
     username = request.GET['spotify-username']  # FIXME: Catch key error
+    print("spotify_post_auth - username: ", username)
 
     # Get token
     token = spotify_get_token(username)
+    print("spotify_post_auth - token: ", token)
 
     # Create User here, if it doesn't exist
     if not User.objects.filter(username=username).exists():
@@ -105,9 +109,13 @@ def create_demo_room(request):
     # playlist_obj.set_songs(one_song)
     # playlist_obj.songs.Objects
 
+    token = spotify_get_token('sampromises')
+
     # TODO: Create an empty room
     return render(request, 'hot_pot_music_share/spotify/spotify-room.html',
-                  {'room':room, 'playlist':playlist_obj})
+                  {'room':room, 'playlist':playlist_obj,
+                   'song_id':'66kQ7wr4d22LwwSjr7HXcyr',
+                   'token':token})
 
 def get_search_results(request):
     # TODO: Fill in code here to return search results
@@ -129,23 +137,41 @@ def spotify_web_playback(request):
 def spotify_get_token(username):
     # Erase cache and prompt for user permission
     try:
-        token = util.prompt_for_user_token(username,
+        token = util.prompt_for_user_token(username=username,
                                            scope=SCOPE,
                                            client_id=SPOTIPY_CLIENT_ID,
                                            client_secret=SPOTIPY_CLIENT_SECRET,
                                            redirect_uri='http://localhost:8000/spotify-callback')  # add scope
     except (AttributeError, JSONDecodeError):  # If reading from cache went bad
         os.remove(f".cache-{username}")
-        token = util.prompt_for_user_token(username,
+        token = util.prompt_for_user_token(username=username,
                                            scope=SCOPE,
                                            client_id=SPOTIPY_CLIENT_ID,
                                            client_secret=SPOTIPY_CLIENT_SECRET,
                                            redirect_uri='http://localhost:8000/spotify-callback')  # add scope
 
+    print(token)
     return token
 
+def spotify_play_song(request, song_id, offset=None):
+    # Get token
+    token = spotify_get_token('sampromises')
+
+    # Create our spotify object with permissions
+    spotify = spotipy.Spotify(auth=token)
+
+    print("DEVICES: ", spotify.devices())
+
+    # Change playback
+    spotify.start_playback(device_id='bab9a49eb64e01a2467bda4486315865c3754ff3',
+                           uris=['spotify:track:'+song_id], offset=offset)
+
+    # Empty response
+    return HttpResponse('')
+
+
 # Transfer Spotify playback to specified device ID
-def spotify_transfer_playback(device_id, username='sampromises'):
+def spotify_transfer_playback(request, device_id, username='sampromises'):
     # Get token
     token = spotify_get_token(username)
 
@@ -154,7 +180,9 @@ def spotify_transfer_playback(device_id, username='sampromises'):
 
     # Get current device
     spotify.transfer_playback(device_id, force_play=True)
+    print(device_id)
 
-
+    # Empty response
+    return HttpResponse('')
 
 

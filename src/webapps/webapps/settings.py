@@ -134,3 +134,5 @@ MEDIA_URL = '/media/'
 PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot_music_share/')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot_music_share/media')
+
+CORS_ORIGIN_ALLOW_ALL = True

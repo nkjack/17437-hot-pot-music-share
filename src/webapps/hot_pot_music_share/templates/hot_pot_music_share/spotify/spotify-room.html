@@ -10,15 +10,177 @@
 
 {# TODO: Playlist #}
 <ol>
-{% for song in playlist.songs.all %}
-    <li>{{ song.song_name }} ({{ song.song_id }})</li>
-{% endfor %}
+    {% for song in playlist.songs.all %}
+        <li>{{ song.song_name }} ({{ song.song_id }})</li>
+    {% endfor %}
 </ol>
 
 {# TODO: Search request #}
 {# TODO: Search results #}
 
 {# TODO: Currently playing #}
+<h4 id="current-state"></h4>
+
 {# TODO: Playback controls #}
+<button onclick="resumePlayback()">Resume</button>
+<button onclick="togglePlayback()">Play/Pause</button>
+<button onclick="nextTrack()">Next</button>
+<button onclick="previousTrack()">Prev</button>
+<button onclick="toggleMute()">Mute/Unmute</button>
+<button onclick="getState()">Get state</button>
+
+<br>
+<form action="spotify-play-song/66kQ7wr4d22LwwSjr7HXcyr">
+    <button type="submit">Play Song</button>
+</form>
+
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script>
+    var player;
+    var preMuteVolume;
+    var deviceId;
+    var song_uri = 'spotify:track:' + '{{ song_id }}';
+    var access_token = '{{ token }}';
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        const token = 'BQBGGFAqDpCx7uOA4IpIo0v9ZjQtZFql76HyO2yI5lHO-LhCgbPnmCbrJHt_6jK3xt0vZH83seF4hyK8CGzlSpRRUOA618-hURUg3NI7bi1Zt-D_CTA-AbH3Y39mb3Cnu_pCzXpy674MeLELwKiiFCwigeSfZrYr5IJv';
+        player = new Spotify.Player({
+            name: 'Web Playback SDK Quick Start Player',
+            getOAuthToken: cb => {
+                cb(token);
+            }
+        });
+
+        // Error handling
+        player.addListener('initialization_error', ({message}) => {
+            console.error(message);
+        });
+        player.addListener('authentication_error', ({message}) => {
+            console.error(message);
+        });
+        player.addListener('account_error', ({message}) => {
+            console.error(message);
+        });
+        player.addListener('playback_error', ({message}) => {
+            console.error(message);
+        });
+
+        // Playback status updates
+        player.addListener('player_state_changed', ({
+                                                        position,
+                                                        duration,
+                                                        track_window: {current_track}
+                                                    }) => {
+            console.log('Currently Playing', current_track);
+            console.log('Position in Song', position);
+            console.log('Duration of Song', duration);
+
+            // Change HTML to display current state
+            var currState = document.getElementById('current-state');
+            currState.innerHTML = current_track['name'] + '(' + current_track['uri'] + ')';
+        });
+
+        // Ready
+        player.addListener('ready', ({device_id}) => {
+            deviceId = device_id;
+            console.log('Ready with Device ID', device_id);
+
+            // Change device playback to the web app
+            var xmlHttpReq = new XMLHttpRequest();
+            var url = "spotify-transfer-playback/" + device_id.toString();
+            xmlHttpReq.open("GET", url);
+            xmlHttpReq.send(null);
+
+            // Change song to play given song_id
+            $.ajax(
+                {
+                    method: "POST",
+                    url: `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${access_token}`,
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                    data: JSON.stringify({uris: ['spotify:user:sskriot:playlist:48MvvAwTeWketx3Db27Zdv']}),
+                    success: function (result) {
+                        // handle result...
+                        console.log("SUCCESS");
+                        console.log(result);
+                    },
+                }
+            );
+        });
+
+        // Not Ready
+        player.addListener('not_ready', ({device_id}) => {
+            console.log('Device ID has gone offline', device_id);
+        });
+
+        // Connect to the player!
+        player.connect();
+    };
+
+    function resumePlayback() {
+        player.resume().then(() => {
+            console.log('Resumed!');
+        });
+    }
+
+    function togglePlayback() {
+        player.togglePlay().then(() => {
+            console.log('Toggled playback!');
+        });
+    }
+
+    function nextTrack() {
+        player.nextTrack().then(() => {
+            console.log('Skipped to next track!');
+        });
+    }
+
+    function previousTrack() {
+        player.previousTrack().then(() => {
+            console.log('Skipped to prev track!');
+        });
+    }
+
+    function toggleMute() {
+        player.getVolume().then(volume => {
+            var currVolume = volume;
+            console.log('The current volume of the player is ', volume);
+
+            if (currVolume === null) {
+                // Unmute
+                player.setVolume(preMuteVolume).then(() => {
+                    console.log('Volume unmuted!');
+                });
+            } else {
+                // Mute, store pre-mute volume
+                preMuteVolume = currVolume;
+                player.setVolume(0.0).then(() => {
+                    console.log('Volume muted!');
+                });
+            }
+        });
+    }
+
+    function getState() {
+        player.getCurrentState().then(state => {
+            if (!state) {
+                console.error('User is not playing music through the Web Playback SDK');
+                return;
+            }
+
+            let {
+                current_track,
+                next_tracks: [next_track]
+            } = state.track_window;
+
+            console.log('Currently Playing', current_track);
+            console.log('Playing Next', next_track);
+        });
+    }
+</script>
 </body>
 </html>

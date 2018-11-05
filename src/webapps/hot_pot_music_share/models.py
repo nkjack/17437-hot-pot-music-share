@@ -140,6 +140,9 @@ class Playlist(models.Model):
     def __str__(self):
         return self.belongs_to_room.username
 
+    def add_song(self, song):
+        self.songs.add(song)
+
 
 class Vote(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)

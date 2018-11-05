@@ -15,4 +15,6 @@ urlpatterns = [
     path('spotify-post-auth', views.spotify_post_auth),
     path('spotify-callback', views.spotify_callback),
     path('create-demo-room', views.create_demo_room),
+    path('spotify-transfer-playback/<str:device_id>', views.spotify_transfer_playback),
+    path('spotify-play-song/<str:song_id>', views.spotify_play_song),
 ]
