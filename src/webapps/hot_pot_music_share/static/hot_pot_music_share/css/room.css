@@ -4,104 +4,86 @@ body {
 }
 
 body {
-  
-  padding-top: 100px;
-  background-image:url("../img/welcome screen_-06.png");
-  background-size:cover;
-    font-family: 'Megrim', cursive;
+  overflow: hidden;
+  background: #EDEDED;
+  font-family: 'Megrim', cursive;
+  padding-left: 50px;
+  padding-right:50px;
+  font-weight: bold;
+  font-size: large;
 }
+p{margin:15px 0px;}
 
- .navbar {
-  min-height:50px;
-  background-color: #eedd82;
-    font-family: 'Megrim', cursive;
-}
-
-.navbar-brand {
-  padding: 0 15px;
-  height: 50px;
-  line-height: 50px;
-}
-.comment{
-}
-.comment:hover{
-  cursor: pointer !important;
-}
-.error{
-  color: red;
-  font-size: 10px;
-}
-.navbar-toggle {
-  /* (80px - button height 34px) / 2 = 23px */
-  margin-top: 10px;
-  padding: 9px 10px !important;
+.container {
+    height: 100%;
+    padding-top: 35px;
 }
 
 .btn{
-    background-color: #FFA500;
+  z-index: 1;
+  width:60%;
+  border-color: #FFA500;
+  color:black;
+  display: inline-block;
+  padding: .3em;
 
+/*  color: rgba(255,255,255,.68);*/
+  border: .075em solid rgba(255,255,255,.1);
 }
-@media (min-width: 768px) {
-  .navbar-nav > li > a {
-    /* (80px - line-height of 27px) / 2 = 26.5px */
-    padding-top: 20px;
-    padding-bottom: 20px;
-    line-height: 20px;
-  }
-.nav-scroller {
-  position: relative;
-  z-index: 2;
-  height:4rem;
-  overflow-y: hidden;
+.notActive{
+      filter: grayscale(100%);
 }
 
-.nav-scroller .nav {
-  display: -ms-flexbox;
+.row-card {
   display: flex;
-  -ms-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  padding-bottom: .25rem;
-  padding-left:1rem;
-  margin-top:15px;
-  overflow-x: auto;
-  color: rgba(255, 255, 255, .75);
-  text-align: center;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
-.nav-underline .nav-link {
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-  font-size: .875rem;
-  color: #6c757d;
+.row-card > div[class*='col-'] {
+  display: flex;
+}
+.intro{
+      align-items: center;
 }
 
-.nav-underline .nav-link:hover {
-  color: #007bff;
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
 }
 
-.nav-underline .active {
-  font-weight: 500;
-  color: #343a40;
+/* Add styles to the form container */
+.form-container {
+  max-width: 400px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 25px;
 }
 
-.text-white-50 { color: rgba(255, 255, 255, .5); }
-
-.container{
-  max-width: 1100px;
-  padding: 5px;
-  margin-bottom: 15px;
-  margin-top: 15px;
+/* Set a style for the submit/login button */
+.form-container .btn {
+  border-color: #eedd82;
+  color: black;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
 }
 
-.box-shadow{
-  min-height:400px;
-  opacity: 0.6;
-  filter: alpha(opacity=60);
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: black;
+  color:white;
 }
 
-.people{
-  background-color: 
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
 }
-

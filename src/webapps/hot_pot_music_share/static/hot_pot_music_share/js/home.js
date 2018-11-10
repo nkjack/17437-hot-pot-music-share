@@ -111,7 +111,7 @@ gridY = 5;
 function shape(x, y, texte) {
   this.x = x;
   this.y = y;
-  this.size = 120;
+  this.size = 200;
 
   this.text = texte;
   this.placement = [];
