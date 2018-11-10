@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Discover</title>
+    <title>My Room History</title>
         <link href="../../static/hot_pot_music_share/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../../static/hot_pot_music_share/css/room.css">
     <link rel="stylesheet" href="../../static/hot_pot_music_share/css/vertical_scrollBar.css">
@@ -27,10 +27,10 @@
               <a href="discover_rooms.html">Discover</a>
           </li>
           <li>
-              <a href="room_history.html">Your Rooms</a>
+              <a href="room_history.html">My Rooms</a>
           </li>
           <li>
-              <a href="#">Settings</a>
+              <a href="profile.html">Settings</a>
           </li>
           <li>
               <a href="login.html">Logout</a>
@@ -45,9 +45,11 @@
 
        <div class="my-3 p-3 rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0">Owned By Me</h6>
+        <button class = "btn-secondary float-right" id = "editMyOwn" onclick = "editMyOwn()">Edit</button>
         <div class="row-card">
               <div class="col-sm-4">
                 <div class="card bg-light rounded">
+                  <input type="checkbox" class = "checkbox" id="checkbox1" name="checkbox1"/>
                   <img class="card-img-top" src="../../static/hot_pot_music_share/img/logo.png" alt="Card image cap">
                   <div class="card-body">
                     <h5 class="card-title">Public Room 0</h5>
@@ -62,6 +64,7 @@
 
        <div class="my-3 p-3 rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0">Other's Rooms</h6>
+        <button class = "btn-primary float-right" id = "editOther">Edit</button>
         <div class="row-card">
               <div class="col-sm-4">
                 <div class="card bg-light rounded">
@@ -99,6 +102,10 @@
         $("#wrapper").toggleClass("toggled");
     };
 
+    function editMyOwn(){
+
+      document.getElementById("checkbox1").style.display = 'block';
+    }
     </script>
 
 </body>
