@@ -53,7 +53,8 @@ class Room(models.Model):
     user_manager = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
     place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
-
+    listeners = models.ManyToManyField(User, on_delete = models.CASCADE)
+    
     def __str__(self):
         return self.name
 
@@ -126,6 +127,7 @@ class Song(models.Model):
     # votes_score = models.IntegerField(default=0)
 
     belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    thumbs_up = models.IntegerField(blank = True, default = 0)
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     def __str__(self):

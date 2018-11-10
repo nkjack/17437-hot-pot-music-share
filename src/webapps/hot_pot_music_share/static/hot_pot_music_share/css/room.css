@@ -1,18 +1,20 @@
 html,
-body {
-  overflow-x: hidden; /* Prevent scroll on narrow devices */
-}
 
 body {
   overflow: hidden;
   background: #EDEDED;
   font-family: 'Megrim', cursive;
-  padding-left: 50px;
-  padding-right:50px;
+  padding-left: 0px;
+  padding-right:0px;
   font-weight: bold;
   font-size: large;
 }
 p{margin:15px 0px;}
+
+a:hover, a:visited, a:link, a:active{
+  text-decoration: none;
+  color: inherit;
+}
 
 .container {
     height: 100%;
@@ -89,4 +91,17 @@ p{margin:15px 0px;}
 }
 .checkbox{
     display: none;
+}
+
+.btn-search {
+    background: #424242;
+    border-radius: 0;
+    color: #fff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #1c1c1c;
+  }
+.btn-search:active, .btn-search:hover {
+  background: #1c1c1c;
+  color: #fff;
 }
