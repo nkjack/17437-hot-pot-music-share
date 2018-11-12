@@ -1,126 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My Profile</title>
-        <link href="../../static/hot_pot_music_share/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/room.css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/vertical_scrollBar.css">
-</head>
-<body>
-    <!-- This part should be in navbar.html which extends this -->
-  <div id="wrapper">
-    <div id="sidebar-wrapper">
-      <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "../../static/hot_pot_music_share/img/menu.png" width = "50">
-      <ul class="sidebar-nav">
-          <li class="sidebar-brand">
-            <a class="figure" href = "home.html">
+{% extends 'base.html' %}
 
-              <img class="mr-4" src="../../static/hot_pot_music_share/img/user_1.png" width="90" alt = "myImage">
-              <p class = "username">User </p>
-            </a>
-          </li>
-          <li>
-              <a href="home.html">Home</a>
-          </li>
-          <li>
-              <a href="discover_rooms.html">Discover</a>
-          </li>
-          <li>
-              <a href="room_history.html">Your Rooms</a>
-          </li>
-          <li>
-              <a href="profile.html">Settings</a>
-          </li>
-          <li>
-              <a href="login.html">Logout</a>
-          </li>
-        </ul>
-    </div>
+{% block content %}
+<form enctype = "multipart/form-data" action = "" method = "POST">
+  <div class="card-deck mb-3">
+    
+    <!-- This is where to change age/description and picture -->
+    <div class="card mb-4 my-3 box-shadow">
+      <div class="card-header ">
+        <h4 class="my-1 font-weight-normal">My Profile</h4>
+      </div>
+        <div class="card-body">
 
-
-
-    <div class="page-content-wrapper">
-      <div class ="container-fluid container">
-          <form enctype = "multipart/form-data" action = "" method = "POST">
-              <div class="card-deck mb-3">
-                
-                <!-- This is where to change age/description and picture -->
-                <div class="card mb-4 my-3 box-shadow">
-                  <div class="card-header ">
-                    <h4 class="my-1 font-weight-normal">My Profile</h4>
-                  </div>
-                    <div class="card-body">
-
-                      <div class = "form-group my-3 mx-3">
-                        <div >
-                          <label class = "font-weight-bold mb-0 " for="Age"><b>Age</b></label>
-                          <input type="text" placeholder="5" name="age">
-                        </div>
-                        <div >
-                          <label class = "font-weight-bold mb-0 " for="Description"><b>Description</b></label>
-                          <input type="text" placeholder="5" name="description">
-                        </div>
-                        <div>
-                           
-                            <label lass = "font-weight-bold mb-0 " for="avatar">Profile picture:</label>
-                            <img  class ="mx-4" src = "../../static/hot_pot_music_share/img/user_1.png" alt = "" width = "80" height = "80">
-                            <input type="file"
-                                 id="avatar" name="avatar"
-                                 accept="image/png, image/jpeg" />         
-                      
-                        </div>
-                      </div>
-                  </div>
-                </div>
-
-                <!-- This is where to reset password -->
-                <div class="card mb-4 my-3 box-shadow">
-                  <div class="card-header ">
-                    <h4 class="my-1 font-weight-normal">Account</h4>
-                  </div>
-                  <div class="card-body">
-                     <div class="my-4 p-3 bg-white rounded box-shadow">
-                      <div class="border-bottom border-gray pb-2 mb-0">
-
-                      <input type="submit" class="btn-lg btn-block btn btn-outline-info my-3" name = 'resetPassword' value ="Reset Password">
-                      </div>
-                      </div>
-
-                      <!-- This is where to reset names -->
-                      <div class = "form-group my-3 mx-3">
-                        <div class = 'error' >
-     
-                        </div>
-                        <div>
-                              <label class = "font-weight-bold mb-0 " for="First name"><b>First name</b></label>
-                              <input type="text" placeholder="5" name="first name">
-                        </div>
-                        <div>
-                              <label class = "font-weight-bold mb-0 " for="Last name"><b>Last name</b></label>
-                              <input type="text" placeholder="5" name="last name">
-                        </div>
-                      </div>
-                    </div>
-                </div>
-
-                </div>
-
-                <input  type="submit" class="btn-lg btn-block btn-outline-primary my-3" name = 'profileSubmit' value ="Submit">
-                </form>
+          <div class = "form-group my-3 mx-3">
+            <div >
+            	<!-- This should be replaced by a form -->
+              <label class = "font-weight-bold mb-0 " for="Age"><b>Age</b></label>
+              <input type="text" placeholder="5" name="age">
+            </div>
+            <div >
+            	<!-- This should be replaced by a form -->
+              <label class = "font-weight-bold mb-0 " for="Description"><b>Description</b></label>
+              <input type="text" placeholder="5" name="description">
+            </div>
+            <div>
+               
+                <label lass = "font-weight-bold mb-0 " for="avatar">Profile picture:</label>
+                <img  class ="mx-4" src = "../../static/hot_pot_music_share/img/user_1.png" alt = "" width = "80" height = "80">
+                <input type="file"
+                     id="avatar" name="avatar"
+                     accept="image/png, image/jpeg" />         
+          
+            </div>
           </div>
       </div>
-  </div>
-  <script src="../../static/hot_pot_music_share/js/popper.min.js"></script>
-  <script src = "../../static/hot_pot_music_share/js/jquery-3.3.1.min.js"></script>
-  <script src="../../static/hot_pot_music_share/js/bootstrap.min.js"></script>
-  <script>
-    function toggleNav() {
-        console.log("toggle");
-        $("#wrapper").toggleClass("toggled");
-    };
+    </div>
 
-    </script>
+    <!-- This is where to reset password -->
+    <div class="card mb-4 my-3 box-shadow">
+      <div class="card-header ">
+        <h4 class="my-1 font-weight-normal">Account</h4>
+      </div>
+      <div class="card-body">
+         <div class="my-4 p-3 bg-white rounded box-shadow">
+          <div class="border-bottom border-gray pb-2 mb-0">
 
-</body>
-</html>
+          <input type="submit" class="btn-lg btn-block btn btn-outline-info my-3" name = 'resetPassword' value ="Reset Password">
+          </div>
+          </div>
+
+          <!-- This is where to reset names -->
+          <div class = "form-group my-3 mx-3">
+            <div class = 'error' >
+            	<!-- all the field errors -->
+            </div>
+            <div>
+
+            		<!-- This should be replaced by a form -->
+                  <label class = "font-weight-bold mb-0 " for="First name"><b>First name</b></label>
+                  <input type="text" placeholder="5" name="first name">
+            </div>
+            <div>
+            		<!-- This should be replaced by a form -->
+                  <label class = "font-weight-bold mb-0 " for="Last name"><b>Last name</b></label>
+                  <input type="text" placeholder="5" name="last name">
+            </div>
+          </div>
+        </div>
+    </div>
+
+    </div>
+
+    <input  type="submit" class="btn-lg btn-block btn-outline-primary my-3" name = 'profileSubmit' value ="Submit">
+</form>
+{% endblock %}

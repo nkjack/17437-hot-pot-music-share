@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    {% load static %}
+    <link href=" {% static 'hot_pot_music_share/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/room.css' %}">
+    <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/vertical_scrollBar.css' %}">
+</head>
+<body>
+    <!-- This part should be in navbar.html which extends this -->
+  <div id="wrapper">
+    <div id="sidebar-wrapper">
+      <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "{% static 'hot_pot_music_share/img/menu.png' %}" width = "50">
+      <ul class="sidebar-nav">
+          <li class="sidebar-brand">
+            <a class="figure" href = "home.html">
+
+              <img class="mr-4" src="{% img  %}" width="90" alt = "myImage">
+              <p class = "username">User </p>
+            </a>
+          </li>
+          <li>
+              <a href="home.html">Home</a>
+          </li>
+          <li>
+              <a href="discover_rooms.html">Discover</a>
+          </li>
+          <li>
+              <a href="room_history.html">My Rooms</a>
+          </li>
+          <li>
+              <a href="profile.html">Settings</a>
+          </li>
+          <li>
+              <a href="login.html">Logout</a>
+          </li>
+        </ul>
+    </div>
+
+
+
+    <div class="page-content-wrapper">
+      <div class ="container-fluid container">
+
+        <!-- The card deck which will only allow 3 cards in one row -->
+            {% block content %}
+            {% endblock %}
+  
+     </div>
+    </div>
+  </div>
+  <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
+  <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

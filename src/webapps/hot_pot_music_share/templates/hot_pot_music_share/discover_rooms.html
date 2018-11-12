@@ -1,75 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Discover</title>
-        <link href="../../static/hot_pot_music_share/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/room.css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/vertical_scrollBar.css">
-</head>
-<body>
-    <!-- This part should be in navbar.html which extends this -->
-  <div id="wrapper">
-    <div id="sidebar-wrapper">
-      <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "../../static/hot_pot_music_share/img/menu.png" width = "50">
-      <ul class="sidebar-nav">
-          <li class="sidebar-brand">
-            <a class="figure" href = "home.html">
+{% extends 'base.html' %}
 
-              <img class="mr-4" src="../../static/hot_pot_music_share/img/user_1.png" width="90" alt = "myImage">
-              <p class = "username">User </p>
-            </a>
-          </li>
-          <li>
-              <a href="home.html">Home</a>
-          </li>
-          <li>
-              <a href="discover_rooms.html">Discover</a>
-          </li>
-          <li>
-              <a href="your_rooms_history.html">My Rooms</a>
-          </li>
-          <li>
-              <a href="profile.html">Settings</a>
-          </li>
-          <li>
-              <a href="login.html">Logout</a>
-          </li>
-        </ul>
-    </div>
-
-
-
-    <div class="page-content-wrapper">
-      <div class ="container-fluid container">
-
-        <!-- The card deck which will only allow 3 cards in one row -->
-        <div class="row-card">
-              <div class="col-sm-4">
-                <div class="card bg-light rounded">
-                  <img class="card-img-top" src="../../static/hot_pot_music_share/img/logo.png" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Public Room 0</h5>
-                    <p class="card-text">This is a public Room for jass music. Our base is in Oakland, Pittsburgh</p>
-                    <p class="card-text"><small class="text-muted">DJ: user000</small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-  
-     </div>
+{% block content %}
+  <div class="row-card">
+      <div class="col-sm-4">
+        <div class="card bg-light rounded">
+          <img class="card-img-top" src="{% img %}" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">{% room_title %}</h5>
+            <p class="card-text">{% room_description %}</p>
+            <p class="card-text"><small class="text-muted">DJ: {% owner %}</small></p>
+          </div>
+        </div>
     </div>
   </div>
-  <script src="../../static/hot_pot_music_share/js/popper.min.js"></script>
-  <script src = "../../static/hot_pot_music_share/js/jquery-3.3.1.min.js"></script>
-  <script src="../../static/hot_pot_music_share/js/bootstrap.min.js"></script>
-  <script>
-    function toggleNav() {
-        console.log("toggle");
-        $("#wrapper").toggleClass("toggled");
-    };
-
-    </script>
-
-</body>
-</html>
+{% endblock%}
