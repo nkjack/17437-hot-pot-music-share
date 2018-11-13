@@ -26,8 +26,55 @@ def home(request):
 
 # Integrate actual Profile model later
 def login(request):
-    return render(request, 'hot_pot_music_share/login.html')
+    context = {'login_active':'active', 'register_active':'',}
+    # If already logged in, redirect to home
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('home',args=[request.user.username]))
 
+    if request.method =='GET':
+        context['login_form'] = LoginForm()
+        
+        return render(request, 'hot_pot_music_share/login.html', context)
+
+    if request.POST.get('login'):
+        form = LoginForm(request.POST)
+        context['login_form'] = form
+
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            
+            user = authenticate(request, username = username, password = password)
+            
+            if user is not None:
+
+                if not hasattr(user, 'profile'):
+                    profile = Profile(user = user, bio = 'my short bio', age = 0)
+                    profile.save()
+
+                login(request, user)
+                return HttpResponseRedirect(reverse('home',args=[username]))
+            else:
+                context['error'] = 'Invalid login. Password doesnot match the user or user doesnot exist'
+                return render(request, 'hot_pot_music_share/login.html', context)
+        else:
+            return render(request, 'hot_pot_music_share/login.html', context)
+
+    
+    elif 'resetPassword' in request.POST or request.POST['resetPassword']:
+        return HttpResponseRedirect(reverse('forgetPassword'))
+
+
+    else:
+        context['error'] = "Please press Login button to register an account"
+        return render(request, 'hot_pot_music_share/login.html', context)
+
+
+
+
+
+#--------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 # SPOTIFY DEMO (STEP 1) - Replacing login for now
 def get_spotify_username(request):
     return render(request, 'hot_pot_music_share/spotify/get-spotify-username.html')

@@ -1,5 +1,5 @@
-from django.urls import path
-
+from django.urls import path,re_path
+from django.views.generic.base import RedirectView
 from hot_pot_music_share import views
 
 urlpatterns = [
@@ -7,9 +7,23 @@ urlpatterns = [
     # path('login', LoginView.as_view(template_name="grumblr/login.html"), name='login'),
     # path('logout', logout_then_login, name='logout'),
     # path('register', views.register, name='register'),
-    path('', views.home, name='home'),
-    path('login', views.login, name='login'),
 
+
+    # User login 
+    path('', RedirectView.as_view(url = 'login'),name="go_to_login"),d
+    path('login', views.login, name='login'),
+    path('register', views.register, name= 'register'),
+
+    # User Home Page
+    re_path(r'^username=(?P<username>[a-z0-9_]{3,15})$',views.home, name = 'home'),
+
+    # Create Room
+    path('create-room', views.create_room, name = "create_room");
+    re_path(r'^room/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.confirm_email, name='confirm'),
+
+    
+    
     # Spotify stuff
     path('get-spotify-username', views.get_spotify_username),
     path('spotify-post-auth', views.spotify_post_auth),
