@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Room</title>
+</head>
+<body>
+{# Display room name #}
+<h1>{{ room.name }}</h1>
+
+{# TODO: Playlist #}
+<ol>
+    {% for song in playlist.songs.all %}
+        <li>{{ song.song_name }} ({{ song.song_id }})</li>
+    {% endfor %}
+</ol>
+
+{# TODO: Search request #}
+<form action="/search-song">
+    <label>
+        Search songs:
+        <input type="text" name="song_anme">
+        <button type="submit">Submit</button>
+    </label>
+
+    <input type="hidden" name="room" value="{{ room.id }}">
+</form>
+{# TODO: Search results #}
+
+<ul>
+    {% for id, song in search_results.items %}
+        <li>
+            <form action="/add-song-to-room-playlist" method="post">
+                <input type="hidden" name="room_id" value="{{ room.id }}">
+                <input type="hidden" name="song_id" value="{{ id }}">
+                <input type="hidden" name="song_name" value="{{ song }}">
+                <input type="submit" value="Add song"> {{ song }}
+                {% csrf_token %}
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+
+<br>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+</body>
+</html>
