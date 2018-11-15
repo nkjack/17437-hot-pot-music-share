@@ -1,3 +1,13 @@
+function openForm() {
+    document.getElementById("create_room_div").style.display = "block";
+}
+
+function closeForm() {
+    document.getElementById("create_room_div").style.display = "none";
+}
+
+
+// ========================= CANVAS RENDER ===========================
 var utils = {
   norm: function(value, min, max) {
     return (value - min) / (max - min);

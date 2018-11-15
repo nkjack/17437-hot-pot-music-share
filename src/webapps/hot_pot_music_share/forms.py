@@ -99,3 +99,29 @@ class LoginForm(forms.Form):
 			raise forms.ValidationError('There is no such account.')
 
 		return cleaned_data
+
+
+class RoomForm(forms.ModelForm):
+	cover_pic = forms.ImageField(required = False, widget = forms.FileInput())
+	description = forms.CharField(widget = forms.Textarea(attrs ={'help_text':'maxlength is 420',
+										'maxlength' :'420', 
+										 'rows':"3",
+										 'class' : 'form-control '}))
+	name = forms.CharField(required = False,max_length =15,
+									label = 'Room Name',
+									widget = forms.TextInput(attrs = 
+										{'class':'form-control mb-3', 'maxlength' :'15',
+										}))
+	class Meta:
+		model = Room
+		fields = ['name', 'cover_pic', 'description']
+
+	def clean(self):
+		cleaned_data = super(RoomForm, self).clean()
+
+		name = self.cleaned_data.get('name')
+		if Room.objects.filter(name__exact = name):
+			raise forms.ValidationError('Room name is already taken.')
+
+
+		return cleaned_data

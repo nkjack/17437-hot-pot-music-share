@@ -10,26 +10,23 @@
     <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/vertical_scrollBar.css' %}">
 </head>
 <body>
-    <!-- This part should be in navbar.html which extends this -->
+    <!-- The nav bar -->
   <div id="wrapper">
     <div id="sidebar-wrapper">
       <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "{% static 'hot_pot_music_share/img/menu.png' %}" width = "50">
       <ul class="sidebar-nav">
           <li class="sidebar-brand">
-            <a class="figure" href = "home.html">
+            <a class="figure" href = "room_history.html">
               {% if img %}
                 <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
               {% else %}
                 <img class="mr-4" src="{% static 'hot_pot_music_share/img/user_1.png' %}" width="90" alt = "myImage">
               {% endif %}
-              <p class = "username">User </p>
+              <p class = "username">{{username}}</p>
             </a>
           </li>
           <li>
-              <a href="home.html">Home</a>
-          </li>
-          <li>
-              <a href="discover_rooms.html">Discover</a>
+              <a href="{% url 'home' username%}">Home</a>
           </li>
           <li>
               <a href="room_history.html">My Rooms</a>
@@ -38,7 +35,7 @@
               <a href="profile.html">Settings</a>
           </li>
           <li>
-              <a href="login.html">Logout</a>
+              <a href="{% url 'logout' %}">Logout</a>
           </li>
         </ul>
     </div>
@@ -57,6 +54,10 @@
   <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
   <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
   <script src = "{% static 'hot_pot_music_share/js/home.js' %}"></script>
-
+  <script>
+      function toggleNav() {
+          $("#wrapper").toggleClass("toggled");
+      };
+  </script>
 </body>
 </html>

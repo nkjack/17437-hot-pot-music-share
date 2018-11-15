@@ -25,7 +25,37 @@ from django.contrib.auth.tokens import default_token_generator
 # Home view
 @login_required
 def home(request, username):
-    return render(request, 'home.html')
+    context = {'error':''}
+    context['username'] =  username
+    user_from_url = get_object_or_404(User, username = username)
+    
+    if(request.method == "GET"):
+        context['form'] = RoomForm()
+
+        popular_rooms = Room.objects.all().order_by('thumbs_up')[:6]
+        context["popular"] = popular_rooms
+        return render(request, 'home.html', context)
+
+    elif (request.POST.get('create_room')):
+        form = RoomForm(request.POST, request.FILES)
+        context['form'] = form
+
+        if form.is_valid():
+            new_room = form.save(commit=False)
+            new_room.owner = request.user
+            new_room.save()
+
+            new_history = SingleRoomEntry.objects.create(user = request.user, 
+                                                        room = new_room)
+            new_history.save()
+
+            return HttpResponseRedirect(reverse('room',args=[request.POST['room_name']]))
+        else:
+            return render(request, 'home.html', context)
+
+    else:
+        context['error'] = "Please press Submit button to create a new room"
+        return render(request, 'home.html', context)
 
 # Integrate actual Profile model later
 def customLogin(request):
@@ -111,6 +141,10 @@ def register(request):
             context['error'] = "Please press Register button to register an account"
             return render(request, 'login.html', context)
 
+def customLogout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('login'))
+
 @transaction.atomic
 def confirm_email(request, username, token):
     user = get_object_or_404(User, username = username)
@@ -125,11 +159,7 @@ def confirm_email(request, username, token):
 
 
 @login_required
-def create_room(request):
-    return HttpResponseRedirect(reverse('login'))
-
-@login_required
-def room(request, token):
+def room(request, room_name):
     return HttpResponseRedirect(reverse('login'))
 
 #--------------------------------------------------------------------------------
