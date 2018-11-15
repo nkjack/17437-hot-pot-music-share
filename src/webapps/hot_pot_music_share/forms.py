@@ -114,7 +114,7 @@ class RoomForm(forms.ModelForm):
 										}))
 	class Meta:
 		model = Room
-		fields = ['name', 'cover_pic', 'description']
+		fields = ['name', 'cover_pic', 'description', 'owner']
 
 	def clean(self):
 		cleaned_data = super(RoomForm, self).clean()

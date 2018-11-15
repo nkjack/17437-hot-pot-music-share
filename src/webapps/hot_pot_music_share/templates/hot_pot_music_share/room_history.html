@@ -8,21 +8,27 @@
         
         <!-- rows of rooms -->
         <div class="row-card">
-              <a href="room_base.html" class="col-sm-4">
-
+              
                 <!-- One single room -->
-                <div class="card bg-light rounded">
+                {% for room in popular %}
+                  <a href="room_base.html" class="col-sm-4">
 
-                  <!-- the checkbox will show after click on edit -->
-                  <input type="checkbox" class = "checkbox" id="checkbox1" name="checkbox1"/>
-                  <img class="card-img-top" src="../../static/hot_pot_music_share/img/logo.png" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">{{room_name}}</h5>
-                    <p class="card-text">{{room_description}}</p>
-                    <p class="card-text"><small class="text-muted">{{owner}}</small></p>
-                  </div>
-                </div>
-              </a>
+                    <div class="card bg-light rounded">
+                   {% if room.cover_pic %}
+                      <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
+
+                    {% endif %}
+                      <div class="card-body">
+                        <h5 class="card-title">{{ room.name }}</h5>
+                        <p class="card-text">{{room.description }}</p>
+                        <p class="card-text"><small class="text-muted">DJ: {{room.owner.username}}</small></p>
+                      </div>
+                    </div>
+                  
+                </a>
+                {% endfor %}
+              
+
             </div>
         </div>
 

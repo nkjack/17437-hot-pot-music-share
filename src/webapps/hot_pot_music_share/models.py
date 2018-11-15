@@ -16,9 +16,11 @@ import os
 # get the rooms own by this user
 #	rooms = Room.objects.filter(owner = request.user)
 
-# 
+def getDefaultUser():
+	return 1;
+
 class Room(models.Model):
-	owner = models.ForeignKey(User, on_delete = models.CASCADE);
+	owner = models.ForeignKey(User, on_delete = models.CASCADE, blank = True);
 	name =  models.CharField(max_length = 42,default = 'myRoom')
 	create_date = models.DateTimeField(auto_now = True)
 	# listeners = models.ManyToManyField(HotPotUser, related_name='+')
@@ -31,9 +33,9 @@ class Room(models.Model):
 	thumbs_up = models.IntegerField(default = 0)
 
 	def __str__(self):
-		return self.user
+		return self.name
 	
-class SingleRoomEntry(models.Model):
+class RoomHistory(models.Model):
 	user = models.ForeignKey(User,on_delete = models.CASCADE)
 	join_date = models.DateTimeField(auto_now = True)
 	has_left = models.BooleanField(default=False)
@@ -52,5 +54,5 @@ class SingleRoomEntry(models.Model):
 	# 	return self.has_left
 
 	def __str__(self):
-		return self.user
+		return self.user.username
 

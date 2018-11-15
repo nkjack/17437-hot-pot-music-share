@@ -25,36 +25,43 @@ from django.contrib.auth.tokens import default_token_generator
 # Home view
 @login_required
 def home(request, username):
-    context = {'error':''}
+    context = {'title': 'home', 'error':''}
     context['username'] =  username
     user_from_url = get_object_or_404(User, username = username)
     
     if(request.method == "GET"):
-        context['form'] = RoomForm()
+        context['form'] = RoomForm(initial={'owner': request.user})
 
         popular_rooms = Room.objects.all().order_by('thumbs_up')[:6]
         context["popular"] = popular_rooms
+
+        print(popular_rooms)
         return render(request, 'home.html', context)
 
     elif (request.POST.get('create_room')):
-        form = RoomForm(request.POST, request.FILES)
+        form = RoomForm(request.POST, request.FILES, initial={'owner': request.user})
         context['form'] = form
 
         if form.is_valid():
-            new_room = form.save(commit=False)
-            new_room.owner = request.user
+            print("0kkkk")
+            new_room = Room.objects.create(owner = request.user,
+                                            name = form.cleaned_data['name'],
+                                            description = form.cleaned_data['description'],
+                                            cover_pic = form.cleaned_data['cover_pic']
+                                            )
             new_room.save()
-
-            new_history = SingleRoomEntry.objects.create(user = request.user, 
+            new_history = RoomHistory.objects.create(user = request.user, 
                                                         visited_room = new_room)
             new_history.save()
 
-            return HttpResponseRedirect(reverse('room',args=[request.POST['room_name']]))
+            return HttpResponseRedirect(reverse('room',args = [new_room.pk]))
         else:
+
             return render(request, 'home.html', context)
 
     else:
         context['error'] = "Please press Submit button to create a new room"
+
         return render(request, 'home.html', context)
 
 # Integrate actual Profile model later
@@ -159,221 +166,6 @@ def confirm_email(request, username, token):
 
 
 @login_required
-def room(request, room_name):
-    return HttpResponseRedirect(reverse('login'))
-
-#--------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------
-# SPOTIFY DEMO (STEP 1) - Replacing login for now
-# def get_spotify_username(request):
-#     return render(request, 'spotify/get-spotify-username.html')
-
-# # SPOTIFY DEMO (STEP 2) Redirect after successfully authenticating with Spotify
-# def spotify_post_auth(request):
-#     username = request.GET['spotify-username']  # FIXME: Catch key error
-#     print("spotify_post_auth - username: ", username)
-
-#     # Get token
-#     token = spotify_get_token(username)
-
-#     # Create User here, if it doesn't exist
-#     if not User.objects.filter(username=username).exists():
-#         user = User.objects.create_user(username=username) # Same username as spotify username for now
-#         user.profile.spotify_username = username
-#         user.profile.token = token
-#         user.save()
-#     else:
-#         user = User.objects.get(username=username)
-
-#     # Create our spotify object with permissions
-#     spotify = spotipy.Spotify(auth=token)
-
-#     # Get current device
-#     devices = spotify.devices()
-#     if len(devices['devices']) > 0:
-#         deviceID = devices['devices'][0]['id']
-
-#     # Current track information
-#     track = spotify.current_user_playing_track()
-#     currently_playing = None
-#     if track is not None:
-#         artist = track['item']['artists'][0]['name']
-#         track = track['item']['name']
-
-#         if artist != "":
-#             currently_playing = "Currently playing " + artist + " - " + track
-
-#     # User information
-#     user = spotify.current_user()
-#     displayName = user['display_name']
-#     followers = user['followers']['total']
-
-#     # Get user playlists
-#     user_playlists = []
-#     searchResults = spotify.current_user_playlists()
-#     for searchResult in searchResults['items']:
-#         user_playlists.append((searchResult['name'], searchResult['id']))
-
-#     context = {'username':displayName, 'currently_playing':currently_playing, 'user_playlists':user_playlists}
-#     context['user'] = user
-#     print(context)
-#     return render(request, 'spotify/spotify-post-auth.html', context)
-
-# # SPOTIFY DEMO (STEP 3) - Create a simple room
-# def create_demo_room(request):
-#     room_name = request.GET['room-name']  # FIXME: Catch key error
-
-#     # Create the room
-#     room = Room(name=room_name, user_manager=User.objects.get(username='nkjack84')) # FIXME: Who to set user_manager to?
-#     room.save()
-
-#     # Create the playlist
-#     playlist_obj = Playlist(belongs_to_room=room)
-#     playlist_obj.save()
-
-#     # Create a single song
-#     # song1 = Song(song_id='66kQ7wr4d22LwwSjr7HXcyr', song_name='All The Stars', belongs_to_room=room)
-#     # song2 = Song(song_id='6TaqooOXAEcijL6G1AWS2K', song_name='All My Friends', belongs_to_room=room)
-#     # song1.save()
-#     # song2.save()
-#     #
-#     # playlist_obj.songs.add(song1)
-#     # playlist_obj.songs.add(song2)
-
-#     # Debug set just one song
-#     # one_song = ['66kQ7wr4d2LwwSjr7HXcyr']
-#     # playlist_obj.set_songs(one_song)
-#     # playlist_obj.songs.Objects
-
-#     token = spotify_get_token('sampromises')
-
-#     # TODO: Create an empty room
-#     return render(request, 'spotify/spotify-room.html',
-#                   {'room':room, 'playlist':playlist_obj,
-#                    'song_id':'66kQ7wr4d22LwwSjr7HXcyr',
-#                    'token':token})
-
-
-# # Simple callback after Spotify authentication is done
-# def spotify_callback(request):
-#     context = {'code': request.GET['code']}
-#     return render(request, 'spotify/spotify-callback.html', context)
-
-# def spotify_web_playback(request):
-#     return render(request, 'spotify/spotify-web-playback.html')
-
-# ### HELPER FUNCTIONS
-
-# # Get a Spotify auth token
-# def spotify_get_token(username):
-#     # Erase cache and prompt for user permission
-#     try:
-#         token = util.prompt_for_user_token(username=username,
-#                                            scope=SCOPE,
-#                                            client_id=SPOTIPY_CLIENT_ID,
-#                                            client_secret=SPOTIPY_CLIENT_SECRET,
-#                                            redirect_uri='http://localhost:8000/spotify-callback')  # add scope
-
-
-
-#     except (AttributeError, JSONDecodeError):  # If reading from cache went bad
-#         os.remove(f".cache-{username}")
-#         token = util.prompt_for_user_token(username=username,
-#                                            scope=SCOPE,
-#                                            client_id=SPOTIPY_CLIENT_ID,
-#                                            client_secret=SPOTIPY_CLIENT_SECRET,
-#                                            redirect_uri='http://localhost:8000/spotify-callback')  # add scope
-#     return token
-
-# def spotify_play_song(request, song_id, offset=None):
-#     # Get token
-#     token = spotify_get_token('sampromises')
-
-#     # Create our spotify object with permissions
-#     spotify = spotipy.Spotify(auth=token)
-
-#     print("DEVICES: ", spotify.devices())
-
-#     # Change playback
-#     spotify.start_playback(device_id='bab9a49eb64e01a2467bda4486315865c3754ff3',
-#                            uris=['spotify:track:'+song_id], offset=offset)
-
-#     # Empty response
-#     return HttpResponse('')
-
-
-# # Transfer Spotify playback to specified device ID
-# def spotify_transfer_playback(request, device_id, username='sampromises'):
-#     # Get token
-#     token = spotify_get_token(username)
-
-#     # Create our spotify object with permissions
-#     spotify = spotipy.Spotify(auth=token)
-
-#     # Get current device
-#     spotify.transfer_playback(device_id, force_play=True)
-#     print(device_id)
-
-#     # Empty response
-#     return HttpResponse('')
-
-# #search song in spotify
-# def search_song(request):
-#     user = User.objects.get(username="nkjack84")
-
-#     context = {}
-#     room_id = request.GET['room']
-#     print(room_id)
-#     room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
-#     playlist_obj = Playlist.objects.get(belongs_to_room=room)
-
-#     search_song = request.GET['spotify-song']
-
-#     user = User.objects.get(username='nkjack84')
-#     sp = spotipy.Spotify(auth=user.profile.spotify_get_token())
-#     result = sp.search(search_song, limit=10, type="track")
-#     # pprint.pprint(result)
-
-#     # print(type(result))
-#     items = result['tracks']['items']
-
-#     dic_songs = {}
-#     for item in items:
-#         dic_songs[item['id']] = item['name']
-
-#     # print(dic_songs)
-
-#     context['room'] = room
-#     context['search_results'] = dic_songs
-#     context['playlist'] = playlist_obj
-#     context['user'] = user
-#     return render(request, 'spotify/spotify-room.html', context)
-
-
-# def add_song_to_room_playlist(request):
-#     user = User.objects.get(username='nkjack84')
-
-#     context = {}
-#     room_id = request.POST['room_id']
-#     searched_song_id = request.POST['song_id']
-#     searched_song_name = request.POST['song_name']
-
-#     room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
-#     playlist = Playlist.objects.get(belongs_to_room=room)
-
-#     song = Song(song_id=searched_song_id, song_name=searched_song_name, belongs_to_room=room)
-#     song.save()
-
-#     playlist.songs.add(song)
-#     context['room'] = room
-#     context['playlist'] = playlist
-#     context['user'] = user
-#     return render(request, 'spotify/spotify-room.html', context)
-
-# def play_song(request):
-#     user = User.objects.get(username='nkjack84')
-#     sp = spotipy.Spotify(auth=user.profile.spotify_get_token())
-#     sp.start_playback(device_id='1171ce229321475f1c5729dfcc56265ca787d51b', uris=['spotify:track:' + request.GET['spotify-song']])
-
-#     return HttpResponse('')
-
+def room(request, pk):
+    context ={'username' : request.user.username}
+    return render(request, 'room_base.html', context)
