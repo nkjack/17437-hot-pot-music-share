@@ -8,11 +8,6 @@ from hot_pot_music_share.models import *
 
 class RegistrationForm(forms.Form):
 
-	name = forms.CharField(required = True, max_length =20,
-									label = 'Name',
-									widget = forms.TextInput(attrs = 
-										{'class':'form-control', 'maxlength' :'15', 
-										}))
 	email = forms.EmailField(required = True, label = 'Email',
 								validators = [EmailValidator()],
 								widget = forms.EmailInput(attrs = {
@@ -67,11 +62,6 @@ class RegistrationForm(forms.Form):
 		username = self.cleaned_data.get('username')
 		if User.objects.filter(username__exact = username):
 			raise forms.ValidationError('Username is already taken.')
-
-		name = self.cleaned_data.get('name')
-		if not lastname or lastname == '' or not isinstance(name, str):
-			raise forms.ValidationError('Name need to be a string and cannot be empty', code = 'invalid email format')
-
 
 		return cleaned_data
 

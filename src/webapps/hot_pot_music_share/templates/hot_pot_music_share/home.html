@@ -1,50 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="../../static/hot_pot_music_share/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/home.css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/room.css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/vertical_scrollBar.css">
-</head>
-<body>
-		<!-- This part should be in navbar.html which extends this -->
-  <div id="wrapper">
-    <div id="sidebar-wrapper">
-      <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "../../static/hot_pot_music_share/img/menu.png" width = "50">
-      <ul class="sidebar-nav">
-          <li class="sidebar-brand">
-            <a class="figure" href = "home.html">
+{% extends 'base.html' %}
 
-              <img class="mr-4" src="../../static/hot_pot_music_share/img/user_1.png" width="90" alt = "myImage">
-              <p class = "username">User </p>
-            </a>
-          </li>
-          <li>
-              <a href="home.html">Home</a>
-          </li>
-          <li>
-              <a href="discover_rooms.html">Discover</a>
-          </li>
-          <li>
-              <a href="room_history.html">My Rooms</a>
-          </li>
-          <li>
-              <a href="profile.html">Settings</a>
-          </li>
-          <li>
-              <a href="login.html">Logout</a>
-          </li>
-        </ul>
-    </div>
-
-
-
-    <div class="page-content-wrapper">
-      <div class ="container-fluid container">
-      
-      <canvas id="canvas"></canvas>    
+{% block content %} 
+     <!--  <canvas id="canvas"></canvas>    --> 
       <button type="button" class="btn btn-lg" onclick="openForm()">Create a Room</button>
 
       <div class="form-popup" id="myForm">
@@ -55,7 +12,7 @@
             <input type="text" placeholder="Room 123" name="room_name" required>
 
             <label for="psw"><b>Description</b></label>
-            <input type="text" placeholder="This is my room" name="Description">
+            <input type="text" placeholder="This is my room" name="description">
 
 
             <label for="avatar">Profile picture:</label>
@@ -68,13 +25,7 @@
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
           </form>
         </div>
-  	 </div>
-    </div>
-  </div>
-  <script src="../../static/hot_pot_music_share/js/popper.min.js"></script>
-  <script src = "../../static/hot_pot_music_share/js/jquery-3.3.1.min.js"></script>
-  <script src="../../static/hot_pot_music_share/js/bootstrap.min.js"></script>
-  <script src = "../../static/hot_pot_music_share/js/home.js"></script>
+
 	<script>
 		function openForm() {
 
@@ -90,6 +41,4 @@
     };
 
 		</script>
-
-</body>
-</html>
+{% endblock %}
