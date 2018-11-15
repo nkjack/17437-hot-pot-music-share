@@ -74,15 +74,13 @@ def search_song(request):
 
 
 def add_song_to_room_playlist(request):
-
-    user = User.objects.get(username='nkjack84')
-
     context = {}
+    user = User.objects.get(username=request.user)
     room_id = request.POST['room_id']
     searched_song_id = request.POST['song_id']
     searched_song_name = request.POST['song_name']
 
-    room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
+    room = Room.objects.get(id=room_id)
     playlist = Playlist.objects.get(belongs_to_room=room)
 
     song = Song(song_id=searched_song_id, song_name=searched_song_name, belongs_to_room=room)
@@ -101,3 +99,9 @@ def play_song(request):
 
     return HttpResponse('')
 
+def base_map(request):
+    context = {}
+    return render(request, 'hot_pot_music_share/maps/base_map.html', context)
+
+def add_marker(request):
+    

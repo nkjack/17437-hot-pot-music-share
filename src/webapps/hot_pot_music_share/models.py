@@ -101,6 +101,18 @@ class Vote(models.Model):
         return self.user.username
 
 
+########## maps
+
+class Marker(models.Model):
+    # id - django generate
+    room_name = models.CharField(max_length=60, default="")
+    address = models.CharField(max_length=80, default="")
+    lat = models.FloatField()
+    lng = models.FloatField()
+
+    def __str__(self):
+        return self.room_name + " " + self.address
+
 
 
 
