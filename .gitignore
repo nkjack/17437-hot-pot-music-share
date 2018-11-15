@@ -36,3 +36,4 @@ nosetests.xml
 
 # JetBrains project folder
 .idea
+*.sqlite3
