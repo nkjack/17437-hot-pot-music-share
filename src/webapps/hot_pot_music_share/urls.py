@@ -1,6 +1,8 @@
+from django.conf.urls import url
 from django.urls import path
 
 from hot_pot_music_share import views
+from hot_pot_music_share import player_views
 
 urlpatterns = [
     # path('', views.global_stream, name='global_stream'),
@@ -22,5 +24,8 @@ urlpatterns = [
     path('search-song', views.search_song),
     path('add-song-to-room-playlist', views.add_song_to_room_playlist),
     path('play-song', views.play_song),
+
+    path('player', player_views.youtube_player),
+    url(r'^player/(?P<room_name>[^/]+)/$', player_views.room, name='room'),
 
 ]

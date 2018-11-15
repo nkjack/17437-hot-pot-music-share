@@ -53,7 +53,7 @@ class Room(models.Model):
     user_manager = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
     place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
-    listeners = models.ManyToManyField(User, on_delete = models.CASCADE)
+    # listeners = models.ManyToManyField(User, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name

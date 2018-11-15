@@ -240,4 +240,3 @@ def play_song(request):
     sp.start_playback(device_id='1171ce229321475f1c5729dfcc56265ca787d51b', uris=['spotify:track:' + request.GET['spotify-song']])
 
     return HttpResponse('')
-
