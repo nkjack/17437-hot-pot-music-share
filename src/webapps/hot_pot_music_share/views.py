@@ -152,6 +152,7 @@ def customLogout(request):
     logout(request)
     return HttpResponseRedirect(reverse('login'))
 
+
 @transaction.atomic
 def confirm_email(request, username, token):
     user = get_object_or_404(User, username = username)
@@ -167,5 +168,22 @@ def confirm_email(request, username, token):
 
 @login_required
 def room(request, pk):
+
     context ={'username' : request.user.username}
+    # if request.method =='GET':
+
+
     return render(request, 'room_base.html', context)
+
+@login_required
+def history(request):
+    context = {'owned':'','visited':'', 'username':request.user.username}
+    if request.method =='GET':
+        owned = Room.objects.filter(owner = request.user)
+        visited = RoomHistory.getVistedRooms(request.user)
+
+        context['owned'] = owned
+        context['visited'] = visited
+
+    return render(request, 'room_history.html', context)
+

@@ -19,4 +19,8 @@ urlpatterns = [
 
     re_path(r'^room/(?P<pk>\w+)/$',views.room, name='room'),
 
+
+    # history
+    path('myRooms',views.history, name = "history")
+
 ]
