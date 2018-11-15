@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>{{title}}</title>
     {% load static %}
+    <link rel="icon" href="{% static 'hot_pot_music_share/img/logo.png' %}"> 
     <link href=" {% static 'hot_pot_music_share/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/room.css' %}">
     <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/vertical_scrollBar.css' %}">
@@ -16,8 +17,11 @@
       <ul class="sidebar-nav">
           <li class="sidebar-brand">
             <a class="figure" href = "home.html">
-
-              <img class="mr-4" src="{% img  %}" width="90" alt = "myImage">
+              {% if img %}
+                <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
+              {% else %}
+                <img class="mr-4" src="{% static 'hot_pot_music_share/img/user_1.png' %}" width="90" alt = "myImage">
+              {% endif %}
               <p class = "username">User </p>
             </a>
           </li>
@@ -44,9 +48,7 @@
     <div class="page-content-wrapper">
       <div class ="container-fluid container">
 
-        <!-- The card deck which will only allow 3 cards in one row -->
-            {% block content %}
-            {% endblock %}
+      {% block content %}{% endblock %}
   
      </div>
     </div>
@@ -54,6 +56,7 @@
   <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
   <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
   <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
+  <script src = "{% static 'hot_pot_music_share/js/home.js' %}"></script>
 
 </body>
 </html>

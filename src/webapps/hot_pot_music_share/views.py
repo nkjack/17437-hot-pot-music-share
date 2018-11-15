@@ -5,30 +5,30 @@ from django.contrib.auth.models import User
 
 # import spotipy
 # import spotipy.util as util
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.urls import reverse
-from hot_pot_music_share import models
+
 from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import login,authenticate,logout
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.urls import reverse
+from django.db import transaction
 
 from hot_pot_music_share.models import *
+from hot_pot_music_share.forms import *
 
-SPOTIPY_CLIENT_ID = '04fb29de4495438aa354af4a57fd47a4'
-SPOTIPY_CLIENT_SECRET = '38378c5d52dc467da1feeac2f53cc6fc'
-SCOPE = 'user-read-private user-read-playback-state user-modify-playback-state' + \
-        ' streaming user-read-birthdate user-read-email user-read-private' # Needed for web playback SDK
-WEB_PLAYBACK_TOKEN = 'BQA6z3s0KVEriyG89oB5UMI9g3p7ldOeMyN6aEMBqOFNZKkI7Hgfkhn1o4cGl13UwkoHiYW4kg3vgZGmexv4KCU_u9c2JrA6hSawyuAJ_QlxOJkMW4fR7pB5sTyDWUv4Hsm59W60w8RJaepgbeMPNPLi_kLJVYWMl3YN'
-
+#send mail
+from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
 
 # Home view
 @login_required
 def home(request, username):
-    return render(request, 'hot_pot_music_share/home.html')
+    return render(request, 'home.html')
 
 # Integrate actual Profile model later
-def login(request):
+def customLogin(request):
     context = {'login_active':'active', 'register_active':'',}
     # If already logged in, redirect to home
     if request.user.is_authenticated:
@@ -37,7 +37,7 @@ def login(request):
     if request.method =='GET':
         context['login_form'] = LoginForm()
         
-        return render(request, 'hot_pot_music_share/login.html', context)
+        return render(request, 'login.html', context)
 
     if request.POST.get('login'):
         form = LoginForm(request.POST)
@@ -50,18 +50,13 @@ def login(request):
             user = authenticate(request, username = username, password = password)
             
             if user is not None:
-
-                if not hasattr(user, 'profile'):
-                    profile = Profile(user = user, bio = 'my short bio', age = 0)
-                    profile.save()
-
                 login(request, user)
                 return HttpResponseRedirect(reverse('home',args=[username]))
             else:
                 context['error'] = 'Invalid login. Password doesnot match the user or user doesnot exist'
-                return render(request, 'hot_pot_music_share/login.html', context)
+                return render(request, 'login.html', context)
         else:
-            return render(request, 'hot_pot_music_share/login.html', context)
+            return render(request, 'login.html', context)
 
     
     elif 'resetPassword' in request.POST or request.POST['resetPassword']:
@@ -70,11 +65,11 @@ def login(request):
 
     else:
         context['error'] = "Please press Login button to register an account"
-        return render(request, 'hot_pot_music_share/login.html', context)
+        return render(request, 'login.html', context)
 
 
 def register(request):
-    context = {'title':'Register for Hot Pot Music Share', 'register_active': 'active', 'login_active' : ''}
+    context = {'register_active': 'active', 'login_active' : ''}
 
     if request.method =='GET':
         context['registration_form'] = RegistrationForm()
@@ -86,30 +81,26 @@ def register(request):
             context['registration_form'] = form 
             if form.is_valid():
                 new_user = User.objects.create_user(username = form.cleaned_data['username'],
-                                                    password = form.cleaned_data['password1'],
-                                                    name = form.cleaned_data['name'],
-                                            
+                                                    password = form.cleaned_data['password1'],                                         
                                                     email = form.cleaned_data['email'])
 
                 new_user.is_active = False
                 new_user.save()
-                profile = Profile(user = new_user, bio = 'my short bio', age = 0)
-                profile.save()
 
                 token = default_token_generator.make_token(new_user)
                 email_body = """
-                Welcome to Grumblr. Please click the link below to verify your email address and complete registration:
+                Welcome to hot_pot_music_share. Please click the link below to verify your email address and complete registration:
                 http://%s%s
                 """ % (request.get_host(),
                     reverse('confirm', args=(new_user.username, token)))
 
                 send_mail(subject = "Verify Your Email Adress",
                         message = email_body,
-                        from_email = "ruilit@andrew.cmu.edu",
+                        from_email = "..",
                         recipient_list = [new_user.email])
 
-                context["email"] = "Welcome to Grumblr. Please check your mailbox to find verification link to complete registration"
-                return render(request,'needs_confirmation.html',context)
+                context["email"] = "Welcome to Hot Pot Music Share. Please check your mailbox to find verification link to complete registration"
+                return render(request,'email_confirmation.html',context)
 
                 # login(request, new_user)
                 # return HttpResponseRedirect(reverse('home',args=[new_user.username]))
@@ -120,13 +111,32 @@ def register(request):
             context['error'] = "Please press Register button to register an account"
             return render(request, 'login.html', context)
 
+@transaction.atomic
+def confirm_email(request, username, token):
+    user = get_object_or_404(User, username = username)
+    if default_token_generator.check_token(user,token):
 
+        user.is_active = True
+        user.save()
+
+        return HttpResponseRedirect(reverse('login'))
+    else:
+        return HttpResponse('Invalid Link')
+
+
+@login_required
+def create_room(request):
+    return HttpResponseRedirect(reverse('login'))
+
+@login_required
+def room(request, token):
+    return HttpResponseRedirect(reverse('login'))
 
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
 # SPOTIFY DEMO (STEP 1) - Replacing login for now
 # def get_spotify_username(request):
-#     return render(request, 'hot_pot_music_share/spotify/get-spotify-username.html')
+#     return render(request, 'spotify/get-spotify-username.html')
 
 # # SPOTIFY DEMO (STEP 2) Redirect after successfully authenticating with Spotify
 # def spotify_post_auth(request):
@@ -177,7 +187,7 @@ def register(request):
 #     context = {'username':displayName, 'currently_playing':currently_playing, 'user_playlists':user_playlists}
 #     context['user'] = user
 #     print(context)
-#     return render(request, 'hot_pot_music_share/spotify/spotify-post-auth.html', context)
+#     return render(request, 'spotify/spotify-post-auth.html', context)
 
 # # SPOTIFY DEMO (STEP 3) - Create a simple room
 # def create_demo_room(request):
@@ -208,7 +218,7 @@ def register(request):
 #     token = spotify_get_token('sampromises')
 
 #     # TODO: Create an empty room
-#     return render(request, 'hot_pot_music_share/spotify/spotify-room.html',
+#     return render(request, 'spotify/spotify-room.html',
 #                   {'room':room, 'playlist':playlist_obj,
 #                    'song_id':'66kQ7wr4d22LwwSjr7HXcyr',
 #                    'token':token})
@@ -217,10 +227,10 @@ def register(request):
 # # Simple callback after Spotify authentication is done
 # def spotify_callback(request):
 #     context = {'code': request.GET['code']}
-#     return render(request, 'hot_pot_music_share/spotify/spotify-callback.html', context)
+#     return render(request, 'spotify/spotify-callback.html', context)
 
 # def spotify_web_playback(request):
-#     return render(request, 'hot_pot_music_share/spotify/spotify-web-playback.html')
+#     return render(request, 'spotify/spotify-web-playback.html')
 
 # ### HELPER FUNCTIONS
 
@@ -307,7 +317,7 @@ def register(request):
 #     context['search_results'] = dic_songs
 #     context['playlist'] = playlist_obj
 #     context['user'] = user
-#     return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
+#     return render(request, 'spotify/spotify-room.html', context)
 
 
 # def add_song_to_room_playlist(request):
@@ -328,7 +338,7 @@ def register(request):
 #     context['room'] = room
 #     context['playlist'] = playlist
 #     context['user'] = user
-#     return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
+#     return render(request, 'spotify/spotify-room.html', context)
 
 # def play_song(request):
 #     user = User.objects.get(username='nkjack84')
