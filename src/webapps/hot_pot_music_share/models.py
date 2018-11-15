@@ -12,8 +12,8 @@ class Room(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=42)
     user_manager = models.ForeignKey(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
-    place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
+    # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
+    # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
     # listeners = models.ManyToManyField(User)
     
     def __str__(self):
@@ -69,7 +69,7 @@ class Song(models.Model):
     song_name = models.CharField(max_length=42)
     # votes_score = models.IntegerField(default=0)
 
-    belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # belongs_to_playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
     thumbs_up = models.IntegerField(blank = True, default = 0)
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
@@ -84,7 +84,7 @@ class Playlist(models.Model):
     songs = models.ManyToManyField(Song, related_name='pl_songs')
 
     def __str__(self):
-        return self.belongs_to_room.username
+        return self.belongs_to_room.name
 
     def add_song(self, song):
         self.songs.add(song)

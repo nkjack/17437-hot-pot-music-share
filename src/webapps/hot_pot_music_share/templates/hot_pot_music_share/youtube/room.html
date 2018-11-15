@@ -35,13 +35,16 @@
     {% for id, song in search_results.items %}
         <li>
             <form action="/add-song-to-room-playlist" method="post">
-{#                <input type="hidden" name="room_id" value="{{ room.id }}">#}
+                <input type="hidden" name="room_id" value="{{ room.id }}">
                 <input type="hidden" name="song_id" value="{{ id }}">
                 <input type="hidden" name="song_name" value="{{ song }}">
-                <input type="submit" value="Add song"> {{ song }}
+                <img src="https://img.youtube.com/vi/{{ id }}/0.jpg" width="10%" height="10%">
+                {{ song }}
+                <input type="submit" value="Add song">
                 {% csrf_token %}
             </form>
         </li>
+        <br>
     {% endfor %}
 </ul>
 

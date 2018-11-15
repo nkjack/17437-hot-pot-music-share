@@ -75,13 +75,26 @@ def search_song(request):
 
 def add_song_to_room_playlist(request):
     context = {}
-    user = User.objects.get(username=request.user)
-    room_id = request.POST['room_id']
+    # user = User.objects.get(username=request.user)
+    # room_id = request.POST['room_id']
     searched_song_id = request.POST['song_id']
     searched_song_name = request.POST['song_name']
 
-    room = Room.objects.get(id=room_id)
-    playlist = Playlist.objects.get(belongs_to_room=room)
+    if not User.objects.filter(exact__username="noam"):
+        u = User.objects.create(username="noam")
+        u.save()
+
+    if not Room.objects.filter(exact__name="noam_room"):
+        u = User.objects.get(username="noam")
+        r = Room.objects.create(user_manager=u, name="noam_room")
+        r.save()
+        p = Playlist.objects.create(belongs_to_room=r)
+        p.save()
+
+
+    # room = Room.objects.get(id=room_id)
+    r = Room.objects.get(name="noam_room")
+    # playlist = Playlist.objects.get(belongs_to_room=room)
 
     song = Song(song_id=searched_song_id, song_name=searched_song_name, belongs_to_room=room)
     song.save()
