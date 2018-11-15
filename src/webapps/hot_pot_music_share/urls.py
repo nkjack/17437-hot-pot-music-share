@@ -10,7 +10,7 @@ urlpatterns = [
 
 
     # User login 
-    path('', RedirectView.as_view(url = 'login'),name="go_to_login"),d
+    path('', RedirectView.as_view(url = 'login'),name="go_to_login"),
     path('login', views.login, name='login'),
     path('register', views.register, name= 'register'),
 
@@ -18,12 +18,12 @@ urlpatterns = [
     re_path(r'^username=(?P<username>[a-z0-9_]{3,15})$',views.home, name = 'home'),
 
     # Create Room
-    path('create-room', views.create_room, name = "create_room");
+    path('create-room', views.create_room, name = "create_room"),
     re_path(r'^room/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.confirm_email, name='confirm'),
 
-    
-    
+
+
     # Spotify stuff
     path('get-spotify-username', views.get_spotify_username),
     path('spotify-post-auth', views.spotify_post_auth),
