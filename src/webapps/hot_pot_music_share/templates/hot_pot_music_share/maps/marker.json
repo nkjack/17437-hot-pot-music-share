@@ -1,0 +1,7 @@
+{
+  "id" : "{{marker.id}}",
+  "room_name" : "{{marker.room_name}}",
+  "address" : "{{marker.address}}",
+  "lat" : "{{marker.lat}}",
+  "lng" : "{{marker.lng}}"
+}

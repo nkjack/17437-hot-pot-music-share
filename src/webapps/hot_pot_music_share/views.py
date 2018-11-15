@@ -101,7 +101,32 @@ def play_song(request):
 
 def base_map(request):
     context = {}
+    all_markers = Marker.objects.all()
+    context['all_markers'] = all_markers
     return render(request, 'hot_pot_music_share/maps/base_map.html', context)
 
+from hot_pot_music_share.forms import *
+from django.http import Http404
+from django.http import JsonResponse
+
 def add_marker(request):
-    
+    context = {}
+    form = MarkerForm(request.POST)
+    if not form.is_valid():
+        print (form.errors)
+        raise Http404
+
+    form.save()
+    all_markers = Marker.objects.all()
+    print (all_markers)
+    context['all_markers'] = all_markers
+    return JsonResponse(data={})
+    # return render(request, 'hot_pot_music_share/maps/base_map.html', context)
+
+# @login_required
+# @transaction.atomic
+def get_markers(request):
+    all_markers = Marker.objects.all()
+    context = {'markers': all_markers}
+
+    return render(request, 'hot_pot_music_share/maps/markers.json', context, content_type='application/json')
