@@ -20,14 +20,14 @@
 </ol>
 
 {# TODO: Search request #}
-<form action="/search-song">
+<form action="{% url 'search-song' %}" method="GET">
     <label>
         Search songs:
-        <input type="text" name="song_anme">
+        <input type="text" name="query">
         <button type="submit">Submit</button>
     </label>
 
-    <input type="hidden" name="room" value="{{ room.id }}">
+{#    <input type="hidden" name="room" value="{{ room.id }}">#}
 </form>
 {# TODO: Search results #}
 
@@ -35,7 +35,7 @@
     {% for id, song in search_results.items %}
         <li>
             <form action="/add-song-to-room-playlist" method="post">
-                <input type="hidden" name="room_id" value="{{ room.id }}">
+{#                <input type="hidden" name="room_id" value="{{ room.id }}">#}
                 <input type="hidden" name="song_id" value="{{ id }}">
                 <input type="hidden" name="song_name" value="{{ song }}">
                 <input type="submit" value="Add song"> {{ song }}

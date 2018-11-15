@@ -22,49 +22,25 @@ def home(request):
 def login(request):
     return render(request, 'hot_pot_music_share/login.html')
 
-# SPOTIFY DEMO (STEP 3) - Create a simple room
-def create_demo_room(request):
-    room_name = request.GET['room-name']  # FIXME: Catch key error
 
-    # Create the room
-    room = Room(name=room_name, user_manager=User.objects.get(username='nkjack84')) # FIXME: Who to set user_manager to?
-    room.save()
-
-    # Create the playlist
-    playlist_obj = Playlist(belongs_to_room=room)
-    playlist_obj.save()
-
-    # Create a single song
-    # song1 = Song(song_id='66kQ7wr4d22LwwSjr7HXcyr', song_name='All The Stars', belongs_to_room=room)
-    # song2 = Song(song_id='6TaqooOXAEcijL6G1AWS2K', song_name='All My Friends', belongs_to_room=room)
-    # song1.save()
-    # song2.save()
-    #
-    # playlist_obj.songs.add(song1)
-    # playlist_obj.songs.add(song2)
-
-    # Debug set just one song
-    # one_song = ['66kQ7wr4d2LwwSjr7HXcyr']
-    # playlist_obj.set_songs(one_song)
-    # playlist_obj.songs.Objects
-
-
-    # TODO: Create an empty room
-    return render(request, 'hot_pot_music_share/spotify/spotify-room.html',
-                  {'room':room, 'playlist':playlist_obj,
-                   'song_id':'66kQ7wr4d22LwwSjr7HXcyr',
-                   'token':token})
 
 ## youtube search
+
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 DEVELOPER_KEY = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
-def search_song(request, query, max_results=10):
-    context = {}
 
+def search_room(request):
+    context = {}
+    return render(request, 'hot_pot_music_share/youtube/room.html', context)
+
+def search_song(request):
+    context = {}
+    query = request.GET['query']
+    max_results = 10
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
                     developerKey=DEVELOPER_KEY)
 
@@ -73,7 +49,9 @@ def search_song(request, query, max_results=10):
     search_response = youtube.search().list(
         q=query,
         part='id,snippet',
-        maxResults=max_results
+        maxResults=max_results,
+        type='video',
+        videoCategoryId='10', # only songs!
     ).execute()
 
     videos = {}
@@ -85,24 +63,14 @@ def search_song(request, query, max_results=10):
             videos[search_result['id']['videoId']] = search_result['snippet']['title']
 
 
-    room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
-    playlist_obj = Playlist.objects.get(belongs_to_room=room)
+    # room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
+    # playlist_obj = Playlist.objects.get(belongs_to_room=room)
 
-    search_song = request.GET['song_name']
     # pprint.pprint(result)
 
 
-    dic_songs = {}
-    for item in items:
-        dic_songs[item['id']] = item['name']
-
-    # print(dic_songs)
-
-    context['room'] = room
-    context['search_results'] = dic_songs
-    context['playlist'] = playlist_obj
-    context['user'] = user
-    return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
+    context['search_results'] = videos
+    return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
 
 def add_song_to_room_playlist(request):

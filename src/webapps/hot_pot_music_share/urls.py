@@ -10,9 +10,9 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('login', views.login, name='login'),
 
-    # Spotify stuff
-    path('create-demo-room', views.create_demo_room),
-    path('search-song', views.search_song),
+    # path('create-demo-room', views.create_demo_room),
+    path('search-room', views.search_room, name='search-room'),
+    path('search-song', views.search_song, name='search-song'),
     path('add-song-to-room-playlist', views.add_song_to_room_playlist),
     path('play-song', views.play_song),
 
