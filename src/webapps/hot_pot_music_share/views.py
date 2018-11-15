@@ -94,15 +94,16 @@ def add_song_to_room_playlist(request):
 
     # room = Room.objects.get(id=room_id)
     r = Room.objects.get(name="noam_room")
-    # playlist = Playlist.objects.get(belongs_to_room=room)
+    p = Playlist.objects.get(belongs_to_room=r)
 
-    song = Song(song_id=searched_song_id, song_name=searched_song_name, belongs_to_room=room)
-    song.save()
+    s = Song(song_id=searched_song_id, song_name=searched_song_name)
+    s.save()
 
-    playlist.songs.add(song)
-    context['room'] = room
-    context['playlist'] = playlist
-    context['user'] = user
+    p.songs.add(s)
+
+    # context['room'] = room
+    context['playlist'] = p
+    # context['user'] = user
     return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
 
 def play_song(request):
