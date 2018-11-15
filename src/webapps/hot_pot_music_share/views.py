@@ -46,7 +46,7 @@ def home(request, username):
             new_room.save()
 
             new_history = SingleRoomEntry.objects.create(user = request.user, 
-                                                        room = new_room)
+                                                        visited_room = new_room)
             new_history.save()
 
             return HttpResponseRedirect(reverse('room',args=[request.POST['room_name']]))
