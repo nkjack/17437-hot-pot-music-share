@@ -35,7 +35,7 @@ urlpatterns = [
     re_path(r'^room/(?P<pk>\w+)/$', views.room, name='room'),
 
     # history
-    path('myRooms', views.history, name="history")
+    path('myRooms', views.history, name="history"),
     path('player', player_views.youtube_player),
     url(r'^player/(?P<room_name>[^/]+)/$', player_views.room, name='room'),
 

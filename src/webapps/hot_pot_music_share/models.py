@@ -11,7 +11,6 @@ class Room(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=42)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-g
     create_date = models.DateTimeField(auto_now=True)
     cover_pic = models.ImageField(upload_to='room-photo', blank=True,
                                   default='room-photo/logo.png',
