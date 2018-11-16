@@ -35,6 +35,10 @@ YOUTUBE_API_VERSION = 'v3'
 
 def search_room(request):
     context = {}
+    r = Room.objects.get(name="noam_room")
+    p = Playlist.objects.get(belongs_to_room=r)
+    context['playlist'] = p
+
     return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
 def search_song(request):
@@ -68,6 +72,9 @@ def search_song(request):
 
     # pprint.pprint(result)
 
+    r = Room.objects.get(name="noam_room")
+    p = Playlist.objects.get(belongs_to_room=r)
+    context['playlist'] = p
 
     context['search_results'] = videos
     return render(request, 'hot_pot_music_share/youtube/room.html', context)
@@ -80,11 +87,11 @@ def add_song_to_room_playlist(request):
     searched_song_id = request.POST['song_id']
     searched_song_name = request.POST['song_name']
 
-    if not User.objects.filter(exact__username="noam"):
+    if not User.objects.filter(username__exact="noam"):
         u = User.objects.create(username="noam")
         u.save()
 
-    if not Room.objects.filter(exact__name="noam_room"):
+    if not Room.objects.filter(name__exact="noam_room"):
         u = User.objects.get(username="noam")
         r = Room.objects.create(user_manager=u, name="noam_room")
         r.save()
@@ -96,15 +103,56 @@ def add_song_to_room_playlist(request):
     r = Room.objects.get(name="noam_room")
     p = Playlist.objects.get(belongs_to_room=r)
 
-    s = Song(song_id=searched_song_id, song_name=searched_song_name)
-    s.save()
+    if not Song.objects.filter(song_id__exact=searched_song_id):
+        s = Song(song_id=searched_song_id, song_name=searched_song_name)
+        s.save()
 
-    p.songs.add(s)
+    s = Song.objects.get(song_id=searched_song_id)
+
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+        p.songs.add(s)
 
     # context['room'] = room
     context['playlist'] = p
     # context['user'] = user
-    return render(request, 'hot_pot_music_share/spotify/spotify-room.html', context)
+    return render(request, 'hot_pot_music_share/youtube/room.html', context)
+
+def add_song_to_room_playlist_ajax(request):
+    context = {}
+    # user = User.objects.get(username=request.user)
+    # room_id = request.POST['room_id']
+    searched_song_id = request.POST['song_id']
+    searched_song_name = request.POST['song_name']
+
+    if not User.objects.filter(username__exact="noam"):
+        u = User.objects.create(username="noam")
+        u.save()
+
+    if not Room.objects.filter(name__exact="noam_room"):
+        u = User.objects.get(username="noam")
+        r = Room.objects.create(user_manager=u, name="noam_room")
+        r.save()
+        p = Playlist.objects.create(belongs_to_room=r)
+        p.save()
+
+    # room = Room.objects.get(id=room_id)
+    r = Room.objects.get(name="noam_room")
+    p = Playlist.objects.get(belongs_to_room=r)
+
+    if not Song.objects.filter(song_id__exact=searched_song_id):
+        s = Song(song_id=searched_song_id, song_name=searched_song_name)
+        s.save()
+
+    s = Song.objects.get(song_id=searched_song_id)
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+        p.songs.add(s)
+
+    # context['room'] = room
+    context['songs'] = p.songs.all()
+    # print (context['songs'])
+    # context['user'] = user
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
 
 def play_song(request):
     # user = User.objects.get(username='nkjack84')

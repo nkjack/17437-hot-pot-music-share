@@ -14,6 +14,7 @@ urlpatterns = [
     path('search-room', views.search_room, name='search-room'),
     path('search-song', views.search_song, name='search-song'),
     path('add-song-to-room-playlist', views.add_song_to_room_playlist),
+    path('add-song-to-room-playlist-ajax', views.add_song_to_room_playlist_ajax),
     path('play-song', views.play_song),
     path('base-map', views.base_map),
     path('add-marker', views.add_marker),
