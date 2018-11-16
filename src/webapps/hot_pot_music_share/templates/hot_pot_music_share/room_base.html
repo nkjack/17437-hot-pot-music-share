@@ -1,87 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-        <link href="../../static/hot_pot_music_share/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/room.css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/vertical_scrollBar.css">
-
-    <title>Room</title>
+{% extends 'base.html' %}
 
 
-  </head>
+{% block content %}
 
-  <body>
-  	 <div id="wrapper">
-    <div id="sidebar-wrapper">
-      <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "../../static/hot_pot_music_share/img/menu.png" width = "50">
-      <ul class="sidebar-nav">
-          <li class="sidebar-brand">
-            <a class="figure" href = "home.html">
-
-              <img class="mr-4" src="../../static/hot_pot_music_share/img/user_1.png" width="90" alt = "myImage">
-              <p class = "username">User </p>
-            </a>
-          </li>
-          <li>
-              <a href="home.html">Home</a>
-          </li>
-          <li>
-              <a href="discover_rooms.html">Discover</a>
-          </li>
-          <li>
-              <a href="room_history.html">My Rooms</a>
-          </li>
-          <li>
-              <a href="profile.html">Settings</a>
-          </li>
-          <li>
-              <a href="login.html">Logout</a>
-          </li>
-        </ul>
-    </div>
-
-
-
-    <div class="page-content-wrapper">
-      <div class ="container-fluid container">
-
-	  	<div class="row">
+<div class="row">
 		    <div class="col">
-		     	<audio src='Kiss_the_Sky.mp3' controls preload='auto'></audio>
+		     	<iframe width="560" height="315" src="https://www.youtube.com/embed/{{video_id}}?start={{start_frame}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				
+		     		<!-- The playlist -->
 				<div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
 					
+					<!-- One track in the playlist -->
 					<div class="media pt-3" id = "song_0">
-	        			<img src="../../static/hot_pot_music_share/img/hearts.png" alt="" class="mr-2 rounded" width="25">
+
+						<!-- The thumbnail of this video -->
+						<!-- Maybe also use API to get a thumbnail -->
+	        			<img src="https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="35">
 				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
 				            <div class="d-flex justify-content-between align-items-center w-100">
-				              <strong class="text-gray-dark">Kiss the Sky</strong>
-				              <span class="d-block">by unknown</span>
+				              <strong class="text-gray-dark">{{name_of_video}}</strong>
+				              <span class="d-block">{{author}}</span>
 				            </div>
 				        </div>
-				    </div>>
+				    </div>
 				</div>
 			</div>
 
-			<!-- This is the col for lyrics/ spotify playlist -->
+			<!-- This is the POLL -->
 		    <div class="col">
-		      <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "panel">
+		    	<div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="dj_list">
+
+		    		<div class="media pt-3" id = "vid_0">
+	        			<img src=".https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="25">
+				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+				            <div class="d-flex justify-content-between align-items-center w-100">
+				              <strong class="text-gray-dark">{{name_of_video}}</strong>
+				              <span class="d-block">{{author}}</span>
+				            </div>
+				        </div>
+				    </div>>
+		    	</div>
+
+		    </div>
+		    <div class="col">
+		    	<!-- This is the search panel -->
+		    	<div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "panel">
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="Search for...">
 					        <button class="btn-search" type="button">Search</button>
 
 					</div>
+					<!-- A list of results -->
+					<div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search result">
+						
+						<!-- One track -->
+						<div class="media pt-3" id = "song_0">
+
+							<!-- The thumbnail of this video -->
+							<!-- Maybe also use API to get a thumbnail -->
+		        			<img src="https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="25">
+					        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+					            <div class="d-flex justify-content-between align-items-center w-100">
+					              <strong class="text-gray-dark">{{name_of_video}}</strong>
+					              <span class="d-block">{{author}}</span>
+					              <span class = "d-block"> {{timespan}}</span>
+					            </div>
+					        </div>
+					    </div>
+					</div>
 
 				</div>
-		    </div>
-		    <div class="col">
+
+				<!-- This is the list of people in this room -->
 		       <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "people">
 	        		<h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
+
+	        		<!-- One user -->
 	        		<div class="media text-muted pt-3" id = "user_1">
-	        			<img src="../../static/hot_pot_music_share/img/user_1.png" alt="" class="mr-2 rounded" width="25">
+	        			<!-- The profile img -->
+	        			<img src="SOME URL" alt="" class="mr-2 rounded" width="25">
 				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
 				            <div class="d-flex justify-content-between align-items-center w-100">
 				              <strong class="text-gray-dark">Full Name</strong>
@@ -89,6 +86,7 @@
 				        </div>
 				    </div>
 
+				    <!-- Add people to this room -->
 				    <button type="button" class=" float-right btn btn-lg" onclick = "openForm()">
 	          			<span class="glyphicon">&#x2b;</span> 
 	        		</button>
@@ -112,36 +110,33 @@
     </div>
   </div>
  
-    <!-- Bootstrap JS -->
-      <script src = "../../static/hot_pot_music_share/js/jquery-3.3.1.min.js"></script>
-      <script src="../../static/hot_pot_music_share/js/popper.min.js"></script>
-      <script src="../../static/hot_pot_music_share/js/bootstrap.min.js"></script>
-      <script>
-		$(document).ready(function(){
-				$("#addFriendForm").submit(function(){
-				  	var names = $('#friendList input:checked').map(function () {
-					    return this.name;
-					}).get();
+  <script>
+	$(document).ready(function(){
+			$("#addFriendForm").submit(function(){
+			  	var names = $('#friendList input:checked').map(function () {
+				    return this.name;
+				}).get();
 
-					alert(names);
-					return false;
-				});
+				alert(names);
+				return false;
 			});
+		});
 
 
 
-			function openForm() {
+		function openForm() {
 
-				document.getElementById("popupForm").style.display = "block";
-			}
+			document.getElementById("popupForm").style.display = "block";
+		}
 
-			function closeForm() {
-			    document.getElementById("popupForm").style.display = "none";
-			}
-		    function toggleNav() {
-		        console.log("toggle");
-		        $("#wrapper").toggleClass("toggled");
-		    };
-		</script>
-</body>
-</html>
+		function closeForm() {
+		    document.getElementById("popupForm").style.display = "none";
+		}
+	    function toggleNav() {
+	        console.log("toggle");
+	        $("#wrapper").toggleClass("toggled");
+	    };
+	</script>
+
+
+{% endblock %}

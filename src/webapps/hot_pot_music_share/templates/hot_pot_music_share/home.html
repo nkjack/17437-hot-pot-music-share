@@ -1,97 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-        <link href="../../static/hot_pot_music_share/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/home.css">
-    <link rel="stylesheet" href="../../static/hot_pot_music_share/css/vertical_scrollBar.css">
-</head>
-<body>
-		<!-- This part should be in navbar.html which extends this -->
-  <div id="wrapper">
-    <div id="sidebar-wrapper">
-      <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "../../static/hot_pot_music_share/img/menu.png" width = "50">
-      <ul class="sidebar-nav">
-          <li class="sidebar-brand">
-            <a class="figure" href = "home.html">
+{% extends 'base.html' %}
 
-              <img class="mr-4" src="../../static/hot_pot_music_share/img/user_1.png" width="90" alt = "myImage">
-              <p class = "username">User </p>
-            </a>
-          </li>
-          <li>
-              <a href="home.html">Home</a>
-          </li>
-          <li>
-              <a href="discover_rooms.html">Discover</a>
-          </li>
-          <li>
-              <a href="room_history.html">My Rooms</a>
-          </li>
-          <li>
-              <a href="profile.html">Settings</a>
-          </li>
-          <li>
-              <a href="login.html">Logout</a>
-          </li>
-        </ul>
-    </div>
+{% block content %} 
+<!--       <canvas id="canvas"></canvas>     -->
+      <button type="button" class="btn btn-lg" onclick="openForm()">Create a Room</button>
+    
+      <div class="my-3 p-3 rounded box-shadow">
+          <h6 class="border-bottom border-gray pb-2 mb-0">Popular Now</h6>
+          <div class="row-card">
+              
+            {% for room in popular %}
+                <a href="{% url 'room' room.pk %}" class="col-sm-4">
 
+                  <div class="card bg-light rounded">
+                 {% if room.cover_pic %}
+                    <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
 
-
-    <div class="page-content-wrapper">
-      <div class ="container-fluid">
-      
-      <canvas id="canvas"></canvas>
-      <div class = "container">
-       
-        <button type="button" class="btn btn-lg" onclick="openForm()">Create a Room</button>
+                  {% endif %}
+                    <div class="card-body">
+                      <h5 class="card-title">{{ room.name }}</h5>
+                      <p class="card-text">{{room.description }}</p>
+                      <p class="card-text"><small class="text-muted">DJ: {{room.owner.username}}</small></p>
+                    </div>
+                  </div>
+                
+              </a>
+              {% endfor %}
+        </div>
       </div>
-
-      <div class="form-popup" id="myForm">
-          <form class="form-container" action = "room_base.html" >
+                   <div class = 'error' >
+                  {{error}}
+                  {{form.errors}}
+                  {{form.non_field_errors}}
+                </div>
+      <div class="form-popup" id="create_room_div">
+          <form class="form-container" method = "POST">{% csrf_token %}
             <h1>Create A Room</h1>
 
-            <label for="name"><b>Room Name</b></label>
-            <input type="text" placeholder="Room 123" name="room_name" required>
+              <div class = "form-group my-3 mx-3">
+                {% if form %}
+                <div class = 'error' >
+                  {{form.errors}}
+                  {{form.non_field_errors}}
+                </div>
+              <div >
+                <p class = "font-weight-bold mb-0 ">{{form.name.label}}
+                  {{form.name}}</p>
+                
+              </div>
+              <div class = "my-3">
+                <p class = "font-weight-bold mb-0 ">{{form.description.label}}</p>
+                  <p class = "mx-4">{{form.description}}</p>
+                
+              </div>
+              <div >
+                <p class = "font-weight-bold mb-0 ">Room Photo</p>
 
-            <label for="psw"><b>Description</b></label>
-            <input type="text" placeholder="This is my room" name="Description">
-
-
-            <label for="avatar">Profile picture:</label>
-            <input type="file"
-                   id="avatar" name="avatar"
-                   accept="image/png, image/jpeg" />
-
-            <input type="checkbox" name="private" value="private" checked>A Private Room?
-            <button type="submit" class="btn">Create</button>
+                  {{form.cover_pic}}
+              
+            </div>
+            {% endif %}
+<!--             <input type="checkbox" name="private" value="private" checked>A Private Room? -->
+            <input type="submit" name = "create_room" value = "create" class="btn">Create</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
           </form>
         </div>
-  	 </div>
-    </div>
-  </div>
-  <script src="../../static/hot_pot_music_share/js/popper.min.js"></script>
-  <script src = "../../static/hot_pot_music_share/js/jquery-3.3.1.min.js"></script>
-  <script src="../../static/hot_pot_music_share/js/bootstrap.min.js"></script>
-  <script src = "../../static/hot_pot_music_share/js/home.js"></script>
-	<script>
-		function openForm() {
+<script>
+  function openForm() {
+    document.getElementById("create_room_div").style.display = "block";
+}
 
-		    document.getElementById("myForm").style.display = "block";
-		}
-
-		function closeForm() {
-		    document.getElementById("myForm").style.display = "none";
-		}
-    function toggleNav() {
-        console.log("toggle");
-        $("#wrapper").toggleClass("toggled");
-    };
-
-		</script>
-
-</body>
-</html>
+function closeForm() {
+    document.getElementById("create_room_div").style.display = "none";
+}
+</script>
+{% endblock %}
