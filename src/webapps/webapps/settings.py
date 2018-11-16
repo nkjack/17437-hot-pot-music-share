@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hot_pot_music_share',
+    'channels',
 ]
 
 
@@ -138,3 +139,15 @@ PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot_music_share/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot_music_share/media')
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Channels
+ASGI_APPLICATION = 'webapps.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
