@@ -199,7 +199,7 @@ def customLogin(request):
     if request.method == 'GET':
         context['login_form'] = LoginForm()
 
-        return render(request, 'login.html', context)
+        return render(request, 'user_auth/login.html', context)
 
     if request.POST.get('login'):
         form = LoginForm(request.POST)
@@ -216,9 +216,9 @@ def customLogin(request):
                 return HttpResponseRedirect(reverse('home', args=[username]))
             else:
                 context['error'] = 'Invalid login. Password doesnot match the user or user doesnot exist'
-                return render(request, 'login.html', context)
+                return render(request, 'user_auth/login.html', context)
         else:
-            return render(request, 'login.html', context)
+            return render(request, 'user_auth/login.html', context)
 
 
     elif 'resetPassword' in request.POST or request.POST['resetPassword']:
