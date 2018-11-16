@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'redirect'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Application definition
 
@@ -38,10 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hot_pot_music_share',
+    'channels',
 ]
 
-LOGIN_URL = '/hot_pot_music_share/login'
-LOGIN_REDIRECT_URL = '/hot_pot_music_share/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,7 +66,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'hot_pot_music_share','templates','hot_pot_music_share')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,6 +128,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "hot_pot_music_share/static")]
 
 STATIC_URL = '/static/'
 
@@ -136,3 +139,15 @@ PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot_music_share/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot_music_share/media')
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Channels
+ASGI_APPLICATION = 'webapps.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
