@@ -1,6 +1,10 @@
+from django.conf.urls import url
+from django.urls import path
+
 from django.urls import path,re_path
 from django.views.generic.base import RedirectView
 from hot_pot_music_share import views
+from hot_pot_music_share import player_views
 
 urlpatterns = [
 
@@ -18,5 +22,8 @@ urlpatterns = [
     re_path(r'^username/(?P<username>[a-zA-Z0-9_]{3,15})/$',views.home, name = 'home'),
 
     re_path(r'^room/(?P<pk>\w+)/$',views.room, name='room'),
+
+    path('player', player_views.youtube_player),
+    url(r'^player/(?P<room_name>[^/]+)/$', player_views.room, name='room'),
 
 ]

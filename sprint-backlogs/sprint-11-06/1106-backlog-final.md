@@ -1,5 +1,30 @@
 ## (11/06-11/19) Sprint
 
+### By Thursday (11/15)
+- Login/Registration with Django model/form
+- HTML template creation for easy inheritance
+- DJ room view
+    - Create a room
+    - DJ can enter the room
+    - DJ can: play/pause/next/prev/seek
+        - *All playback metadata sent back to django server*
+- Listener room view
+    - Listener can click a room and join it
+    - Listener asks server for current playback info
+    - Listener room immediately begins 'synchronized' playback
+- Search functionality
+    - *Will be used in both DJ room and Listener room later*
+    - Allow user to search for youtube videos
+    - Allow user to see results from search query
+    - Allow user to add results, which should:
+        - 1) async. update the site to display new youtube video list
+        - 2) update django model to store list
+
+### By Saturday (11/17)
+
+### By Monday (11/19)
+- [Rui] Powerpoint slides
+
 ### YouTube API
 - [Sam][2 hours] Research YouTube authentication, be able to log-in with user
 - [Sam][2 hours] Play YouTube video on client-side, given video-id and playback-position
