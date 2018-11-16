@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 # send mail
 from django.core.mail import send_mail
+from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -51,8 +52,8 @@ def home(request, username):
 
 
 # Integrate actual Profile model later
-def login(request):
-    return render(request, 'hot_pot_music_share/login.html')
+# def login(request):
+#     return render(request, 'hot_pot_music_share/login.html')
 
 
 ## youtube search
@@ -226,7 +227,7 @@ def customLogin(request):
 
     else:
         context['error'] = "Please press Login button to register an account"
-        return render(request, 'login.html', context)
+        return render(request, 'user_auth/login.html', context)
 
 
 def register(request):
@@ -235,7 +236,7 @@ def register(request):
     if request.method == 'GET':
         context['registration_form'] = RegistrationForm()
 
-        return render(request, 'login.html', context)
+        return render(request, 'user_auth/login.html', context)
     else:
         if 'register' in request.POST or request.POST['register']:
             form = RegistrationForm(request.POST)
@@ -262,16 +263,16 @@ def register(request):
 
                 context[
                     "email"] = "Welcome to Hot Pot Music Share. Please check your mailbox to find verification link to complete registration"
-                return render(request, 'email_confirmation.html', context)
+                return render(request, 'user_auth/email_confirmation.html', context)
 
                 # login(request, new_user)
                 # return HttpResponseRedirect(reverse('home',args=[new_user.username]))
             else:
                 context['error'] = "Please check if all the field satisfy requirements or the username is already taken"
-                return render(request, 'login.html', context)
+                return render(request, 'user_auth/login.html', context)
         else:
             context['error'] = "Please press Register button to register an account"
-            return render(request, 'login.html', context)
+            return render(request, 'user_auth/login.html', context)
 
 
 def customLogout(request):

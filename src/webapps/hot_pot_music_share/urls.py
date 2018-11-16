@@ -14,7 +14,6 @@ urlpatterns = [
     path('search-song', views.search_song, name='search-song'),
     path('add-song-to-room-playlist', views.add_song_to_room_playlist),
     path('add-song-to-room-playlist-ajax', views.add_song_to_room_playlist_ajax),
-    path('play-song', views.play_song),
     path('base-map', views.base_map),
     path('add-marker', views.add_marker),
     path('get-markers', views.get_markers),
@@ -36,7 +35,10 @@ urlpatterns = [
 
     # history
     path('myRooms', views.history, name="history"),
+
+
+    # Sam Player stuff
+    re_path(r'^player/(?P<room_name>[^/]+)/$', player_views.room, name='player-room'),
     path('player', player_views.youtube_player),
-    url(r'^player/(?P<room_name>[^/]+)/$', player_views.room, name='room'),
 
 ]
