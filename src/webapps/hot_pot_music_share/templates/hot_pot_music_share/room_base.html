@@ -3,140 +3,438 @@
 
 {% block content %}
 
-<div class="row">
-		    <div class="col">
-		     	<iframe width="560" height="315" src="https://www.youtube.com/embed/{{video_id}}?start={{start_frame}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-				
-		     		<!-- The playlist -->
-				<div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
-					
-					<!-- One track in the playlist -->
-					<div class="media pt-3" id = "song_0">
+    <div class="row">
+        <div class="col">
+            <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+            <div id="player"></div>
 
-						<!-- The thumbnail of this video -->
-						<!-- Maybe also use API to get a thumbnail -->
-	        			<img src="https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="35">
-				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-				            <div class="d-flex justify-content-between align-items-center w-100">
-				              <strong class="text-gray-dark">{{name_of_video}}</strong>
-				              <span class="d-block">{{author}}</span>
-				            </div>
-				        </div>
-				    </div>
-				</div>
-			</div>
+            <!-- Add a 'sync' now button -->
+            {% if not is_host %}
+                <button onclick="syncToHost()">Sync To Host</button>
+            {% endif %}
 
-			<!-- This is the POLL -->
-		    <div class="col">
-		    	<div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="dj_list">
 
-		    		<div class="media pt-3" id = "vid_0">
-	        			<img src=".https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="25">
-				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-				            <div class="d-flex justify-content-between align-items-center w-100">
-				              <strong class="text-gray-dark">{{name_of_video}}</strong>
-				              <span class="d-block">{{author}}</span>
-				            </div>
-				        </div>
-				    </div>>
-		    	</div>
+            {#            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video_id }}?start={{ start_frame }}"#}
+            {#                    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"#}
+            {#                    allowfullscreen></iframe>#}
 
-		    </div>
-		    <div class="col">
-		    	<!-- This is the search panel -->
-		    	<div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "panel">
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Search for...">
-					        <button class="btn-search" type="button">Search</button>
+            <!-- The playlist -->
+            <div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
 
-					</div>
-					<!-- A list of results -->
-					<div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search result">
-						
-						<!-- One track -->
-						<div class="media pt-3" id = "song_0">
+                <!-- One track in the playlist -->
+                <div class="media pt-3" id="song_0">
 
-							<!-- The thumbnail of this video -->
-							<!-- Maybe also use API to get a thumbnail -->
-		        			<img src="https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="25">
-					        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-					            <div class="d-flex justify-content-between align-items-center w-100">
-					              <strong class="text-gray-dark">{{name_of_video}}</strong>
-					              <span class="d-block">{{author}}</span>
-					              <span class = "d-block"> {{timespan}}</span>
-					            </div>
-					        </div>
-					    </div>
-					</div>
+                    <!-- The thumbnail of this video -->
+                    <!-- Maybe also use API to get a thumbnail -->
+                    <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded" width="35">
+                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <strong class="text-gray-dark">{{ name_of_video }}</strong>
+                            <span class="d-block">{{ author }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-				</div>
+        <!-- This is the POLL -->
+        <div class="col">
+            <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="dj_list">
 
-				<!-- This is the list of people in this room -->
-		       <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "people">
-	        		<h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
+                <div class="media pt-3" id="vid_0">
+                    <img src=".https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded" width="25">
+                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <strong class="text-gray-dark">{{ name_of_video }}</strong>
+                            <span class="d-block">{{ author }}</span>
+                        </div>
+                    </div>
+                </div>
+                >
+            </div>
 
-	        		<!-- One user -->
-	        		<div class="media text-muted pt-3" id = "user_1">
-	        			<!-- The profile img -->
-	        			<img src="SOME URL" alt="" class="mr-2 rounded" width="25">
-				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-				            <div class="d-flex justify-content-between align-items-center w-100">
-				              <strong class="text-gray-dark">Full Name</strong>
-				            </div>
-				        </div>
-				    </div>
+        </div>
+        <div class="col">
+            <!-- This is the search panel -->
+            <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <button class="btn-search" type="button">Search</button>
 
-				    <!-- Add people to this room -->
-				    <button type="button" class=" float-right btn btn-lg" onclick = "openForm()">
-	          			<span class="glyphicon">&#x2b;</span> 
-	        		</button>
-		    	</div>
-		  	</div>
-		</div>
+                </div>
+                <!-- A list of results -->
+                <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search result">
 
-  	
+                    <!-- One track -->
+                    <div class="media pt-3" id="song_0">
 
-      <div class="form-popup" id = "popupForm">
-          <form class="form-container" id = "addFriendForm" >
+                        <!-- The thumbnail of this video -->
+                        <!-- Maybe also use API to get a thumbnail -->
+                        <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded"
+                             width="25">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <strong class="text-gray-dark">{{ name_of_video }}</strong>
+                                <span class="d-block">{{ author }}</span>
+                                <span class="d-block"> {{ timespan }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- This is the list of people in this room -->
+            <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
+                <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
+
+                <!-- One user -->
+                <div class="media text-muted pt-3" id="user_1">
+                    <!-- The profile img -->
+                    <img src="SOME URL" alt="" class="mr-2 rounded" width="25">
+                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <strong class="text-gray-dark">Full Name</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add people to this room -->
+                <button type="button" class=" float-right btn btn-lg" onclick="openForm()">
+                    <span class="glyphicon">&#x2b;</span>
+                </button>
+
+                {#CHAT ROOM#}
+                <textarea id="chat-log" cols="20" rows="10"></textarea><br/>
+                <input id="chat-message-input" type="text" size="10"/><br/>
+                <input id="chat-message-submit" type="button" value="Send"/>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="form-popup" id="popupForm">
+        <form class="form-container" id="addFriendForm">
             <h1>Add Your Friend to This Room</h1>
             <div id="friendList">
-				<input type="checkbox" name="name3" checked="checked" >Friend_01
-			</div>
-            <input class="btn"  type = "submit" name = "addFriend">Add</button>
+                <input type="checkbox" name="name3" checked="checked">Friend_01
+            </div>
+            <input class="btn" type="submit" name="addFriend">Add</button>
             <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-          </form>
-        </div>
-  	 </div>
+        </form>
     </div>
-  </div>
- 
-  <script>
-	$(document).ready(function(){
-			$("#addFriendForm").submit(function(){
-			  	var names = $('#friendList input:checked').map(function () {
-				    return this.name;
-				}).get();
+{% endblock %}
 
-				alert(names);
-				return false;
-			});
-		});
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            $("#addFriendForm").submit(function () {
+                var names = $('#friendList input:checked').map(function () {
+                    return this.name;
+                }).get();
 
-
-
-		function openForm() {
-
-			document.getElementById("popupForm").style.display = "block";
-		}
-
-		function closeForm() {
-		    document.getElementById("popupForm").style.display = "none";
-		}
-	    function toggleNav() {
-	        console.log("toggle");
-	        $("#wrapper").toggleClass("toggled");
-	    };
-	</script>
+                alert(names);
+                return false;
+            });
+        });
 
 
+        function openForm() {
+
+            document.getElementById("popupForm").style.display = "block";
+        }
+
+        function closeForm() {
+            document.getElementById("popupForm").style.display = "none";
+        }
+
+        function toggleNav() {
+            console.log("toggle");
+            $("#wrapper").toggleClass("toggled");
+        };
+
+        <!-- Script appended by Sam -->
+
+        {#CHAT ROOM#}
+        var roomName = {{ room_name_json }};
+
+        var socket = new WebSocket(
+            'ws://' + window.location.host +
+            '/ws/room/' + roomName + '/');
+
+        // Synchronize playback better RTT/2
+        var sentSyncRequestTime;
+
+        socket.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+
+            if ('chat_text' in data) {
+                var chat_text = data['chat_text'];
+                var username = data['username'];
+
+                document.querySelector('#chat-log').value += (username + ': ' + chat_text + '\n');
+            } else if (('playback_info' in data) && ('{{ username }}' !== data['username'])) {
+                var playback_info = data['playback_info'];
+                {#var username = data['username'];#}
+
+                console.log('Received playback_info = ' + playback_info + 'from username: ' + data['username']);
+
+                {#if (playback_info.startsWith('play:')) {#}
+                if (playback_info === 'play') {
+                    // Start playing if paused
+                    {#const position = parseInt(playback_info.split(':')[1]);#}
+                    {#player.seekTo(seconds = position, allowSeekAhead = true);#}
+
+                    player.playVideo();
+
+                } else if (playback_info === 'pause') {
+                    player.pauseVideo();
+
+                } else if (playback_info.startsWith('seek:')) {
+                    console.log('entered SEEK case...');
+                    const position = parseInt(playback_info.split(':')[1]);
+                    player.seekTo(seconds = position, allowSeekAhead = true);
+                }
+            } else if ('sync_request' in data) {
+                console.log('Received sync_request = ' + data + 'from username: ' + data['from_username']);
+
+                var currPosition = String(player.getCurrentTime());
+                console.log("Host currPosition = " + currPosition);
+
+                // Send all information to other players so they can sync up
+                socket.send(JSON.stringify({
+                    'sync_result_message': '',
+                    'video_id': String(player.getVideoData()['video_id']),
+                    'position': currPosition,
+                    'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
+                }));
+
+                console.log('Sent back sync_result');
+
+            } else if ('sync_result' in data) {
+                console.log('Received sync_result...');
+
+
+                // Play the correct video
+                if (String(player.getVideoData()['video_id']) !== data['video_id']) {
+                    console.log("Changing my video and going to offset...");
+                    offset = getNetworkOffset(sentSyncRequestTime);
+                    player.cueVideoById(data['video_id'], data['position'] + offset);
+                } else if (String(player.getCurrentTime()) !== data['position']) {
+                    // Otherwise, correct video - just jump to correct offset
+                    console.log("Correct video, but changing my offset...");
+                    offset = getNetworkOffset(sentSyncRequestTime);
+                    player.seekTo(parseInt(data['position']) + offset);
+                }
+
+                // Play the video, if needed
+                if (data['is_playing'] === 'true' && player.getPlayerState() != YT.PlayerState.PLAYING) {
+                    console.log("Host is playing and i am not, so i will play...");
+                    player.playVideo();
+                } else if (data['is_playing'] === 'false' && player.getPlayerState() != YT.PlayerState.PAUSED) {
+                    console.log("Host is not playing and i am, so i will pause...");
+                    player.pauseVideo();
+                }
+            }
+
+        };
+
+        socket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function (e) {
+            var messageInputDom = document.querySelector('#chat-message-input');
+            var message = messageInputDom.value;
+            console.log('sending...');
+            socket.send(JSON.stringify({
+                'chat_message': message,
+                'username': '{{ username }}',
+            }));
+
+            messageInputDom.value = '';
+        };
+
+        {#YOUTUBE#}
+
+        // 2. This code loads the IFrame Player API code asynchronously.
+        var tag = document.createElement('script');
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // 3. This function creates an <iframe> (and YouTube player)
+        //    after the API code downloads.
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '390',
+                width: '640',
+                videoId: '9_k_goMr5ZI',
+                playerVars: {
+                    'start': 0,
+                },
+                events: {
+                    {% if is_host %}
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    {% endif %}
+                }
+            });
+        }
+
+        // 4. The API will call this function when the video player is ready.
+        function onPlayerReady(event) {
+            event.target.playVideo();
+
+            /// Time tracking starting here
+
+            var lastTime = -1;
+            var interval = 1000;
+
+            var checkPlayerTime = function () {
+                if (lastTime != -1) {
+                    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                        var currPosition = player.getCurrentTime();
+
+                        //console.log(Math.abs(t - lastTime -1));
+
+                        ///expecting 1 second interval , with 500 ms margin
+                        if (Math.abs(currPosition - lastTime - 1) > 0.5) {
+                            // there was a seek occuring
+                            console.log("Seeked to " + currPosition); /// fire your event here !
+
+                            /*
+                            socket.send(JSON.stringify({
+                                'playback_message': 'seek:' + currPosition,
+                                'username': ' username }}',
+                            }));
+                            */
+
+                            // Send same thing as sync-result, so listeners will sync up
+                            socket.send(JSON.stringify({
+                                'sync_result_message': '',
+                                'video_id': String(player.getVideoData()['video_id']),
+                                'position': currPosition,
+                                'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
+                            }));
+                        }
+                    }
+                }
+                lastTime = player.getCurrentTime();
+                setTimeout(checkPlayerTime, interval); /// repeat function call in 1 second
+            }
+            setTimeout(checkPlayerTime, interval); /// initial call delayed
+        }
+
+        var lastPlayerStateChange = window.performance.now();
+
+        function onPlayerStateChange(event) {
+            const playerStatus = event.data;
+            {#var delta = window.performance.now() - lastPlayerStateChange;#}
+            {#lastPlayerStateChange += delta;#}
+
+            // Send message via sockets
+            switch (playerStatus) {
+                case YT.PlayerState.PLAYING:
+                    console.log("onPlayerStateChange, case: YT.PlayerState.PLAYING");
+
+                    socket.send(JSON.stringify({
+                        'playback_message': 'play',
+                        'username': 'username ',
+                    }));
+
+                    break;
+                case YT.PlayerState.PAUSED:
+                    console.log("onPlayerStateChange, case: YT.PlayerState.PAUSED");
+
+                    socket.send(JSON.stringify({
+                        'playback_message': 'pause',
+                        'username': 'username ',
+                    }));
+
+                    break;
+                case YT.PlayerState.BUFFERING:
+                    console.log("onPlayerStateChange, case: YT.PlayerState.BUFFERING");
+                    // Do nothing.
+                    break;
+                case YT.PlayerState.CUED:
+                    console.log("onPlayerStateChange, case: YT.PlayerState.CUED");
+                    // Do nothing.
+                    break;
+                case YT.PlayerState.ENDED:
+                    console.log("onPlayerStateChange, case: YT.PlayerState.ENDED");
+                    // TODO: Start playing next song in the queue
+                    // player.cueVideoById(...);
+                    break;
+            }
+        }
+
+        function stopVideo() {
+            player.stopVideo();
+        }
+
+        function playVideo() {
+            // Play own video first
+            player.playVideo();
+
+            // Send message via sockets
+            socket.send(JSON.stringify({
+                'playback_message': 'play',
+                'username': '{{ username }}',
+            }));
+        }
+
+        function pauseVideo() {
+            // Pause own video first
+            player.pauseVideo();
+
+            // Send message via sockets
+            socket.send(JSON.stringify({
+                'playback_message': 'pause',
+                'username': '{{ username }}',
+            }));
+        }
+
+        function seekTo(number) {
+            player.seekTo(seconds = number, allowSeekAhead = true);
+
+            const playback_message = 'seek:' + number;
+            console.log('seek sending, msg = ' + playback_message);
+
+            // Send message via sockets
+            socket.send(JSON.stringify({
+                'playback_message': 'seek:' + number,
+                'username': '{{ username }}',
+            }));
+        }
+
+        function syncToHost() {
+            // Send message via socket
+            socket.send(JSON.stringify({
+                'sync_request_message': '',
+                'username': '{{ username }}',
+            }));
+
+            sentSyncRequestTime = window.performance.now();
+        }
+
+        // Helper function get offset in seconds
+        function getNetworkOffset(startTime) {
+            {#return (window.performance.now() / startTime) / 2 / 1000;#}
+            return 0.3;
+        }
+
+    </script>
 {% endblock %}
