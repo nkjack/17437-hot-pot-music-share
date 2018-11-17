@@ -3,7 +3,7 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
-from hot_pot_music_share.models import Room
+from hot_pot_music_share.models import Room, Song
 
 
 class PlayerConsumer(WebsocketConsumer):
@@ -93,8 +93,6 @@ class PlayerConsumer(WebsocketConsumer):
             )
         elif 'sync_result_message' in text_data_json:
 
-            print('broadcasting sync_result_message...')
-
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
@@ -104,6 +102,25 @@ class PlayerConsumer(WebsocketConsumer):
                     'is_playing': text_data_json['is_playing'],
                 }
             )
+
+        elif 'add_to_song_queue_message' in text_data_json or 'add_to_song_pool_message' in text_data_json:
+            playlist = 'queue' if 'add_to_song_queue_message' in text_data_json else 'pool'
+            print('add_to_song_[queue|pool]_message received on backend')
+
+            # Create new song
+            # FIXME: Creating replicate songs... Exact same song_id and song_name... But in DB have diff pk's... OK?
+            new_song = Song.objects.create(song_id=text_data_json['song_id'], song_name=text_data_json['song_name'])
+            new_song.save()
+
+            # Add to room's song queue, if it doesn't exist
+            room = Room.objects.get(name=self.room_name)
+            # IMPORTANT: Only add the song if it doesn't already exist - otherwise multiple values for same key
+            if playlist is 'queue' and not room.song_queue.songs.filter(song_id=new_song.song_id).exists():
+                print('Created and added new song: ' + str(new_song) + ' to queue')
+                room.song_queue.songs.add(new_song)
+            elif playlist is 'pool' and not room.song_pool.songs.filter(song_id=new_song.song_id).exists():
+                print('Created and added new song: ' + str(new_song) + ' to pool')
+                room.song_pool.songs.add(new_song)
 
     # Receive chat message from room group
     def chat_message(self, event):
@@ -143,7 +160,7 @@ class PlayerConsumer(WebsocketConsumer):
                 'from_username': username,
             }))
 
-    # Receve sync request message
+    # Receive sync request message
     def sync_result_message(self, event):
         # FIXME: Currently only the *owner* is handling sync requests
         # Note: Host just sent out sync_result, so no point in handling this as the host

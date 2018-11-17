@@ -7,29 +7,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class Room(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=42)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-    create_date = models.DateTimeField(auto_now=True)
-    cover_pic = models.ImageField(upload_to='room-photo', blank=True,
-                                  default='room-photo/logo.png',
-                                  )
-    description = models.TextField(max_length=420, blank=True,
-                                   )
-
-    thumbs_up = models.IntegerField(default=0)
-
-    # TODO: Need to add field to keep track of Hosts and Listeners
-
-    # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
-    # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
-    # listeners = models.ManyToManyField(User)
-
-    def __str__(self):
-        return self.name
-
-
 # cited from https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -86,7 +63,7 @@ class Song(models.Model):
 
 
 class Playlist(models.Model):
-    belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE) # Sam commented this out
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
@@ -98,12 +75,45 @@ class Playlist(models.Model):
 class Vote(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # room = models.ForeignKey(Room, on_delete=models.CASCADE) # Sam commented this out
 
     vote = models.CharField(max_length=2)  # could be '-1', '0', or '+1'
 
     def __str__(self):
         return self.user.username
+
+
+class Room(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=42)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    create_date = models.DateTimeField(auto_now=True)
+    cover_pic = models.ImageField(upload_to='room-photo', blank=True,
+                                  default='room-photo/logo.png',
+                                  )
+    description = models.TextField(max_length=420, blank=True,
+                                   )
+
+    thumbs_up = models.IntegerField(default=0)
+
+    # FIXME: Sam added this to keep working
+    song_queue = models.OneToOneField(Playlist,
+                                      on_delete=models.CASCADE,
+                                      related_name='song_queue',
+                                      default=None)  # Only Hosts can modify this, Room will play songs from here
+    song_pool = models.OneToOneField(Playlist,
+                                     on_delete=models.CASCADE,
+                                     related_name='song_pool',
+                                     default=None)  # Anyone can add to this
+
+    # TODO: Need to add field to keep track of Hosts and Listeners
+
+    # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
+    # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
+    # listeners = models.ManyToManyField(User)
+
+    def __str__(self):
+        return self.name
 
 
 # #extend User model to have things like profile photos etc.

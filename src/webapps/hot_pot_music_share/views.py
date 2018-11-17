@@ -11,8 +11,6 @@ from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-
-
 # Home view
 from django.utils.safestring import mark_safe
 
@@ -37,11 +35,33 @@ def home(request, username):
         context['form'] = form
 
         if form.is_valid():
+            # Create empty song_queue and song_pool
+            print("Initializing song_queue and song_pool...")
+            song_queue = Playlist.objects.create()
+            song_pool = Playlist.objects.create()
+
+            # TODO: For debugging, just add a couple songs
+            song_0 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
+            song_1 = Song.objects.create(song_id='6ONRf7h3Mdk', song_name='Travis Scott - SICKO MODE ft. Drake')
+            song_2 = Song.objects.create(song_id='xTvyyoF_LZY', song_name='Ed Sheeran - Shape of You')
+            song_3 = Song.objects.create(song_id='GTe57jQX5Eg', song_name='Jay Rock - Wow Freestyle ft. Kendrick Lamar')
+
+            song_pool.songs.add(song_2)
+            song_pool.songs.add(song_3)
+
+            song_queue.songs.add(song_0)
+            song_queue.songs.add(song_1)
+
+            song_queue.save()
+            song_pool.save()
+
             print("Creating Room...")
             new_room = Room.objects.create(owner=request.user,
                                            name=form.cleaned_data['name'],
                                            description=form.cleaned_data['description'],
-                                           cover_pic=form.cleaned_data['cover_pic']
+                                           cover_pic=form.cleaned_data['cover_pic'],
+                                           song_queue=song_queue,
+                                           song_pool=song_pool,
                                            )
             new_room.save()
             new_history = RoomHistory.objects.create(user=request.user,
@@ -295,13 +315,16 @@ def confirm_email(request, username, token):
 
 @login_required
 def room(request, room_name):
-    is_host = Room.objects.get(name=room_name).owner == request.user
+    room = Room.objects.get(name=room_name)
+    is_host = room.owner == request.user
     print(">>>>>>>>" + str(is_host))
 
     context = {'username': request.user.username,
                'room_name_json': mark_safe(json.dumps(room_name)),
                'title': 'Room ' + room_name,
                'is_host': is_host,
+               'song_pool': room.song_pool,
+               'song_queue': room.song_queue,
                }
 
     return render(request, 'room_base.html', context)
