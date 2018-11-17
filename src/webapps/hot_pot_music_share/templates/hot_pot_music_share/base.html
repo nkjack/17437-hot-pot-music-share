@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>{{title}}</title>
     {% load static %}
+      <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
+      <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
+      <script src = "{% static 'hot_pot_music_share/js/home.js' %}"></script>
+
     <link rel="icon" href="{% static 'hot_pot_music_share/img/logo.png' %}"> 
     <link href=" {% static 'hot_pot_music_share/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/room.css' %}">
@@ -50,10 +55,10 @@
      </div>
     </div>
   </div>
-  <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
-  <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
-  <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
-  <script src = "{% static 'hot_pot_music_share/js/home.js' %}"></script>
+{#  <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>#}
+{#  <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>#}
+{#  <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>#}
+{#  <script src = "{% static 'hot_pot_music_share/js/home.js' %}"></script>#}
   <script>
       function toggleNav() {
           $("#wrapper").toggleClass("toggled");

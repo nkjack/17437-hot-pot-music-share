@@ -44,16 +44,12 @@ def home(request, username):
                                                      visited_room=new_room)
             new_history.save()
 
+            p = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
+            p.save()
             return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
         else:
 
             return render(request, 'home.html', context)
-
-
-
-# Integrate actual Profile model later
-# def login(request):
-#     return render(request, 'hot_pot_music_share/login.html')
 
 
 ## youtube search
@@ -91,25 +87,30 @@ def search_song(request):
         videoCategoryId='10',  # only songs!
     ).execute()
 
-    videos = {}
+    # videos = {}
+    videos = []
 
     # Add each result to the appropriate list, and then display the lists of
     # matching videos, channels, and playlists.
     for search_result in search_response.get('items', []):
         if search_result['id']['kind'] == 'youtube#video':
-            videos[search_result['id']['videoId']] = search_result['snippet']['title']
+            # videos[search_result['id']['videoId']] = search_result['snippet']['title']
+            videos.append(Song(song_id=search_result['id']['videoId'],
+                               song_name=search_result['snippet']['title']))
 
     # room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
     # playlist_obj = Playlist.objects.get(belongs_to_room=room)
 
     # pprint.pprint(result)
+    #
+    # r = Room.objects.get(name="noam_room")
+    # p = Playlist.objects.get(belongs_to_room=r)
+    # context['playlist'] = p
+    context['songs'] = videos
 
-    r = Room.objects.get(name="noam_room")
-    p = Playlist.objects.get(belongs_to_room=r)
-    context['playlist'] = p
-
-    context['search_results'] = videos
-    return render(request, 'hot_pot_music_share/youtube/room.html', context)
+    # context['search_results'] = videos
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+    # return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
 
 def add_song_to_room_playlist(request):
@@ -148,28 +149,28 @@ def add_song_to_room_playlist(request):
     # context['user'] = user
     return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
-
+@login_required
 def add_song_to_room_playlist_ajax(request):
     context = {}
-    # user = User.objects.get(username=request.user)
-    # room_id = request.POST['room_id']
+
+    room_id = request.POST['room_id']
     searched_song_id = request.POST['song_id']
     searched_song_name = request.POST['song_name']
 
-    if not User.objects.filter(username__exact="noam"):
-        u = User.objects.create(username="noam")
-        u.save()
+    # if not User.objects.filter(username__exact="noam"):
+    #     u = User.objects.create(username="noam")
+    #     u.save()
 
-    if not Room.objects.filter(name__exact="noam_room"):
-        u = User.objects.get(username="noam")
-        r = Room.objects.create(user_manager=u, name="noam_room")
-        r.save()
-        p = Playlist.objects.create(belongs_to_room=r)
-        p.save()
+    # if not Room.objects.filter(name__exact="noam_room"):
+    #     u = User.objects.get(username="noam")
+    #     r = Room.objects.create(user_manager=u, name="noam_room")
+    #     r.save()
+    #     p = Playlist.objects.create(belongs_to_room=r)
+    #     p.save()
 
-    # room = Room.objects.get(id=room_id)
-    r = Room.objects.get(name="noam_room")
-    p = Playlist.objects.get(belongs_to_room=r)
+    r = Room.objects.get(id=room_id)
+    # r = Room.objects.get(name="noam_room")
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")
 
     if not Song.objects.filter(song_id__exact=searched_song_id):
         s = Song(song_id=searched_song_id, song_name=searched_song_name)
@@ -295,9 +296,14 @@ def confirm_email(request, username, token):
 
 @login_required
 def room(request, pk):
-    context = {'username': request.user.username}
+    context = {}
     # if request.method =='GET':
+    context['username'] = request.user.username
+    context['room_id'] = pk
 
+    r = Room.objects.get(id=pk)
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")
+    context['songs'] = p.songs.all()
     return render(request, 'room_base.html', context)
 
 

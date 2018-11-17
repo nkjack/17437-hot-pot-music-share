@@ -89,6 +89,9 @@ class Playlist(models.Model):
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
 
+    # pool / dj
+    pl_type = models.CharField(max_length=20, default="", blank=True)
+
     def __str__(self):
         return self.belongs_to_room.name
 
