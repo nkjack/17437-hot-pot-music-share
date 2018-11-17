@@ -20,6 +20,8 @@ class Room(models.Model):
 
     thumbs_up = models.IntegerField(default=0)
 
+    # TODO: Need to add field to keep track of Hosts and Listeners
+
     # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
     # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
     # listeners = models.ManyToManyField(User)
