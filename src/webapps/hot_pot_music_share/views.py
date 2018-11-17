@@ -1,5 +1,6 @@
 # import spotipy
 # import spotipy.util as util
+import json
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -10,9 +11,10 @@ from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-
-
 # Home view
+from django.utils.safestring import mark_safe
+
+
 @login_required
 def home(request, username):
     context = {'title': 'home', 'error': ''}
@@ -33,7 +35,7 @@ def home(request, username):
         context['form'] = form
 
         if form.is_valid():
-            print("0kkkk")
+            print("Creating Room...")
             new_room = Room.objects.create(owner=request.user,
                                            name=form.cleaned_data['name'],
                                            description=form.cleaned_data['description'],
@@ -44,8 +46,22 @@ def home(request, username):
                                                      visited_room=new_room)
             new_history.save()
 
-            p = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
-            p.save()
+
+            song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
+            song_0.save()
+
+            song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
+            song_1.save()
+
+
+            song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
+            song_pool.songs.add(song_0)
+            song_pool.save()
+
+            song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
+            song_queue.songs.add(song_1)
+            song_queue.save()
+
 
             import random
             lat = random.uniform(0, 1) + 40
@@ -55,7 +71,6 @@ def home(request, username):
             # 40.440624, -79.995888 pitt
             return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
         else:
-
             return render(request, 'home.html', context)
 
 
@@ -68,21 +83,14 @@ YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
 
-# def search_room(request):
-#     context = {}
-#     r = Room.objects.get(name="noam_room")
-#     p = Playlist.objects.get(belongs_to_room=r)
-#     context['playlist'] = p
-#
-#     return render(request, 'hot_pot_music_share/youtube/room.html', context)
-
-
 def search_song(request):
     context = {}
     query = request.GET['query']
     max_results = 10
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
                     developerKey=DEVELOPER_KEY)
+
+    print('making search query...')
 
     # Call the search.list method to retrieve results matching the specified
     # query term.
@@ -105,6 +113,8 @@ def search_song(request):
             videos.append(Song(song_id=search_result['id']['videoId'],
                                song_name=search_result['snippet']['title']))
 
+    print('printing videos: ' + str(videos))
+
     # room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
     # playlist_obj = Playlist.objects.get(belongs_to_room=room)
 
@@ -119,42 +129,6 @@ def search_song(request):
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
     # return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
-
-def add_song_to_room_playlist(request):
-    context = {}
-    # user = User.objects.get(username=request.user)
-    # room_id = request.POST['room_id']
-    searched_song_id = request.POST['song_id']
-    searched_song_name = request.POST['song_name']
-
-    if not User.objects.filter(username__exact="noam"):
-        u = User.objects.create(username="noam")
-        u.save()
-
-    if not Room.objects.filter(name__exact="noam_room"):
-        u = User.objects.get(username="noam")
-        r = Room.objects.create(user_manager=u, name="noam_room")
-        r.save()
-        p = Playlist.objects.create(belongs_to_room=r)
-        p.save()
-
-    # room = Room.objects.get(id=room_id)
-    r = Room.objects.get(name="noam_room")
-    p = Playlist.objects.get(belongs_to_room=r)
-
-    if not Song.objects.filter(song_id__exact=searched_song_id):
-        s = Song(song_id=searched_song_id, song_name=searched_song_name)
-        s.save()
-
-    s = Song.objects.get(song_id=searched_song_id)
-
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
-        p.songs.add(s)
-
-    # context['room'] = room
-    context['playlist'] = p
-    # context['user'] = user
-    return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
 @login_required
 def add_song_to_room_playlist_ajax(request):
@@ -194,11 +168,8 @@ def add_song_to_room_playlist_ajax(request):
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
-
-
-
 # Integrate actual Profile model later
-def customLogin(request):
+def custom_login(request):
     context = {'login_active': 'active', 'register_active': '', }
     # If already logged in, redirect to home
     if request.user.is_authenticated:
@@ -207,7 +178,7 @@ def customLogin(request):
     if request.method == 'GET':
         context['login_form'] = LoginForm()
 
-        return render(request, 'hot_pot_music_share/user_auth/login.html', context)
+        return render(request, 'user_auth/login.html', context)
 
     if request.POST.get('login'):
         form = LoginForm(request.POST)
@@ -228,10 +199,8 @@ def customLogin(request):
         else:
             return render(request, 'user_auth/login.html', context)
 
-
     elif 'resetPassword' in request.POST or request.POST['resetPassword']:
         return HttpResponseRedirect(reverse('forgetPassword'))
-
 
     else:
         context['error'] = "Please press Login button to register an account"
@@ -302,15 +271,24 @@ def confirm_email(request, username, token):
 
 
 @login_required
-def room(request, pk):
-    context = {}
-    # if request.method =='GET':
-    context['username'] = request.user.username
-    context['room_id'] = pk
+def room(request, room_id):
+    room = Room.objects.get(id=room_id)
+    room_name = room.name
+    is_host = room.owner == request.user
+    song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
+    song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
-    r = Room.objects.get(id=pk)
-    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")
-    context['songs'] = p.songs.all()
+    print('song_queue: ' + str(song_queue.songs.all()))
+
+    context = {'username': request.user.username,
+               'room_id': room_id,
+               'room_name_json': mark_safe(json.dumps(room_name)),
+               'title': 'Room ' + room_name,
+               'is_host': is_host,
+               'song_pool': song_pool.songs.all(),
+               'song_queue': song_queue.songs.all(),
+               }
+
     return render(request, 'room_base.html', context)
 
 
@@ -325,13 +303,6 @@ def history(request):
         context['visited'] = visited
 
     return render(request, 'room_history.html', context)
-
-#
-# def base_map(request):
-#     context = {}
-#     all_markers = Marker.objects.all()
-#     context['all_markers'] = all_markers
-#     return render(request, 'hot_pot_music_share/maps/base_map.html', context)
 
 def map_of_rooms(request):
     context = {}

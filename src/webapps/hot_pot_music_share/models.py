@@ -7,27 +7,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class Room(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=42)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-    create_date = models.DateTimeField(auto_now=True)
-    cover_pic = models.ImageField(upload_to='room-photo', blank=True,
-                                  default='room-photo/logo.png',
-                                  )
-    description = models.TextField(max_length=420, blank=True,
-                                   )
-
-    thumbs_up = models.IntegerField(default=0)
-
-    # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
-    # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
-    # listeners = models.ManyToManyField(User)
-
-    def __str__(self):
-        return self.name
-
-
 # cited from https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -68,9 +47,31 @@ def save_user_profile(sender, instance, **kwargs):
 #         return "{}, {}".format(self.user.username, self.room.name)
 #
 
+class Room(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=42)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    create_date = models.DateTimeField(auto_now=True)
+    cover_pic = models.ImageField(upload_to='room-photo', blank=True,
+                                  default='room-photo/logo.png',
+                                  )
+    description = models.TextField(max_length=420, blank=True,
+                                   )
+
+    thumbs_up = models.IntegerField(default=0)
+
+    # TODO: Need to add field to keep track of Hosts and Listeners
+
+    # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
+    # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
+    # listeners = models.ManyToManyField(User)
+
+    def __str__(self):
+        return self.name
+
 
 class Song(models.Model):
-    song_id = models.CharField(max_length=100)  # song will probably have id link to a Spotify API
+    song_id = models.CharField(max_length=100)
     song_name = models.CharField(max_length=42)
 
     # votes_score = models.IntegerField(default=0)
@@ -89,7 +90,7 @@ class Playlist(models.Model):
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
 
-    # pool / dj
+    # Options: 'pool', 'queue'
     pl_type = models.CharField(max_length=20, default="", blank=True)
 
     def __str__(self):
@@ -99,7 +100,7 @@ class Playlist(models.Model):
 class Vote(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    # room = models.ForeignKey(Room, on_delete=models.CASCADE) # Sam commented this out
 
     vote = models.CharField(max_length=2)  # could be '-1', '0', or '+1'
 
