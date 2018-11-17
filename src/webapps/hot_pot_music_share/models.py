@@ -17,6 +17,7 @@ class Room(models.Model):
                                   )
     description = models.TextField(max_length=420, blank=True,
                                    )
+    isMarked = models.BooleanField(default = True, blank=True)
 
     thumbs_up = models.IntegerField(default=0)
 
@@ -107,7 +108,8 @@ class Vote(models.Model):
 ########## maps
 
 class Marker(models.Model):
-    # id - django generate
+
+    room = models.OneToOneField(Room, on_delete = models.CASCADE, default = "")
     room_name = models.CharField(max_length=60, default="")
     address = models.CharField(max_length=80, default="")
     lat = models.FloatField()
@@ -118,29 +120,30 @@ class Marker(models.Model):
 
 
 class RoomHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    join_date = models.DateTimeField(auto_now=True)
-    visited_room = models.ForeignKey(Room, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	join_date = models.DateTimeField(auto_now=True)
+	visited_room = models.ForeignKey(Room, on_delete=models.CASCADE)
+	has_left = models.BooleanField(default = False)
 
-    @staticmethod
-    def getCurrentListeners(room, time="1970-01-01T00:00+00:00"):
-        history = RoomHistory.objects.filter(room=room, has_left=False, join_date__gt=time)
-        users = []
-        for i in history:
-        	users.append(i.user)
-        return users
+	@staticmethod
+	def getCurrentListeners(room, time="1970-01-01T00:00+00:00"):
+	    history = RoomHistory.objects.filter(visited_room=room, has_left=False, join_date__gt=time)
+	    users = []
+	    for i in history:
+	    	users.append(i.user)
+	    return users
 
-    @staticmethod
-    def getVistedRooms(user, time="1970-01-01T00:00+00:00"):
-        history = RoomHistory.objects.filter(user=user, join_date__gt=time)
-        rooms = []
-        for i in history:
-            rooms.append(i.visited_room)
-        return rooms
+	@staticmethod
+	def getVistedRooms(user, time="1970-01-01T00:00+00:00"):
+	    history = RoomHistory.objects.filter(user=user, join_date__gt=time)
+	    rooms = []
+	    for i in history:
+	        rooms.append(i.visited_room)
+	    return rooms
 
-    def leaveRoom(self):
-        self.has_left = True
-        return self.has_left
+	def leaveRoom(self):
+	    self.has_left = True
+	    return self.has_left
 
-    def __str__(self):
-        return self.user.username
+	def __str__(self):
+	    return self.user.username

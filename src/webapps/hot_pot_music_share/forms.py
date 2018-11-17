@@ -1,5 +1,5 @@
 from django import forms
-
+from django.forms import  CheckboxInput
 from hot_pot_music_share.models import Marker
 
 
@@ -115,10 +115,12 @@ class RoomForm(forms.ModelForm):
                            widget=forms.TextInput(attrs=
                                                   {'class': 'form-control mb-3', 'maxlength': '15',
                                                    }))
+    isMarked = forms.BooleanField(required = False, initial= True, label = 'Mark Geo Location',
+                                  widget = forms.CheckboxInput())
 
     class Meta:
         model = Room
-        fields = ['name', 'cover_pic', 'description', 'owner']
+        fields = ['name', 'cover_pic', 'description', 'owner', 'isMarked']
 
     def clean(self):
         cleaned_data = super(RoomForm, self).clean()

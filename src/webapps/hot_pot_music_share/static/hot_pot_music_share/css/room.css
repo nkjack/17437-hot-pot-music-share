@@ -1,13 +1,13 @@
 html,
 
 body {
-  overflow: hidden;
   background: #EDEDED;
-  font-family: 'Megrim', cursive;
+  font-family: 'arial';
   padding-left: 0px;
   padding-right:0px;
   font-weight: bold;
   font-size: large;
+  border: .075em solid #696969;
 }
 p{margin:15px 0px;}
 
@@ -16,6 +16,10 @@ a:hover, a:visited, a:link, a:active{
   color: inherit;
 }
 
+.col{
+  width: 100%
+  margin: auto;
+}
 .container {
     height: 100%;
     padding-top: 35px;
@@ -23,19 +27,20 @@ a:hover, a:visited, a:link, a:active{
 
 .btn{
   z-index: 1;
-  width:60%;
-  border-color: #FFA500;
+  width:100%;
   color:black;
   display: inline-block;
   padding: .3em;
-
 /*  color: rgba(255,255,255,.68);*/
-  border: .075em solid rgba(255,255,255,.1);
+  border: .075em solid #696969;
 }
 .notActive{
       filter: grayscale(100%);
 }
 
+.row{
+  width: 100%;
+}
 .row-card {
   display: flex;
   flex-wrap: wrap;
@@ -61,7 +66,7 @@ a:hover, a:visited, a:link, a:active{
 
 /* Add styles to the form container */
 .form-container {
-  max-width: 400px;
+  max-width: 800px;
   padding: 20px;
   background-color: white;
   border-radius: 25px;
@@ -69,13 +74,15 @@ a:hover, a:visited, a:link, a:active{
 
 /* Set a style for the submit/login button */
 .form-container .btn {
-  border-color: #eedd82;
+  font-weight: bold;
+  font-size: large;
+  border: .075em solid #696969;
   color: black;
   padding: 16px 20px;
   border: none;
   cursor: pointer;
   width: 100%;
-  margin-bottom:10px;
+  margin-top:10px;
   opacity: 0.8;
 }
 

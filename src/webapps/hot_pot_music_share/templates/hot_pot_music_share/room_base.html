@@ -8,7 +8,7 @@
 		     	<iframe width="560" height="315" src="https://www.youtube.com/embed/{{video_id}}?start={{start_frame}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 				
 		     		<!-- The playlist -->
-				<div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
+				<div class="p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
 					
 					<!-- One track in the playlist -->
 					<div class="media pt-3" id = "song_0">
@@ -18,8 +18,8 @@
 	        			<img src="https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="35">
 				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
 				            <div class="d-flex justify-content-between align-items-center w-100">
-				              <strong class="text-gray-dark">{{name_of_video}}</strong>
-				              <span class="d-block">{{author}}</span>
+				              <strong class="text-gray-dark">name_of_video</strong>
+				              <span class="d-block">author</span>
 				            </div>
 				        </div>
 				    </div>
@@ -28,116 +28,115 @@
 
 			<!-- This is the POLL -->
 		    <div class="col">
-		    	<div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="dj_list">
+		    	<div class="p-3 bg-dark text-light  rounded box-shadow" id="dj_list">
 
 		    		<div class="media pt-3" id = "vid_0">
 	        			<img src=".https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="25">
 				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
 				            <div class="d-flex justify-content-between align-items-center w-100">
-				              <strong class="text-gray-dark">{{name_of_video}}</strong>
-				              <span class="d-block">{{author}}</span>
+				              <strong class="text-gray-dark">name_of_video</strong>
+				              <span class="d-block">author</span>
 				            </div>
 				        </div>
 				    </div>>
 		    	</div>
-
+		    	 <button type="button" class=" float-right btn btn-lg">
+	          			<span class="glyphicon">&#x2b;</span> 
+	        		</button>
 		    </div>
 		    <div class="col">
 		    	<!-- This is the search panel -->
-		    	<div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "panel">
+		    	<div class="p-3 bg-light text-dark rounded box-shadow" id = "panel">
 					<div class="input-group">
+
 						<input type="text" class="form-control" placeholder="Search for...">
 					        <button class="btn-search" type="button">Search</button>
 
 					</div>
 					<!-- A list of results -->
-					<div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search result">
+					<div class="p-3 bg-light text-dark rounded box-shadow" id="search result">
 						
 						<!-- One track -->
 						<div class="media pt-3" id = "song_0">
-
 							<!-- The thumbnail of this video -->
 							<!-- Maybe also use API to get a thumbnail -->
-		        			<img src="https://img.youtube.com/vi/{{video_id}}/1.jpg" alt="" class="mr-2 rounded" width="25">
+		        			<img src="https://img.youtube.com/vi/{{video_id}}/0.jpg" alt="" class="mr-2 rounded" width="25">
 					        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
 					            <div class="d-flex justify-content-between align-items-center w-100">
-					              <strong class="text-gray-dark">{{name_of_video}}</strong>
-					              <span class="d-block">{{author}}</span>
-					              <span class = "d-block"> {{timespan}}</span>
+					              <strong class="text-gray-dark">name_of_video</strong>
+<!-- 					              <span class="d-block">{{author}}</span> -->
+					              <span class = "d-block"> length of vid</span>
 					            </div>
 					        </div>
 					    </div>
+					    <!-- end of one track -->
 					</div>
-
+					<!-- end of result list -->
 				</div>
+				<!-- end of search panel -->
 
 				<!-- This is the list of people in this room -->
-		       <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id = "people">
+		       <div class="p-3 bg-light text-dark rounded box-shadow" id = "people">
 	        		<h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
 
-	        		{% for user in listeners %}
 	        		<!-- One user -->
 	        		<div class="media text-muted pt-3" id = "user_1">
 	        			<!-- The profile img -->
-	        			<img src="{% url 'img' user.username %}" alt="" class="mr-2 rounded" width="25">
+	        			<img src="SOME URL" alt="" class="mr-2 rounded" width="25">
 				        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
 				            <div class="d-flex justify-content-between align-items-center w-100">
-				              <strong class="text-gray-dark">{{user.username}}</strong>
+				              <strong class="text-gray-dark">Full Name</strong>
 				            </div>
 				        </div>
 				    </div>
 
 				    <!-- Add people to this room -->
-				    <button type="button" class=" float-right btn btn-lg" onclick = "openForm()">
-	          			<span class="glyphicon">&#x2b;</span> 
-	        		</button>
+
 		    	</div>
 		  	</div>
 		</div>
 
   	
 
-      <div class="form-popup" id = "popupForm">
-          <form class="form-container" id = "addFriendForm" >
-            <h1>Add Your Friend to This Room</h1>
-            <div id="friendList">
-				<input type="checkbox" name="name3" checked="checked" >Friend_01
-			</div>
-            <input class="btn"  type = "submit" name = "addFriend">Add</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-          </form>
-        </div>
-  	 </div>
-    </div>
-  </div>
+<!-- 	    <div class="form-popup" id = "popupForm">
+	        <form class="form-container" id = "addFriendForm" >
+	            <h1>Add Your Friend to This Room</h1>
+	            <div id="friendList">
+					<input type="checkbox" name="name3" checked="checked" >Friend_01
+				</div>
+	            <input class="btn"  type = "submit" name = "addFriend">Add</button>
+	            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+	          </form>
+	        </div>
+	  	 </div>
+	    </div>
+	  </div> -->
  
   <script>
-	$(document).ready(function(){
-			$("#addFriendForm").submit(function(){
-			  	var names = $('#friendList input:checked').map(function () {
-				    return this.name;
-				}).get();
+	// $(document).ready(function(){
+	// 		$("#addFriendForm").submit(function(){
+	// 		  	var names = $('#friendList input:checked').map(function () {
+	// 			    return this.name;
+	// 			}).get();
 
-				alert(names);
-				return false;
-			});
-		});
+	// 			alert(names);
+	// 			return false;
+	// 		});
+	// 	});
 
 
 
-		function openForm() {
+	// 	function openForm() {
 
-			document.getElementById("popupForm").style.display = "block";
-		}
+	// 		document.getElementById("popupForm").style.display = "block";
+	// 	}
 
-		function closeForm() {
-		    document.getElementById("popupForm").style.display = "none";
-		}
+	// 	function closeForm() {
+	// 	    document.getElementById("popupForm").style.display = "none";
+	// 	}
 	    function toggleNav() {
 	        console.log("toggle");
 	        $("#wrapper").toggleClass("toggled");
 	    };
 	</script>
-
-
 {% endblock %}
