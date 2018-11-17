@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
@@ -144,6 +144,18 @@ class RoomHistory(models.Model):
 	def leaveRoom(self):
 	    self.has_left = True
 	    return self.has_left
+
+	@staticmethod
+	def visitedBefore(user, room, new_time):
+		try:
+			history = RoomHistory.objects.get(user=user, visited_room = room)
+			
+			history.has_left = False
+			history.join_date = new_time
+			return True
+		except ObjectDoesNotExist:	
+			return False;
+
 
 	def __str__(self):
 	    return self.user.username
