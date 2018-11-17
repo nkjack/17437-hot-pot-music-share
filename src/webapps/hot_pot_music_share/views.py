@@ -326,12 +326,18 @@ def history(request):
 
     return render(request, 'room_history.html', context)
 
+#
+# def base_map(request):
+#     context = {}
+#     all_markers = Marker.objects.all()
+#     context['all_markers'] = all_markers
+#     return render(request, 'hot_pot_music_share/maps/base_map.html', context)
 
-def base_map(request):
+def map_of_rooms(request):
     context = {}
     all_markers = Marker.objects.all()
     context['all_markers'] = all_markers
-    return render(request, 'hot_pot_music_share/maps/base_map.html', context)
+    return render(request, 'hot_pot_music_share/maps/map_of_rooms.html', context)
 
 
 from hot_pot_music_share.forms import *
