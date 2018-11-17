@@ -31,7 +31,7 @@ urlpatterns = [
     # User Home Page
     re_path(r'^username/(?P<username>[a-zA-Z0-9_]{3,15})/$', views.home, name='home'),
 
-    re_path(r'^room/(?P<pk>\w+)/$', views.room, name='room'),
+    re_path(r'^room/(?P<room_name>[^/]+)/$', views.room, name='room'),
 
     # history
     path('myRooms', views.history, name="history"),

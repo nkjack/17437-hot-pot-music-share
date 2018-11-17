@@ -1,5 +1,6 @@
 # import spotipy
 # import spotipy.util as util
+import json
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,9 @@ from django.urls import reverse
 
 
 # Home view
+from django.utils.safestring import mark_safe
+
+
 @login_required
 def home(request, username):
     context = {'title': 'home', 'error': ''}
@@ -33,7 +37,7 @@ def home(request, username):
         context['form'] = form
 
         if form.is_valid():
-            print("0kkkk")
+            print("Creating Room...")
             new_room = Room.objects.create(owner=request.user,
                                            name=form.cleaned_data['name'],
                                            description=form.cleaned_data['description'],
@@ -44,11 +48,10 @@ def home(request, username):
                                                      visited_room=new_room)
             new_history.save()
 
-            return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
+            return HttpResponseRedirect(reverse('room', args=[new_room]))
         else:
 
             return render(request, 'home.html', context)
-
 
 
 # Integrate actual Profile model later
@@ -186,9 +189,6 @@ def add_song_to_room_playlist_ajax(request):
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
-
-
-
 # Integrate actual Profile model later
 def customLogin(request):
     context = {'login_active': 'active', 'register_active': '', }
@@ -294,9 +294,15 @@ def confirm_email(request, username, token):
 
 
 @login_required
-def room(request, pk):
-    context = {'username': request.user.username}
-    # if request.method =='GET':
+def room(request, room_name):
+    is_host = Room.objects.get(name=room_name).owner == request.user
+    print(">>>>>>>>" + str(is_host))
+
+    context = {'username': request.user.username,
+               'room_name_json': mark_safe(json.dumps(room_name)),
+               'title': 'Room ' + room_name,
+               'is_host': is_host,
+               }
 
     return render(request, 'room_base.html', context)
 

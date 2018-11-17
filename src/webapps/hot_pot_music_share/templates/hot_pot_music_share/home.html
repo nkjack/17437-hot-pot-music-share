@@ -9,7 +9,7 @@
           <div class="row-card">
               
             {% for room in popular %}
-                <a href="{% url 'room' room.pk %}" class="col-sm-4">
+                <a href="{% url 'room' room %}" class="col-sm-4">
 
                   <div class="card bg-light rounded">
                  {% if room.cover_pic %}
