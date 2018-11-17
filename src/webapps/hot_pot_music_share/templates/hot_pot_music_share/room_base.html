@@ -11,6 +11,10 @@
             <!-- Add a 'sync' now button -->
             {% if not is_host %}
                 <button onclick="syncToHost()">Sync To Host</button>
+            {% else %}
+                Video ID or URL:
+                <input id="video-id-input" type="text" size="10"/>
+                <button onclick="changeVideoSubmit()">Change Video</button>
             {% endif %}
 
 
@@ -176,27 +180,31 @@
 
                 document.querySelector('#chat-log').value += (username + ': ' + chat_text + '\n');
             } else if (('playback_info' in data) && ('{{ username }}' !== data['username'])) {
-                var playback_info = data['playback_info'];
-                {#var username = data['username'];#}
+                {% if not is_host %}
+                    var playback_info = data['playback_info'];
+                    {#var username = data['username'];#}
 
-                console.log('Received playback_info = ' + playback_info + 'from username: ' + data['username']);
+                    console.log('Received playback_info = ' + playback_info + 'from username: ' + data['username']);
 
-                {#if (playback_info.startsWith('play:')) {#}
-                if (playback_info === 'play') {
-                    // Start playing if paused
-                    {#const position = parseInt(playback_info.split(':')[1]);#}
-                    {#player.seekTo(seconds = position, allowSeekAhead = true);#}
+                    if (playback_info.startsWith('play:')) {
+                        {#if (playback_info === 'play') {#}
+                        // Start playing if paused
+                        const position = parseInt(playback_info.split(':')[1]);
+                        player.seekTo(seconds = position, allowSeekAhead = true);
 
-                    player.playVideo();
+                        player.playVideo();
 
-                } else if (playback_info === 'pause') {
-                    player.pauseVideo();
+                    } else if (playback_info === 'pause') {
+                        player.pauseVideo();
 
-                } else if (playback_info.startsWith('seek:')) {
-                    console.log('entered SEEK case...');
-                    const position = parseInt(playback_info.split(':')[1]);
-                    player.seekTo(seconds = position, allowSeekAhead = true);
-                }
+                    } else if (playback_info.startsWith('seek:')) {
+                        console.log('entered SEEK case...');
+                        const position = parseInt(playback_info.split(':')[1]);
+                        player.seekTo(seconds = position, allowSeekAhead = true);
+                    }
+                {% else %}
+                    // Do nothing if I am the host
+                {% endif %}
             } else if ('sync_request' in data) {
                 console.log('Received sync_request = ' + data + 'from username: ' + data['from_username']);
 
@@ -204,14 +212,7 @@
                 console.log("Host currPosition = " + currPosition);
 
                 // Send all information to other players so they can sync up
-                socket.send(JSON.stringify({
-                    'sync_result_message': '',
-                    'video_id': String(player.getVideoData()['video_id']),
-                    'position': currPosition,
-                    'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
-                }));
-
-                console.log('Sent back sync_result');
+                syncListeners();
 
             } else if ('sync_result' in data) {
                 console.log('Received sync_result...');
@@ -219,10 +220,14 @@
 
                 // Play the correct video
                 if (String(player.getVideoData()['video_id']) !== data['video_id']) {
+
                     console.log("Changing my video and going to offset...");
+                    player.stopVideo();
                     offset = getNetworkOffset(sentSyncRequestTime);
                     player.cueVideoById(data['video_id'], data['position'] + offset);
+
                 } else if (String(player.getCurrentTime()) !== data['position']) {
+
                     // Otherwise, correct video - just jump to correct offset
                     console.log("Correct video, but changing my offset...");
                     offset = getNetworkOffset(sentSyncRequestTime);
@@ -281,13 +286,13 @@
             player = new YT.Player('player', {
                 height: '390',
                 width: '640',
-                videoId: '9_k_goMr5ZI',
+                videoId: 'JQbjS0_ZfJ0',
                 playerVars: {
                     'start': 0,
                 },
                 events: {
                     {% if is_host %}
-                        'onReady': onPlayerReady,
+                        //'onReady': onPlayerReady,
                         'onStateChange': onPlayerStateChange
                     {% endif %}
                 }
@@ -303,6 +308,7 @@
             var lastTime = -1;
             var interval = 1000;
 
+            // FIXME: This doesn't work all the time, main issue is that seeking does: Pause -> Buffer -> Playing
             var checkPlayerTime = function () {
                 if (lastTime != -1) {
                     if (player.getPlayerState() == YT.PlayerState.PLAYING) {
@@ -323,12 +329,7 @@
                             */
 
                             // Send same thing as sync-result, so listeners will sync up
-                            socket.send(JSON.stringify({
-                                'sync_result_message': '',
-                                'video_id': String(player.getVideoData()['video_id']),
-                                'position': currPosition,
-                                'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
-                            }));
+                            syncListeners();
                         }
                     }
                 }
@@ -345,25 +346,17 @@
             {#var delta = window.performance.now() - lastPlayerStateChange;#}
             {#lastPlayerStateChange += delta;#}
 
+            // New way - any time the state changes, Host syncs up Listeners (works better in practice)
+            syncListeners();
+            return;
+
             // Send message via sockets
             switch (playerStatus) {
                 case YT.PlayerState.PLAYING:
                     console.log("onPlayerStateChange, case: YT.PlayerState.PLAYING");
-
-                    socket.send(JSON.stringify({
-                        'playback_message': 'play',
-                        'username': 'username ',
-                    }));
-
                     break;
                 case YT.PlayerState.PAUSED:
                     console.log("onPlayerStateChange, case: YT.PlayerState.PAUSED");
-
-                    socket.send(JSON.stringify({
-                        'playback_message': 'pause',
-                        'username': 'username ',
-                    }));
-
                     break;
                 case YT.PlayerState.BUFFERING:
                     console.log("onPlayerStateChange, case: YT.PlayerState.BUFFERING");
@@ -381,10 +374,12 @@
             }
         }
 
+        // TODO: Delete - This does nothing
         function stopVideo() {
             player.stopVideo();
         }
 
+        // TODO: Delete - videoStateChangeListener does this now
         function playVideo() {
             // Play own video first
             player.playVideo();
@@ -396,6 +391,7 @@
             }));
         }
 
+        // TODO: Delete - videoStateChangeListener does this now
         function pauseVideo() {
             // Pause own video first
             player.pauseVideo();
@@ -407,6 +403,7 @@
             }));
         }
 
+        // TODO: Delete - videoStateChangeListener does this now
         function seekTo(number) {
             player.seekTo(seconds = number, allowSeekAhead = true);
 
@@ -420,6 +417,21 @@
             }));
         }
 
+        // Host will call this function so Listeners will sync
+        function syncListeners() {
+            var currPosition = player.getCurrentTime();
+
+            socket.send(JSON.stringify({
+                'sync_result_message': '',
+                'video_id': String(player.getVideoData()['video_id']),
+                'position': currPosition,
+                'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
+            }));
+
+            console.log('Host sent back sync_result');
+        }
+
+        // Listener will call this function to ask Host for video information
         function syncToHost() {
             // Send message via socket
             socket.send(JSON.stringify({
@@ -434,6 +446,33 @@
         function getNetworkOffset(startTime) {
             {#return (window.performance.now() / startTime) / 2 / 1000;#}
             return 0.3;
+        }
+
+        // Change video to submitted video
+        function changeVideoSubmit() {
+            var videoId = document.getElementById('video-id-input').value;
+
+            // It's okay if they input a URL
+            if (videoId.includes('youtube.com')) {
+                videoId = videoId.split('watch?v=')[1]
+            }
+
+            changeVideoById(videoId);
+        }
+
+        // TODO: Put function here to tie in Noam's search stuff to call 'changeVideoById
+        /*
+        function changeVideoOnClick() {
+            // Get the URL from the link clicked
+            changeVideoById(videoId);
+        }
+         */
+
+        // Helper function to change the player itself to the new video ID
+        function changeVideoById(videoId) {
+            player.stopVideo();
+            player.cueVideoById(videoId);
+            player.playVideo();
         }
 
     </script>
