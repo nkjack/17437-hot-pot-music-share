@@ -292,8 +292,9 @@
                 },
                 events: {
                     {% if is_host %}
-                        //'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
+                        'onStateChange': onPlayerStateChange,
+                    {% else %}
+                        'onReady': onPlayerReady,
                     {% endif %}
                 }
             });
@@ -301,6 +302,10 @@
 
         // 4. The API will call this function when the video player is ready.
         function onPlayerReady(event) {
+            // Listeners will sync-up to Host
+            syncToHost();
+            return;
+
             event.target.playVideo();
 
             /// Time tracking starting here
@@ -445,7 +450,16 @@
         // Helper function get offset in seconds
         function getNetworkOffset(startTime) {
             {#return (window.performance.now() / startTime) / 2 / 1000;#}
-            return 0.3;
+
+            /* FIXME: 0.3 - 0.5 seems to be the average offset... But is there a better way?
+             * Main issue is that Listener will:
+             *  1) Receive offset
+             *  2) Start BUFFERING...
+             *  3) Start PLAYING...
+             *
+             *  Cannot know how long the 'BUFFERING' state will take in the future...
+             */
+            return 0.5;
         }
 
         // Change video to submitted video
