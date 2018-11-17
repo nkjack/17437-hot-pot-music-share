@@ -165,10 +165,9 @@
               }
               Array.prototype.forEach.call(markers, function(markerElem){
                   console.log(markerElem);
-                  console.log("blabla");
-                    var id = markerElem['id'];
+                  var id = markerElem['marker_id'];
                   var room_name = markerElem['room_name'];
-                  var address = markerElem['address'];
+                  var room_id= markerElem['room_id'];
                   var lat = markerElem['lat'];
                   var lng = markerElem['lng'];
                   var point = new google.maps.LatLng(
@@ -181,9 +180,14 @@
                   infowincontent.appendChild(strong);
                   infowincontent.appendChild(document.createElement('br'));
 
-                  var text = document.createElement('text');
-                  text.textContent = address;
-                  infowincontent.appendChild(text);
+                  var btn_to_room = document.createElement('button');
+                  btn_to_room.addEventListener("click", function(){
+                     {#alert(1);#}
+                      window.location = "http://127.0.0.1:8000/room/"+room_id+"/";
+                  });
+                  btn_to_room.textContent = "Go to room";
+                  infowincontent.appendChild(btn_to_room);
+
                   var marker1 = new google.maps.Marker({
                     map: map,
                     position: point
