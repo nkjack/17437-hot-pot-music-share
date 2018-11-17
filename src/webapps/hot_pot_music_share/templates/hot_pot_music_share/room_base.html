@@ -25,6 +25,7 @@
 
             <!-- The playlist -->
             <div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
+                <h1>SONG QUEUE</h1>
                 {% for song in song_queue %}
                     <!-- One track in the playlist -->
                     <div class="media pt-3" id="song_0">
@@ -57,6 +58,7 @@
 
         <!-- This is the POLL -->
         <div class="col">
+            <h1>SONG POOL</h1>
             <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="poll_list">
                 {% for song in song_pool %}
                     <div class="media pt-3" id="poll_song_div">
@@ -121,6 +123,11 @@
                 <button type="button" class=" float-right btn btn-lg" onclick="openForm()">
                     <span class="glyphicon">&#x2b;</span>
                 </button>
+
+                <!-- Sam Chat Room -->
+                <textarea id="chat-log" cols="20" rows="10"></textarea><br/>
+                <input id="chat-message-input" type="text" size="10"/><br/>
+                <input id="chat-message-submit" type="button" value="Send"/>
             </div>
         </div>
     </div>
@@ -129,7 +136,6 @@
 
     <div class="form-popup" id="popupForm">
         <form class="form-container" id="addFriendForm">
-            >>>>>>> master
             <h1>Add Your Friend to This Room</h1>
             <div id="friendList">
                 <input type="checkbox" name="name3" checked="checked">Friend_01
@@ -142,16 +148,18 @@
 
 {% block script %}
     <script>
-        $(document).ready(function () {
-            $("#addFriendForm").submit(function () {
-                var names = $('#friendList input:checked').map(function () {
-                    return this.name;
-                }).get();
+        /*
+            $(document).ready(function () {
+                $("#addFriendForm").submit(function () {
+                    var names = $('#friendList input:checked').map(function () {
+                        return this.name;
+                    }).get();
 
-                alert(names);
-                return false;
+                    alert(names);
+                    return false;
+                });
             });
-        });
+            */
 
 
         function openForm() {

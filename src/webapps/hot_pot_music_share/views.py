@@ -39,12 +39,13 @@ def home(request, username):
             new_room = Room.objects.create(owner=request.user,
                                            name=form.cleaned_data['name'],
                                            description=form.cleaned_data['description'],
-                                           cover_pic=form.cleaned_data['cover_pic'],
+                                           cover_pic=form.cleaned_data['cover_pic']
                                            )
             new_room.save()
             new_history = RoomHistory.objects.create(user=request.user,
                                                      visited_room=new_room)
             new_history.save()
+
 
             song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
             song_0.save()
@@ -56,9 +57,11 @@ def home(request, username):
             song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
             song_pool.songs.add(song_0)
             song_pool.save()
+
             song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
-            song_pool.songs.add(song_1)
+            song_queue.songs.add(song_1)
             song_queue.save()
+
 
             import random
             lat = random.uniform(0, 1) + 40
@@ -66,7 +69,7 @@ def home(request, username):
             m = Marker.objects.create(lat=lat, lng=lng, room=new_room)
             m.save()
             # 40.440624, -79.995888 pitt
-            return HttpResponseRedirect(reverse('room', args=[new_room]))
+            return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
         else:
             return render(request, 'home.html', context)
 
@@ -86,6 +89,8 @@ def search_song(request):
     max_results = 10
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
                     developerKey=DEVELOPER_KEY)
+
+    print('making search query...')
 
     # Call the search.list method to retrieve results matching the specified
     # query term.
@@ -107,6 +112,8 @@ def search_song(request):
             # videos[search_result['id']['videoId']] = search_result['snippet']['title']
             videos.append(Song(song_id=search_result['id']['videoId'],
                                song_name=search_result['snippet']['title']))
+
+    print('printing videos: ' + str(videos))
 
     # room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
     # playlist_obj = Playlist.objects.get(belongs_to_room=room)
@@ -271,13 +278,15 @@ def room(request, room_id):
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
+    print('song_queue: ' + str(song_queue.songs.all()))
+
     context = {'username': request.user.username,
                'room_id': room_id,
                'room_name_json': mark_safe(json.dumps(room_name)),
                'title': 'Room ' + room_name,
                'is_host': is_host,
-               'song_pool': song_pool,
-               'song_queue': song_queue,
+               'song_pool': song_pool.songs.all(),
+               'song_queue': song_queue.songs.all(),
                }
 
     return render(request, 'room_base.html', context)
