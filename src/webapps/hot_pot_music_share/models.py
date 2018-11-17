@@ -64,7 +64,7 @@ class RoomHistory(models.Model):
 		return rooms
 
 	@staticmethod
-	def getvisitHistory(user, time="1970-01-01T00:00+00:00"):
+	def getVisitHistory(user, time="1970-01-01T00:00+00:00"):
 			return RoomHistory.objects.filter(user=user, join_date__gt=time)
 
 	def leaveRoom(self):
@@ -78,10 +78,10 @@ class RoomHistory(models.Model):
 
 			history.has_left = False
 			history.join_date = new_time
+			history.save()
 			return True
 		except ObjectDoesNotExist:	
 			return False;
-
 
 	def __str__(self):
 			return self.user.username

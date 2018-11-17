@@ -42,7 +42,7 @@
 
                 <!-- One single room -->
                 {% for history in visited %}
-                  <a href="{% url 'room' room.pk %}" class="col-sm-4">
+                  <a href="{% url 'room' history.visited_room.pk %}" class="col-sm-4">
 
                     <div class="card bg-light rounded">
                    {% if history.visited_room.cover_pic %}
