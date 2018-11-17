@@ -1,7 +1,7 @@
 {
-  "id" : "{{marker.id}}",
-  "room_name" : "{{marker.room_name}}",
-  "address" : "{{marker.address}}",
+  "marker_id" : "{{marker.id}}",
+  "room_name" : "{{ marker.room.name }}",
+  "room_id" : "{{ marker.room.id }}",
   "lat" : "{{marker.lat}}",
   "lng" : "{{marker.lng}}"
 }

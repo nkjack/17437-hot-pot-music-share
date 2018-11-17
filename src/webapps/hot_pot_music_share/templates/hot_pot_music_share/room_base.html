@@ -3,6 +3,7 @@
 
 {% block content %}
 
+    <input type="hidden" id="room_id" value="{{ room_id }}"/>
     <div class="row">
         <div class="col">
             <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
@@ -24,10 +25,23 @@
 
             <!-- The playlist -->
             <div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
+                {% for song in song_queue %}
+                    <!-- One track in the playlist -->
+                    <div class="media pt-3" id="song_0">
+                        <!-- The thumbnail of this video -->
+                        <!-- Maybe also use API to get a thumbnail -->
+                        <img src="https://img.youtube.com/vi/{{ song.song_id }}/1.jpg" alt="" class="mr-2 rounded"
+                             width="35">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <strong class="text-gray-dark">{{ song.song_name }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
 
                 <!-- One track in the playlist -->
                 <div class="media pt-3" id="song_0">
-
                     <!-- The thumbnail of this video -->
                     <!-- Maybe also use API to get a thumbnail -->
                     <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded" width="35">
@@ -43,56 +57,18 @@
 
         <!-- This is the POLL -->
         <div class="col">
-            <!-- Sam start -->
-            {% if is_host %}
-                <h4>SONG POOL</h4>
-                <ol>
-                    {% for song in song_pool.songs.all %}
-                        <li>
-                            <button onclick="changeVideoById('{{ song.song_id }}')">{{ song.song_name }}</button>
-                        </li>
-                    {% endfor %}
-                </ol>
-                <h4>SONG QUEUE</h4>
-                <ol>
-                    {% for song in song_queue.songs.all %}
-                        <li>
-                            <button onclick="changeVideoById('{{ song.song_id }}')">{{ song.song_name }}</button>
-                        </li>
-                    {% endfor %}
-                </ol>
-            {% else %}
-                <h4>SONG POOL</h4>
-                <ol>
-                    {% for song in song_pool.songs.all %}
-                        <li>
-                            {{ song.song_name }}
-                        </li>
-                    {% endfor %}
-                </ol>
-                <h4>SONG QUEUE</h4>
-                <ol>
-                    {% for song in song_queue.songs.all %}
-                        <li>
-                            {{ song.song_name }}
-                        </li>
-                    {% endfor %}
-                </ol>
-            {% endif %}
-
-            <!-- Sam end -->
-            <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="dj_list">
-
-                <div class="media pt-3" id="vid_0">
-                    <img src=".https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded" width="25">
-                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-                        <div class="d-flex justify-content-between align-items-center w-100">
-                            <strong class="text-gray-dark">{{ name_of_video }}</strong>
-                            <span class="d-block">{{ author }}</span>
+            <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="poll_list">
+                {% for song in song_pool %}
+                    <div class="media pt-3" id="poll_song_div">
+                        <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
+                             width="100">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <strong class="text-gray-dark">{{ song.song_name }}</strong>
+                            </div>
                         </div>
                     </div>
-                </div>
-                >
+                {% endfor %}
             </div>
 
         </div>
@@ -100,12 +76,12 @@
             <!-- This is the search panel -->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
-                    <button class="btn-search" type="button">Search</button>
-
+                    <input type="text" class="form-control" id="search-query" placeholder="Search for...">
+                    <button id="search-button" class="btn-search" type="button">Search</button>
+                    <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
                 </div>
                 <!-- A list of results -->
-                <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search result">
+                <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search-results">
 
                     <!-- One track -->
                     <div class="media pt-3" id="song_0">
@@ -145,12 +121,6 @@
                 <button type="button" class=" float-right btn btn-lg" onclick="openForm()">
                     <span class="glyphicon">&#x2b;</span>
                 </button>
-
-                {#CHAT ROOM#}
-                <textarea id="chat-log" cols="20" rows="10"></textarea><br/>
-                <input id="chat-message-input" type="text" size="10"/><br/>
-                <input id="chat-message-submit" type="button" value="Send"/>
-
             </div>
         </div>
     </div>
@@ -159,6 +129,7 @@
 
     <div class="form-popup" id="popupForm">
         <form class="form-container" id="addFriendForm">
+            >>>>>>> master
             <h1>Add Your Friend to This Room</h1>
             <div id="friendList">
                 <input type="checkbox" name="name3" checked="checked">Friend_01
@@ -489,6 +460,7 @@
         }
          */
 
+
         // Helper function to change the player itself to the new video ID
         function changeVideoById(videoId) {
             player.stopVideo();
@@ -496,5 +468,151 @@
             player.playVideo();
         }
 
+        /* NOAM JS START **********************************************************************************************/
+
+        // The boilerplate code below is copied from the Django 1.10 documentation.
+        // It establishes the necessary HTTP header fields and cookies to use
+        // Django CSRF protection with jQuery Ajax requests.
+
+        $(document).ready(function () {  // Runs when the document is ready
+            // using jQuery
+            // https://docs.djangoproject.com/en/1.10/ref/csrf/
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            var csrftoken = getCookie('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+        }); // End of $(document).ready
+
+        $("#panel").on("click", "#search-button", function (event) {
+            var panel = $(this).closest("#panel");
+            var query = panel.find("#search-query");
+            var p_url = panel.find("#add-comment-url").attr("data-url");
+
+            $.ajax({
+                // The URL for the request
+                url: p_url,
+                data: {
+                    query: query.val()
+                },
+                // Whether this is a POST or GET request
+                type: "GET",
+                // The type of data we expect back
+                dataType: "json",
+            })
+                .done(function (data) {
+                    $("#search-results").empty();
+                    for (var i = 0; i < data.songs.length; i++) {
+                        var v_id = data.songs[i]['id'];
+                        var v_name = data.songs[i]['name'];
+                        {#$('#suggest-playlist').append('<li>' + data.songs[i]['name'] +'\t' +#}
+
+                        $('#search-results').append(
+                            '<div class="media pt-3" id="search-song-div">' +
+                            '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="200">' +
+                            '    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
+                            '       <div class="d-flex justify-content-between align-items-center w-100">' +
+                            '       <strong class="text-gray-dark">' + v_name + '</strong>' +
+                            {#'        <span class = "d-block"> {{timespan}}</span>'+#}
+                            '       <button type="button" id="add-song-btn">Add song</button>' +
+                            '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
+                            '       <input type="hidden" id="song_name" value="' + v_name + '"/>' +
+                            '     </div>' +
+                            '</div>' +
+                            '</div>');
+                    }
+                })
+                .fail(function (xhr, status, errorThrown) {
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+                    console.dir(xhr);
+                })
+                // Code to run regardless of success or failure;
+                .always(function (xhr, status) {
+                    console.log("fetch songs request is finished!");
+                });
+        });
+
+
+        $("#search-results").on("click", "#add-song-btn", function (event) {
+            event.preventDefault();
+            var search_form = $(this).closest("#search-song-div");
+            var room_id = $("#room_id");
+            var song_id = search_form.find("#song_id");
+            var song_name = search_form.find("#song_name");
+
+            $.ajax({
+                // The URL for the request
+                url: "/add-song-to-room-playlist-ajax",
+                data: {
+                    room_id: room_id.val(),
+                    song_id: song_id.val(),
+                    song_name: song_name.attr('value')
+                },
+                // Whether this is a POST or GET request
+                type: "POST",
+                // The type of data we expect back
+                dataType: "json",
+            })
+                .done(function (data) {
+                    console.log(data);
+                    $("#poll_list").empty();
+                    for (var i = 0; i < data.songs.length; i++) {
+                        var v_id = data.songs[i]['id'];
+                        var v_name = data.songs[i]['name'];
+
+                        $('#poll_list').append(
+                            '<div class="media pt-3" id="poll_song_div">' +
+                            '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
+                            '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
+                            '    <div class="d-flex justify-content-between align-items-center w-100">' +
+                            '      <strong class="text-gray-dark">' + v_name + '</strong>' +
+                            '    </div>' +
+                            '</div>' +
+                            '</div>');
+                    }
+                })
+                .fail(function (xhr, status, errorThrown) {
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+                    console.dir(xhr);
+                })
+                // Code to run regardless of success or failure;
+                .always(function (xhr, status) {
+                    console.log("fetch songs from poll request is finished!");
+                });
+            /*
+            $.post("/add-marker", {"room_name": room_name, "lng": lng, "lat": lat})
+                .done(function(data) {
+                    alert("saved!");
+            });
+            */
+        });
     </script>
 {% endblock %}

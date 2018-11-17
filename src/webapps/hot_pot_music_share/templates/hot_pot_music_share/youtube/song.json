@@ -1,4 +1,4 @@
 {
-  "id" : "{{song.song_id}}",
-  "name" : "{{song.song_name}}"
+  "id" : "{{video.video_id}}",
+  "name" : "{{video.video_name}}"
 }

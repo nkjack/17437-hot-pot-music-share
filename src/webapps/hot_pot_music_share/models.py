@@ -47,9 +47,31 @@ def save_user_profile(sender, instance, **kwargs):
 #         return "{}, {}".format(self.user.username, self.room.name)
 #
 
+class Room(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=42)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    create_date = models.DateTimeField(auto_now=True)
+    cover_pic = models.ImageField(upload_to='room-photo', blank=True,
+                                  default='room-photo/logo.png',
+                                  )
+    description = models.TextField(max_length=420, blank=True,
+                                   )
+
+    thumbs_up = models.IntegerField(default=0)
+
+    # TODO: Need to add field to keep track of Hosts and Listeners
+
+    # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
+    # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
+    # listeners = models.ManyToManyField(User)
+
+    def __str__(self):
+        return self.name
+
 
 class Song(models.Model):
-    song_id = models.CharField(max_length=100)  # song will probably have id link to a Spotify API
+    song_id = models.CharField(max_length=100)
     song_name = models.CharField(max_length=42)
 
     # votes_score = models.IntegerField(default=0)
@@ -63,10 +85,13 @@ class Song(models.Model):
 
 
 class Playlist(models.Model):
-    # belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE) # Sam commented this out
+    belongs_to_room = models.ForeignKey(Room, on_delete=models.CASCADE)
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
+
+    # Options: 'pool', 'queue'
+    pl_type = models.CharField(max_length=20, default="", blank=True)
 
     def __str__(self):
         return self.belongs_to_room.name
@@ -83,39 +108,6 @@ class Vote(models.Model):
         return self.user.username
 
 
-class Room(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=42)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-    create_date = models.DateTimeField(auto_now=True)
-    cover_pic = models.ImageField(upload_to='room-photo', blank=True,
-                                  default='room-photo/logo.png',
-                                  )
-    description = models.TextField(max_length=420, blank=True,
-                                   )
-
-    thumbs_up = models.IntegerField(default=0)
-
-    # FIXME: Sam added this to keep working
-    song_queue = models.OneToOneField(Playlist,
-                                      on_delete=models.CASCADE,
-                                      related_name='song_queue',
-                                      default=None)  # Only Hosts can modify this, Room will play songs from here
-    song_pool = models.OneToOneField(Playlist,
-                                     on_delete=models.CASCADE,
-                                     related_name='song_pool',
-                                     default=None)  # Anyone can add to this
-
-    # TODO: Need to add field to keep track of Hosts and Listeners
-
-    # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
-    # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
-    # listeners = models.ManyToManyField(User)
-
-    def __str__(self):
-        return self.name
-
-
 # #extend User model to have things like profile photos etc.
 # class HotPotUser(models.Model):
 # 	user = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -124,13 +116,13 @@ class Room(models.Model):
 
 class Marker(models.Model):
     # id - django generate
-    room_name = models.CharField(max_length=60, default="")
-    address = models.CharField(max_length=80, default="")
+    # address = models.CharField(max_length=80, default="")
     lat = models.FloatField()
     lng = models.FloatField()
+    room = models.OneToOneField(Room, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.room_name + " " + self.address
+        return ""
 
 
 class RoomHistory(models.Model):
