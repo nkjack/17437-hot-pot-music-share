@@ -33,7 +33,6 @@ def home(request, username):
 		context['form'] = form
 
 		if form.is_valid():
-			print("0kkkk")
 			new_room = Room.objects.create(owner=request.user,
 										   name=form.cleaned_data['name'],
 										   description=form.cleaned_data['description'],
@@ -313,10 +312,10 @@ def history(request):
 	context = {'owned': '', 'visited': '', 'username': request.user.username}
 	if request.method == 'GET':
 		owned = Room.objects.filter(owner=request.user)
-		visited = RoomHistory.getVistedRooms(request.user)
+		history = RoomHistory.getVisitHistory(request.user)
 
 		context['owned'] = owned
-		context['visited'] = visited
+		context['visited'] = history
 
 	return render(request, 'room_history.html', context)
 
