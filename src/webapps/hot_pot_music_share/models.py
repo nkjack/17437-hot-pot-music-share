@@ -89,6 +89,9 @@ class Playlist(models.Model):
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
 
+    # pool / dj
+    pl_type = models.CharField(max_length=20, default="", blank=True)
+
     def __str__(self):
         return self.belongs_to_room.name
 
@@ -112,13 +115,13 @@ class Vote(models.Model):
 
 class Marker(models.Model):
     # id - django generate
-    room_name = models.CharField(max_length=60, default="")
-    address = models.CharField(max_length=80, default="")
+    # address = models.CharField(max_length=80, default="")
     lat = models.FloatField()
     lng = models.FloatField()
+    room = models.OneToOneField(Room, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.room_name + " " + self.address
+        return ""
 
 
 class RoomHistory(models.Model):
