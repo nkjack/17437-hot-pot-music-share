@@ -61,13 +61,13 @@ YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
 
-def search_room(request):
-    context = {}
-    r = Room.objects.get(name="noam_room")
-    p = Playlist.objects.get(belongs_to_room=r)
-    context['playlist'] = p
-
-    return render(request, 'hot_pot_music_share/youtube/room.html', context)
+# def search_room(request):
+#     context = {}
+#     r = Room.objects.get(name="noam_room")
+#     p = Playlist.objects.get(belongs_to_room=r)
+#     context['playlist'] = p
+#
+#     return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
 
 def search_song(request):
