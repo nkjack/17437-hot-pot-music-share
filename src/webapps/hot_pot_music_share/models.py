@@ -104,10 +104,6 @@ class Vote(models.Model):
         return self.user.username
 
 
-# #extend User model to have things like profile photos etc.
-# class HotPotUser(models.Model):
-# 	user = models.OneToOneField(User, on_delete = models.CASCADE)
-
 ########## maps
 
 class Marker(models.Model):
@@ -124,12 +120,15 @@ class Marker(models.Model):
 class RoomHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     join_date = models.DateTimeField(auto_now=True)
-    has_left = models.BooleanField(default=False)
     visited_room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
     @staticmethod
     def getCurrentListeners(room, time="1970-01-01T00:00+00:00"):
-        return RoomHistory.objects.filter(room=room, has_left=False, join_date__gt=time).user_set.all()
+        history = RoomHistory.objects.filter(room=room, has_left=False, join_date__gt=time)
+        users = []
+        for i in history:
+        	users.append(i.user)
+        return users
 
     @staticmethod
     def getVistedRooms(user, time="1970-01-01T00:00+00:00"):
@@ -137,6 +136,7 @@ class RoomHistory(models.Model):
         rooms = []
         for i in history:
             rooms.append(i.visited_room)
+        return rooms
 
     def leaveRoom(self):
         self.has_left = True

@@ -2,7 +2,7 @@
 # import spotipy.util as util
 
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import ogin_required
 from django.contrib.auth.tokens import default_token_generator
 # send mail
 from django.core.mail import send_mail
@@ -52,8 +52,8 @@ def home(request, username):
 
 
 # Integrate actual Profile model later
-# def login(request):
-#     return render(request, 'hot_pot_music_share/login.html')
+# def user_auth/login(request):
+#     return render(request, 'hot_pot_music_share/user_auth/login.html')
 
 
 ## youtube search
@@ -190,20 +190,20 @@ def add_song_to_room_playlist_ajax(request):
 
 
 # Integrate actual Profile model later
-def customLogin(request):
-    context = {'login_active': 'active', 'register_active': '', }
+def customulogin(request):
+    context = {'user_auth/login_active': 'active', 'register_active': '', }
     # If already logged in, redirect to home
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('home', args=[request.user.username]))
 
     if request.method == 'GET':
-        context['login_form'] = LoginForm()
+        context['user_auth/login_form'] = user_auth/loginForm()
 
-        return render(request, 'login.html', context)
+        return render(request, 'user_auth/login.html', context)
 
-    if request.POST.get('login'):
-        form = LoginForm(request.POST)
-        context['login_form'] = form
+    if request.POST.get('user_auth/login'):
+        form = user_auth/loginForm(request.POST)
+        context['user_auth/login_form'] = form
 
         if form.is_valid():
             username = request.POST['username']
@@ -212,13 +212,13 @@ def customLogin(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
-                login(request, user)
+                user_auth/login(request, user)
                 return HttpResponseRedirect(reverse('home', args=[username]))
             else:
-                context['error'] = 'Invalid login. Password doesnot match the user or user doesnot exist'
-                return render(request, 'login.html', context)
+                context['error'] = 'Invalid user_auth/login. Password doesnot match the user or user doesnot exist'
+                return render(request, 'user_auth/login.html', context)
         else:
-            return render(request, 'login.html', context)
+            return render(request, 'user_auth/login.html', context)
 
 
     elif 'resetPassword' in request.POST or request.POST['resetPassword']:
@@ -226,12 +226,12 @@ def customLogin(request):
 
 
     else:
-        context['error'] = "Please press Login button to register an account"
-        return render(request, 'user_auth/login.html', context)
+        context['error'] = "Please press user_auth/login button to register an account"
+        return render(request, 'user_auth/user_auth/login.html', context)
 
 
 def register(request):
-    context = {'register_active': 'active', 'login_active': ''}
+    context = {'register_active': 'active', 'user_auth/login_active': ''}
 
     if request.method == 'GET':
         context['registration_form'] = RegistrationForm()
@@ -265,19 +265,19 @@ def register(request):
                     "email"] = "Welcome to Hot Pot Music Share. Please check your mailbox to find verification link to complete registration"
                 return render(request, 'user_auth/email_confirmation.html', context)
 
-                # login(request, new_user)
+                # user_auth/login(request, new_user)
                 # return HttpResponseRedirect(reverse('home',args=[new_user.username]))
             else:
                 context['error'] = "Please check if all the field satisfy requirements or the username is already taken"
-                return render(request, 'user_auth/login.html', context)
+                return render(request, 'user_auth/user_auth/login.html', context)
         else:
             context['error'] = "Please press Register button to register an account"
-            return render(request, 'user_auth/login.html', context)
+            return render(request, 'user_auth/user_auth/login.html', context)
 
 
 def customLogout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('login'))
+    return HttpResponseRedirect(reverse('user_auth/login'))
 
 
 @transaction.atomic
@@ -288,7 +288,7 @@ def confirm_email(request, username, token):
         user.is_active = True
         user.save()
 
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('user_auth/login'))
     else:
         return HttpResponse('Invalid Link')
 
@@ -296,7 +296,14 @@ def confirm_email(request, username, token):
 @login_required
 def room(request, pk):
     context = {'username': request.user.username}
-    # if request.method =='GET':
+    currentRoom = get_object_or_404(Room, pk = pk)
+    if request.method =='GET':
+
+        history =  RoomHistory.objects.create(user = request.user, visited_room = currentRoom)
+        history.save()
+
+        listners = RoomHistory.getCurrentListeners(currentRoom)
+        context['listeners'] = listners
 
     return render(request, 'room_base.html', context)
 
@@ -341,7 +348,7 @@ def add_marker(request):
     # return render(request, 'hot_pot_music_share/maps/base_map.html', context)
 
 
-# @login_required
+# @user_auth/login_required
 # @transaction.atomic
 def get_markers(request):
     all_markers = Marker.objects.all()
