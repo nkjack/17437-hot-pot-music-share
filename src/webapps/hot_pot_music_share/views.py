@@ -46,6 +46,13 @@ def home(request, username):
 
             p = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
             p.save()
+
+            import random
+            lat = random.uniform(0, 1) + 40
+            lng = random.uniform(0, 1) - 80
+            m = Marker.objects.create(lat=lat, lng=lng, room=new_room)
+            m.save()
+            # 40.440624, -79.995888 pitt
             return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
         else:
 

@@ -118,7 +118,7 @@ class Marker(models.Model):
     # address = models.CharField(max_length=80, default="")
     lat = models.FloatField()
     lng = models.FloatField()
-    room = models.OneToOneField(Room, on_delete=models.CASCADE, blank=True)
+    room = models.OneToOneField(Room, on_delete=models.CASCADE)
 
     def __str__(self):
         return ""
