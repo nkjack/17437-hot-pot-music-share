@@ -5,13 +5,17 @@
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
     <div class="row">
         <div class="col">
+            <h1 id="now-playing"></h1>
             <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
             <div id="player"></div>
+            <br>
 
             <!-- Add a 'sync' now button -->
             {% if not is_host %}
                 <button onclick="syncToHost()">Sync To Host</button><br>
             {% else %}
+                <button onclick="nextVideo()">Next Video</button><br>
+
                 Video ID or URL:
                 <input id="add-to-song-queue-input" type="text" size="10"/>
                 <button onclick="addToSongQueue()">Add to Song Queue</button><br>
@@ -229,11 +233,12 @@
                 // Play the video, if needed
                 if (data['is_playing'] === 'true' && player.getPlayerState() != YT.PlayerState.PLAYING) {
                     console.log("\tHost is playing and I am not, so I will play...");
-                    player.playVideo();
+                    playVideoWrapper();
                 } else if (data['is_playing'] === 'false' && player.getPlayerState() != YT.PlayerState.PAUSED) {
                     console.log("\tHost is not playing and I am, so I will pause...");
                     player.pauseVideo();
                 }
+
             }
 
         };
@@ -281,10 +286,13 @@
         var player;
 
         function onYouTubeIframeAPIReady() {
+            const videoId = getTopOfSongQueue();
+            console.log("onYouTubeIframeAPIReady - videoId = " + videoId);
+
             player = new YT.Player('player', {
                 height: '390',
                 width: '640',
-                videoId: '9R3-0-Xg_Ro',
+                videoId: videoId,
                 playerVars: {
                     'start': 0,
                 },
@@ -306,14 +314,11 @@
 
 
         function onPlayerStateChange(event) {
-            // Host syncs up Listeners whenever Host's player state changes
-            syncListeners();
-            return;
-
             const playerStatus = event.data;
 
             // Send message via sockets
             switch (playerStatus) {
+                /*
                 case YT.PlayerState.PLAYING:
                     console.log("onPlayerStateChange, case: YT.PlayerState.PLAYING");
                     break;
@@ -328,12 +333,24 @@
                     console.log("onPlayerStateChange, case: YT.PlayerState.CUED");
                     // Do nothing.
                     break;
+                */
                 case YT.PlayerState.ENDED:
                     console.log("onPlayerStateChange, case: YT.PlayerState.ENDED");
                     // TODO: Start playing next song in the queue
-                    // player.cueVideoById(...);
+                    // Delete currently playing song from queue and play next one
+                    nextVideo();
                     break;
+                default:
+                    // Host syncs up Listeners whenever Host's player state changes
+                    syncListeners();
+                    return;
             }
+        }
+
+        // Wrapper for playVideo so 'now playing' gets changed as well
+        function playVideoWrapper() {
+            // Play video
+            player.playVideo();
         }
 
         // Host will call this function so Listeners will sync
@@ -378,14 +395,18 @@
 
         // Helper function to clean up video input from URL/ID to just ID
         function cleanVideoIdInput(input) {
-            videoId = input;
+            console.log('cleanVideoIdInput input: ' + input);
+            var videoId = input;
+            console.log('cleanVideoIdInput videoId: ' + videoId);
 
             // It's okay if they input a URL
             if (videoId.includes('youtube.com')) {
-                videoId = input.split('watch?v=')[1];
+                videoId = input.split('v=')[1];
+                console.log('\tcleanVideoIdInput videoId: ' + videoId);
             } else if (videoId.includes('youtu.be')) {
                 // Shortened URL form: https://youtu.be/JQbjS0_ZfJ0
                 videoId = input.split('.be/')[1];
+                console.log('\tcleanVideoIdInput videoId: ' + videoId);
             }
 
             // If there are other URL parameters
@@ -475,7 +496,68 @@
         function changeVideoById(videoId) {
             player.stopVideo();
             player.cueVideoById(videoId);
-            player.playVideo();
+            playVideoWrapper();
+        }
+
+        // On the event the Host wants to go to the next video OR end of currently playing video
+        function nextVideo() {
+            // Make GET request to get current playing song from top of song queue
+            const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+            deleteFromSongQueue(currVideoId);
+
+            // Make GET request to get top song
+            const videoId = getTopOfSongQueue();
+
+            if (videoId) {
+                // videoId could be undefined if no more songs left (FIXME: UI error message)
+                changeVideoById(videoId);
+            }
+        }
+
+        // Make GET call to 'delete-from-song-queue'
+        function deleteFromSongQueue(videoId) {
+            $.ajax({
+                async: false, // Wait for GET request to finish
+                url: '/delete-from-song-queue/' + {{ room_id }} +'/' + videoId,
+                type: "GET",
+                dataType: "json",
+            })
+                .done(function (data) {
+                    videoId = String(data.id);
+                    videoName = String(data.name);
+
+                    console.log("Got pop-song-queue response: " + videoId + ", " + videoName);
+
+                    changeVideoById(videoId);
+                })
+                .fail(function (xhr, status, errorThrown) {
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+                    console.dir(xhr);
+                });
+        }
+
+        // Make GET call to 'get-top-of-song-queue'
+        function getTopOfSongQueue() {
+            var videoId;
+            $.ajax({
+                async: false, // Wait for GET request to finish
+                url: '/get-top-of-song-queue/' + {{ room_id }},
+                type: "GET",
+                dataType: "json",
+            })
+                .done(function (data) {
+                    videoId = String(data.id);
+                    videoName = String(data.name);
+
+                    console.log("Got get-top-of-song-queue response: " + videoId + ", " + videoName);
+                })
+                .fail(function (xhr, status, errorThrown) {
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+                    console.dir(xhr);
+                });
+            return videoId;
         }
 
         /* NOAM JS START **********************************************************************************************/

@@ -48,18 +48,27 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-        song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
+        song_0 = Song.objects.create(song_id='3WSgJCYIewM', song_name='Drake - In My Feelings')
         song_0.save()
-        # JQbjS0_ZfJ0
-        song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
+
+        song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
         song_1.save()
+
+        song_2 = Song.objects.create(song_id='10yrPDf92hY', song_name='Kendrick Lamar - M.A.A.D. City (Feat. MC eiht)')
+        song_2.save()
+
+        song_3 = Song.objects.create(song_id='6vwNcNOTVzY', song_name='Kanye West - Gold Digger ft. Jamie Foxx')
+        song_3.save()
 
         song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
         song_pool.songs.add(song_0)
         song_pool.save()
 
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
+        song_queue.songs.add(song_0)
         song_queue.songs.add(song_1)
+        song_queue.songs.add(song_2)
+        song_queue.songs.add(song_3)
         song_queue.save()
 
         import random
@@ -382,3 +391,48 @@ def get_img(request, pk):
         raise Http404
     content_type = guess_type(room.cover_pic.name)
     return HttpResponse(room.cover_pic, content_type=content_type)
+
+
+# Sam new start
+
+# Return name of top song and remove from song queue
+def get_top_of_song_queue(request, room_id):
+    print('entered pop_song_queue for room_id='+room_id)
+
+    # TODO: What to do if no more songs in song_queue
+
+    # Get song queue for this room
+    room = Room.objects.get(id=room_id)
+    song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
+
+    # If empty, return nothing
+    if song_queue.songs.count() == 0:
+        return HttpResponse('')
+    else:
+        top_song = song_queue.songs.first()
+
+        print('Got top song: ' + top_song.song_name)
+
+        context = {'song': top_song}
+
+        """ song.json is as follows:
+        {
+            "id" : "{{song.song_id}}",
+            "name" : "{{song.song_name}}"
+        }
+        """
+
+        return render(request, 'hot_pot_music_share/youtube/song.json', context, content_type='application/json')
+
+def delete_from_song_queue(request, room_id, song_id):
+    # Get song queue for this room
+    room = Room.objects.get(id=room_id)
+    song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
+
+    # Delete from song queue
+    song_queue.songs.filter(song_id=song_id).delete()
+    print('Deleted song with song_id: ' + song_id)
+
+    # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
+
+    return HttpResponse('')
