@@ -339,10 +339,10 @@ def history(request):
 
 
 def map_of_rooms(request):
-    context = {}
+    context = {'username': request.user.username}
     all_markers = Marker.objects.all()
     context['all_markers'] = all_markers
-    return render(request, 'hot_pot_music_share/maps/map_of_rooms.html', context)
+    return render(request, 'hot_pot_music_share/maps/room_map.html', context)
 
 
 from hot_pot_music_share.forms import *
