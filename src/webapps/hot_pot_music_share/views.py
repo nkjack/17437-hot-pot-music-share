@@ -159,7 +159,7 @@ def add_song_to_room_playlist_ajax(request):
         s.save()
 
     s = Song.objects.get(song_id=searched_song_id)
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r):
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="pool"):
         p.songs.add(s)
 
     # context['room'] = room
@@ -179,14 +179,14 @@ def add_song_from_pool_to_queue(request):
     searched_song_name = request.POST['song_name']
 
     r = Room.objects.get(id=room_id)
-    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
 
     if not Song.objects.filter(song_id__exact=searched_song_id):
         s = Song(song_id=searched_song_id, song_name=searched_song_name)
         s.save()
 
     s = Song.objects.get(song_id=searched_song_id)
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="queue"):
         p.songs.add(s)
 
     # context['room'] = room
@@ -383,3 +383,27 @@ def get_img(request, pk):
         raise Http404
     content_type = guess_type(room.cover_pic.name)
     return HttpResponse(room.cover_pic, content_type=content_type)
+
+
+
+@login_required
+def get_pool_songs_from_room(request):
+    context = {}
+    room_id = request.GET['room_id']
+    r = Room.objects.get(id=room_id)
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")    # context['room'] = room
+    context['songs'] = p.songs.all()
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
+
+@login_required
+@transaction.atomic
+def get_queue_songs_from_room(request):
+    context = {}
+    room_id = request.GET['room_id']
+    r = Room.objects.get(id=room_id)
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
+    context['songs'] = p.songs.all()
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
+
