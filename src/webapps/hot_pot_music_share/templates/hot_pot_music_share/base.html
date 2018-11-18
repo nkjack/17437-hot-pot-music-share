@@ -24,7 +24,7 @@
              src="{% static 'hot_pot_music_share/img/menu.png' %}" width="50">
         <ul class="sidebar-nav">
             <li class="sidebar-brand">
-                <a class="figure" href="room_history.html">
+                <a class="figure" href="#">
                     {% if img %}
                         <img class="mr-4" src="{% url 'img' username %}" width="90" alt="">
                     {% else %}
@@ -39,6 +39,9 @@
             </li>
             <li>
                 <a href="{% url 'history' %}">My Rooms</a>
+            </li>
+            <li>
+              <a href="{% url 'map_of_rooms' %}">Map</a>
             </li>
             <li>
                 <a href="profile.html">Settings</a>
