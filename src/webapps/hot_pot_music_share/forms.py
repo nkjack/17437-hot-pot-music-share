@@ -105,12 +105,12 @@ class RoomForm(forms.ModelForm):
                            widget=forms.TextInput(attrs=
                                                   {'class': 'form-control mb-3', 'maxlength': '15',
                                                    }))
-    isMarked = forms.BooleanField(required=False, initial=True, label='Mark Geo Location',
-                                  widget=forms.CheckboxInput())
+    # isMarked = forms.BooleanField(required=False, initial=True, label='Mark Geo Location',
+    #                               widget=forms.CheckboxInput())
 
     class Meta:
         model = Room
-        fields = ['name', 'cover_pic', 'description', 'owner', 'isMarked']
+        fields = ['name', 'cover_pic', 'description', 'owner']
 
     def clean(self):
         cleaned_data = super(RoomForm, self).clean()

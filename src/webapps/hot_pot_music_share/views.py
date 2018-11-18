@@ -309,6 +309,7 @@ def room(request, room_id):
     if not RoomHistory.visitedBefore(request.user, room, localtime(now())):
         history = RoomHistory.objects.create(user=request.user, visited_room=room)
         history.save()
+    listeners = RoomHistory.getCurrentListeners(room)
 
     print('song_queue: ' + str(song_queue.songs.all()))
 
