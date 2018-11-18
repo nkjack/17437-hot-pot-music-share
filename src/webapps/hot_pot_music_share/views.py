@@ -60,7 +60,6 @@ def home(request, username):
         song_3 = Song.objects.create(song_id='6vwNcNOTVzY', song_name='Kanye West - Gold Digger ft. Jamie Foxx')
         song_3.save()
 
-
         song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
         song_pool.save()
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
@@ -98,7 +97,6 @@ def search_song(request):
     max_results = 10
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
                     developerKey=DEVELOPER_KEY)
-
 
     print('making search query...')
 
@@ -330,6 +328,7 @@ def history(request):
     return render(request, 'room_history.html', context)
 
 
+@login_required
 def map_of_rooms(request):
     context = {'username': request.user.username}
     all_markers = Marker.objects.all()
@@ -356,8 +355,6 @@ def add_marker(request):
     return JsonResponse(data={})
 
 
-
-
 def get_markers(request):
     all_markers = Marker.objects.all()
     context = {'markers': all_markers}
@@ -379,7 +376,7 @@ def get_pool_songs_from_room(request):
     context = {}
     room_id = request.GET['room_id']
     r = Room.objects.get(id=room_id)
-    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")    # context['room'] = room
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")  # context['room'] = room
     context['songs'] = p.songs.all()
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
@@ -421,6 +418,7 @@ def get_top_of_song_queue(request, room_id):
         """
 
         return render(request, 'hot_pot_music_share/youtube/song.json', context, content_type='application/json')
+
 
 # Delete song with specified song_id from song_queue of specified room_id
 def delete_from_song_queue(request, room_id, song_id):
