@@ -1,6 +1,7 @@
 # import spotipy
 # import spotipy.util as util
 import json
+from mimetypes import guess_type
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -11,69 +12,65 @@ from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.utils.timezone import localtime, now
-
 # Home view
 from django.utils.safestring import mark_safe
+from django.utils.timezone import localtime, now
 
 
 @login_required
 def home(request, username):
-	context = {'title': 'home', 'error': ''}
-	context['username'] = username
-	user_from_url = get_object_or_404(User, username=username)
+    context = {'title': 'home', 'error': ''}
+    context['username'] = username
+    user_from_url = get_object_or_404(User, username=username)
 
-	if (request.method == "GET"):
-		context['form'] = RoomForm(initial={'owner': request.user})
+    if (request.method == "GET"):
+        context['form'] = RoomForm(initial={'owner': request.user})
 
-		popular_rooms = Room.objects.all().order_by('thumbs_up')[:6]
-		context["popular"] = popular_rooms
+        popular_rooms = Room.objects.all().order_by('thumbs_up')[:6]
+        context["popular"] = popular_rooms
 
-		print(popular_rooms)
-		return render(request, 'home.html', context)
+        print(popular_rooms)
+        return render(request, 'home.html', context)
 
-	elif (request.POST.get('create_room')):
-		form = RoomForm(request.POST, request.FILES, initial={'owner': request.user})
-		context['form'] = form
+    elif (request.POST.get('create_room')):
+        form = RoomForm(request.POST, request.FILES, initial={'owner': request.user})
+        context['form'] = form
 
-        if form.is_valid():
-            print("Creating Room...")
-            new_room = Room.objects.create(owner=request.user,
-                                           name=form.cleaned_data['name'],
-                                           description=form.cleaned_data['description'],
-                                           cover_pic=form.cleaned_data['cover_pic']
-                                           )
-            new_room.save()
-            new_history = RoomHistory.objects.create(user=request.user,
-                                                     visited_room=new_room)
-            new_history.save()
+    if form.is_valid():
+        print("Creating Room...")
+        new_room = Room.objects.create(owner=request.user,
+                                       name=form.cleaned_data['name'],
+                                       description=form.cleaned_data['description'],
+                                       cover_pic=form.cleaned_data['cover_pic']
+                                       )
+        new_room.save()
+        new_history = RoomHistory.objects.create(user=request.user,
+                                                 visited_room=new_room)
+        new_history.save()
 
+        song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
+        song_0.save()
+        # JQbjS0_ZfJ0
+        song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
+        song_1.save()
 
-            song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
-            song_0.save()
-            # JQbjS0_ZfJ0
-            song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
-            song_1.save()
+        song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
+        song_pool.songs.add(song_0)
+        song_pool.save()
 
+        song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
+        song_queue.songs.add(song_1)
+        song_queue.save()
 
-            song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
-            song_pool.songs.add(song_0)
-            song_pool.save()
-
-            song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
-            song_queue.songs.add(song_1)
-            song_queue.save()
-
-
-            import random
-            lat = random.uniform(0, 1) + 40
-            lng = random.uniform(0, 1) - 80
-            m = Marker.objects.create(lat=lat, lng=lng, room=new_room)
-            m.save()
-            # 40.440624, -79.995888 pitt
-            return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
-        else:
-            return render(request, 'home.html', context)
+        import random
+        lat = random.uniform(0, 1) + 40
+        lng = random.uniform(0, 1) - 80
+        m = Marker.objects.create(lat=lat, lng=lng, room=new_room)
+        m.save()
+        # 40.440624, -79.995888 pitt
+        return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
+    else:
+        return render(request, 'home.html', context)
 
 
 ## youtube search
@@ -85,13 +82,13 @@ YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
 
-
 def search_song(request):
-	context = {}
-	query = request.GET['query']
-	max_results = 10
-	youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-					developerKey=DEVELOPER_KEY)
+    context = {}
+    query = request.GET['query']
+    max_results = 10
+    youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+                    developerKey=DEVELOPER_KEY)
+
 
     print('making search query...')
 
@@ -118,8 +115,8 @@ def search_song(request):
 
     print('printing videos: ' + str(videos))
 
-	# room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
-	# playlist_obj = Playlist.objects.get(belongs_to_room=room)
+    # room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
+    # playlist_obj = Playlist.objects.get(belongs_to_room=room)
 
     # pprint.pprint(result)
     #
@@ -156,9 +153,10 @@ def add_song_to_room_playlist_ajax(request):
     # r = Room.objects.get(name="noam_room")
     p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")
 
-	if not Song.objects.filter(song_id__exact=searched_song_id):
-		s = Song(song_id=searched_song_id, song_name=searched_song_name)
-		s.save()
+    if not Song.objects.filter(song_id__exact=searched_song_id):
+        s = Song(song_id=searched_song_id, song_name=searched_song_name)
+        s.save()
+
 
     s = Song.objects.get(song_id=searched_song_id)
     if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
@@ -169,6 +167,7 @@ def add_song_to_room_playlist_ajax(request):
     # print (context['songs'])
     # context['user'] = user
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
 
 @login_required
 def add_song_from_pool_to_queue(request):
@@ -181,20 +180,19 @@ def add_song_from_pool_to_queue(request):
     r = Room.objects.get(id=room_id)
     p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
 
-	if not Song.objects.filter(song_id__exact=searched_song_id):
-		s = Song(song_id=searched_song_id, song_name=searched_song_name)
-		s.save()
+    if not Song.objects.filter(song_id__exact=searched_song_id):
+        s = Song(song_id=searched_song_id, song_name=searched_song_name)
+        s.save()
 
-	s = Song.objects.get(song_id=searched_song_id)
-	if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
-		p.songs.add(s)
+    s = Song.objects.get(song_id=searched_song_id)
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+        p.songs.add(s)
 
-	# context['room'] = room
-	context['songs'] = p.songs.all()
-	# print (context['songs'])
-	# context['user'] = user
-	return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
-
+    # context['room'] = room
+    context['songs'] = p.songs.all()
+    # print (context['songs'])
+    # context['user'] = user
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
 # Integrate actual Profile model later
@@ -204,113 +202,113 @@ def custom_login(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('home', args=[request.user.username]))
 
-	if request.method == 'GET':
-		context['login_form'] = LoginForm()
+    if request.method == 'GET':
+        context['login_form'] = LoginForm()
 
-		return render(request, 'user_auth/login.html', context)
+        return render(request, 'user_auth/login.html', context)
 
-	if request.POST.get('login'):
-		form = LoginForm(request.POST)
-		context['login_form'] = form
+    if request.POST.get('login'):
+        form = LoginForm(request.POST)
+        context['login_form'] = form
 
-		if form.is_valid():
-			username = request.POST['username']
-			password = request.POST['password']
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
 
-			user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
-			if user is not None:
-				login(request, user)
-				return HttpResponseRedirect(reverse('home', args=[username]))
-			else:
-				context['error'] = 'Invalid login. Password does not match the user or user does not exist'
-				return render(request, 'user_auth/login.html', context)
-		else:
-			return render(request, 'user_auth/login.html', context)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('home', args=[username]))
+            else:
+                context['error'] = 'Invalid login. Password does not match the user or user does not exist'
+                return render(request, 'user_auth/login.html', context)
+        else:
+            return render(request, 'user_auth/login.html', context)
 
-	elif 'resetPassword' in request.POST or request.POST['resetPassword']:
-		return HttpResponseRedirect(reverse('forgetPassword'))
+    elif 'resetPassword' in request.POST or request.POST['resetPassword']:
+        return HttpResponseRedirect(reverse('forgetPassword'))
 
-	else:
-		context['error'] = "Please press login button to register an account"
-		return render(request, 'user_auth/login.html', context)
+    else:
+        context['error'] = "Please press login button to register an account"
+        return render(request, 'user_auth/login.html', context)
 
 
 def register(request):
-	context = {'register_active': 'active', 'login_active': ''}
+    context = {'register_active': 'active', 'login_active': ''}
 
-	if request.method == 'GET':
-		context['registration_form'] = RegistrationForm()
+    if request.method == 'GET':
+        context['registration_form'] = RegistrationForm()
 
-		return render(request, 'user_auth/login.html', context)
-	else:
-		if 'register' in request.POST or request.POST['register']:
-			form = RegistrationForm(request.POST)
-			context['registration_form'] = form
-			if form.is_valid():
-				new_user = User.objects.create_user(username=form.cleaned_data['username'],
-													password=form.cleaned_data['password1'],
-													email=form.cleaned_data['email'])
+        return render(request, 'user_auth/login.html', context)
+    else:
+        if 'register' in request.POST or request.POST['register']:
+            form = RegistrationForm(request.POST)
+            context['registration_form'] = form
+            if form.is_valid():
+                new_user = User.objects.create_user(username=form.cleaned_data['username'],
+                                                    password=form.cleaned_data['password1'],
+                                                    email=form.cleaned_data['email'])
 
-				new_user.is_active = False
-				new_user.save()
+                new_user.is_active = False
+                new_user.save()
 
-				token = default_token_generator.make_token(new_user)
-				email_body = """
+                token = default_token_generator.make_token(new_user)
+                email_body = """
 				Welcome to hot_pot_music_share. Please click the link below to verify your email address and complete registration:
 				http://%s%s
 				""" % (request.get_host(),
-					   reverse('confirm', args=(new_user.username, token)))
+                       reverse('confirm', args=(new_user.username, token)))
 
-				send_mail(subject="Verify Your Email Adress",
-						  message=email_body,
-						  from_email="..",
-						  recipient_list=[new_user.email])
+                send_mail(subject="Verify Your Email Adress",
+                          message=email_body,
+                          from_email="..",
+                          recipient_list=[new_user.email])
 
-				context[
-					"email"] = "Welcome to Hot Pot Music Share. Please check your mailbox to find verification link to complete registration"
-				return render(request, 'user_auth/email_confirmation.html', context)
+                context[
+                    "email"] = "Welcome to Hot Pot Music Share. Please check your mailbox to find verification link to complete registration"
+                return render(request, 'user_auth/email_confirmation.html', context)
 
-				# login(request, new_user)
-				# return HttpResponseRedirect(reverse('home',args=[new_user.username]))
-			else:
-				context['error'] = "Please check if all the field satisfy requirements or the username is already taken"
-				return render(request, 'user_auth/login.html', context)
-		else:
-			context['error'] = "Please press Register button to register an account"
-			return render(request, 'user_auth/login.html', context)
+            # login(request, new_user)
+            # return HttpResponseRedirect(reverse('home',args=[new_user.username]))
+            else:
+                context['error'] = "Please check if all the field satisfy requirements or the username is already taken"
+                return render(request, 'user_auth/login.html', context)
+        else:
+            context['error'] = "Please press Register button to register an account"
+            return render(request, 'user_auth/login.html', context)
 
 
-def customLogout(request):
-	logout(request)
-	return HttpResponseRedirect(reverse('login'))
+def custom_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('login'))
 
 
 @transaction.atomic
 def confirm_email(request, username, token):
-	user = get_object_or_404(User, username=username)
-	if default_token_generator.check_token(user, token):
+    user = get_object_or_404(User, username=username)
+    if default_token_generator.check_token(user, token):
 
-		user.is_active = True
-		user.save()
+        user.is_active = True
+        user.save()
 
-		return HttpResponseRedirect(reverse('login'))
-	else:
-		return HttpResponse('Invalid Link')
+        return HttpResponseRedirect(reverse('login'))
+    else:
+        return HttpResponse('Invalid Link')
 
 
 @login_required
 def room(request, room_id):
-    room = get_object_or_404(Room, id = room_id)
+    room = get_object_or_404(Room, id=room_id)
     room_name = room.name
     is_host = room.owner == request.user
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
-    
+
     # Update user room history if this user has never been to this room
-    if not RoomHistory.visitedBefore(request.user, currentRoom, localtime(now())):
-			history =  RoomHistory.objects.create(user = request.user, visited_room = currentRoom)
-			history.save()
+    if not RoomHistory.visitedBefore(request.user, room, localtime(now())):
+        history = RoomHistory.objects.create(user=request.user, visited_room=room)
+        history.save()
 
     print('song_queue: ' + str(song_queue.songs.all()))
 
@@ -322,21 +320,22 @@ def room(request, room_id):
                'song_pool': song_pool.songs.all(),
                'song_queue': song_queue.songs.all(),
                }
-    
-	return render(request, 'room_base.html', context)
+
+    return render(request, 'room_base.html', context)
 
 
 @login_required
 def history(request):
-	context = {'owned': '', 'visited': '', 'username': request.user.username}
-	if request.method == 'GET':
-		owned = Room.objects.filter(owner=request.user)
-		history = RoomHistory.getVisitHistory(request.user)
+    context = {'owned': '', 'visited': '', 'username': request.user.username}
+    if request.method == 'GET':
+        owned = Room.objects.filter(owner=request.user)
+        history = RoomHistory.getVisitHistory(request.user)
 
-		context['owned'] = owned
-		context['visited'] = history
-		context
-	return render(request, 'room_history.html', context)
+        context['owned'] = owned
+        context['visited'] = history
+        context
+    return render(request, 'room_history.html', context)
+
 
 def map_of_rooms(request):
     context = {}
@@ -351,32 +350,35 @@ from django.http import JsonResponse
 
 
 def add_marker(request):
-	context = {}
-	form = MarkerForm(request.POST)
-	if not form.is_valid():
-		print(form.errors)
-		raise Http404
+    context = {}
+    form = MarkerForm(request.POST)
+    if not form.is_valid():
+        print(form.errors)
+        raise Http404
 
-	form.save()
-	all_markers = Marker.objects.all()
-	print(all_markers)
-	context['all_markers'] = all_markers
-	return JsonResponse(data={})
-	# return render(request, 'hot_pot_music_share/maps/base_map.html', context)
+    form.save()
+    all_markers = Marker.objects.all()
+    print(all_markers)
+    context['all_markers'] = all_markers
+    return JsonResponse(data={})
+
+
+# return render(request, 'hot_pot_music_share/maps/base_map.html', context)
 
 
 # @ulogin_required
 # @transaction.atomic
 def get_markers(request):
-	all_markers = Marker.objects.all()
-	context = {'markers': all_markers}
+    all_markers = Marker.objects.all()
+    context = {'markers': all_markers}
 
-	return render(request, 'hot_pot_music_share/maps/markers.json', context, content_type='application/json')
+    return render(request, 'hot_pot_music_share/maps/markers.json', context, content_type='application/json')
+
 
 @login_required
-def get_img(request,pk):
-	room= get_object_or_404(Room, pk = pk)
-	if not room.cover_pic:
-		raise Http404
-	content_type = guess_type (room.cover_pic.name)
-	return HttpResponse(room.cover_pic, content_type = content_type)
+def get_img(request, pk):
+    room = get_object_or_404(Room, pk=pk)
+    if not room.cover_pic:
+        raise Http404
+    content_type = guess_type(room.cover_pic.name)
+    return HttpResponse(room.cover_pic, content_type=content_type)

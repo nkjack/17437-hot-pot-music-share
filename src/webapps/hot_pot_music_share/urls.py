@@ -20,7 +20,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='login'), name="go_to_login"),
     path('login', views.custom_login, name='login'),
     path('register', views.register, name='register'),
-    path('logout', views.customLogout, name='logout'),
+    path('logout', views.custom_logout, name='logout'),
 
     # Email Confirmation
     re_path(r'^confirm-email/username=(?P<username>[0-9A-Za-z_]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
