@@ -316,7 +316,7 @@ def history(request):
 
 		context['owned'] = owned
 		context['visited'] = history
-
+		context
 	return render(request, 'room_history.html', context)
 
 
@@ -354,3 +354,11 @@ def get_markers(request):
 	context = {'markers': all_markers}
 
 	return render(request, 'hot_pot_music_share/maps/markers.json', context, content_type='application/json')
+
+@login_required
+def get_img(request,pk):
+	room= get_object_or_404(Room, pk = pk)
+	if not room.cover_pic:
+		raise Http404
+	content_type = guess_type (room.cover_pic.name)
+	return HttpResponse(room.cover_pic, content_type = content_type)

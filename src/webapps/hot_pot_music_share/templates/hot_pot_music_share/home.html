@@ -13,7 +13,7 @@
 
                   <div class="card bg-light rounded">
                  {% if room.cover_pic %}
-                    <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
+                    <img class="mr-4" src="{% url 'img' room.pk %}" width="90" alt = "">
 
                   {% endif %}
                     <div class="card-body">

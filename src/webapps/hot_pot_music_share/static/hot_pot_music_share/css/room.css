@@ -15,10 +15,10 @@ a:hover, a:visited, a:link, a:active{
   color: inherit;
 }
 
-.container {
+.home_container {
   height: 100%;
-  width: 100%;
-  margin:auto;
+  padding-left: 50px;
+  padding-left:50px;
   padding-top: 35px;
   border: .075em solid #696969;
 }
