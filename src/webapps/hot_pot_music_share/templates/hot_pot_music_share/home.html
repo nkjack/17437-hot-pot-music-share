@@ -1,81 +1,79 @@
 {% extends 'hot_pot_music_share/base.html' %}
 
-{% block content %} 
-<!--       <canvas id="canvas"></canvas>     -->
-      <button type="button" class="btn btn-lg" onclick="openForm()">Create a Room</button>
-    
-      <div class="my-3 p-3 rounded box-shadow">
-          <h6 class="border-bottom border-gray pb-2 mb-0">Popular Now</h6>
-          <div class="row-card">
-              
+{% block content %}
+    <!--       <canvas id="canvas"></canvas>     -->
+    <button type="button" class="btn btn-lg" onclick="openForm()">Create a Room</button>
+
+    <div class="my-3 p-3 rounded box-shadow">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Popular Now</h6>
+        <div class="row-card">
+
             {% for room in popular %}
-                <a href="{% url 'room' room.pk %}" class="col-sm-4">
+                <a href="{% url 'room' room.id %}" class="col-sm-4">
+
 
                   <div class="card bg-light rounded">
                  {% if room.cover_pic %}
                     <img class="mr-4" src="{% url 'img' room.pk %}" width="90" alt = "">
-
                   {% endif %}
-                    <div class="card-body">
-                      <h5 class="card-title">{{ room.name }}</h5>
-                      <p class="card-text">{{room.description }}</p>
-                      <p class="card-text"><small class="text-muted">DJ: {{room.owner.username}}</small></p>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ room.name }}</h5>
+                            <p class="card-text">{{ room.description }}</p>
+                            <p class="card-text">
+                                <small class="text-muted">DJ: {{ room.owner.username }}</small>
+                            </p>
+                        </div>
                     </div>
-                  </div>
-                
-              </a>
-              {% endfor %}
+
+                </a>
+            {% endfor %}
         </div>
-      </div>
-                   <div class = 'error' >
-                  {{error}}
-                  {{form.errors}}
-                  {{form.non_field_errors}}
-                </div>
-      <div class="form-popup" id="create_room_div">
-          <form class="form-container" method = "POST">{% csrf_token %}
+    </div>
+    <div class='error'>
+        {{ error }}
+        {{ form.errors }}
+        {{ form.non_field_errors }}
+    </div>
+    <div class="form-popup" id="create_room_div">
+        <form class="form-container" method="POST">{% csrf_token %}
             <h1>Create A Room</h1>
 
-              <div class = "form-group my-3 mx-3">
+            <div class="form-group my-3 mx-3">
                 {% if form %}
-                <div class = 'error' >
-                  {{form.errors}}
-                  {{form.non_field_errors}}
-                </div>
-              <div >
-                <p class = "font-weight-bold mb-0 ">{{form.name.label}}
-                  {{form.name}}</p>
-                
-              </div>
-              <div>
-                <p class = "font-weight-bold mb-0 ">{{form.description.label}}
-                {{form.description}}</p>
-                
-              </div>
-              <div>
-                <p class = "font-weight-bold mb-0 "><bold>{{form.isMarked.label}}</bold>
-                {{form.isMarked}}</p>
-                
-              </div>
-              <div >
-                <p class = "font-weight-bold mb-0 ">Room Photo
+                    <div class='error'>
+                        {{ form.errors }}
+                        {{ form.non_field_errors }}
+                    </div>
+                    </div>
+                    <div>
+                        <p class="font-weight-bold mb-0 ">{{ form.name.label }}
+                            {{ form.name }}</p>
 
-                  {{form.cover_pic}}</p>
-              
-            </div>
-            {% endif %}
-<!--             <input type="checkbox" name="private" value="private" checked>A Private Room? -->
-            <input type="submit" name = "create_room" class = "btn create" value = "Create" class="btn">
+                    </div>
+                    <div class="my-3">
+                        <p class="font-weight-bold mb-0 ">{{ form.description.label }}</p>
+                        <p class="mx-4">{{ form.description }}</p>
+
+                    </div>
+                    <div>
+                        <p class="font-weight-bold mb-0 ">Room Photo</p>
+
+                        {{ form.cover_pic }}
+
+                    </div>
+                {% endif %}
+            <!--             <input type="checkbox" name="private" value="private" checked>A Private Room? -->
+            <input type="submit" name="create_room" value="create" class="btn create">Create</button>
             <button type="button" class="btn" onclick="closeForm()">Close</button>
-          </form>
-        </div>
-<script>
-  function openForm() {
-    document.getElementById("create_room_div").style.display = "block";
-}
+        </form>
+    </div>
+    <script>
+        function openForm() {
+            document.getElementById("create_room_div").style.display = "block";
+        }
 
-function closeForm() {
-    document.getElementById("create_room_div").style.display = "none";
-}
-</script>
+        function closeForm() {
+            document.getElementById("create_room_div").style.display = "none";
+        }
+    </script>
 {% endblock %}

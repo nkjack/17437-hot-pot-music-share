@@ -2,7 +2,8 @@ html,
 
 body {
   background: #EDEDED;
-  font-family: 'arial';
+  font-family: Arial, serif;
+
   padding-left: 0px;
   padding-right:0px;
   font-weight: bold;
