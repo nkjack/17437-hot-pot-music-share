@@ -3,14 +3,9 @@
 
 {% block content %}
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
-    <input type="hidden" id="is_host" value="{{ is_host }}"/>
-
     <div class="row">
-        <div class="col">
-            <!-- To be filled in by JS whenever player starts playing -->
-            <strong>Now playing:</strong>
-            <i id="now-playing"></i>
-
+        <div class="col video_col">
+            <h1 id="now-playing my-0"></h1>
             <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
             <div id="player"></div>
             <br>
@@ -32,8 +27,10 @@
             <button onclick="addToSongPool()">Add to Song Pool</button>
 
             <!-- The playlist -->
-            <div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
-                <h3>SONG QUEUE</h3>
+            <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
+                <h5 class ="border-bottom border-dark pb-2 mb-0">DJ Playlist</h5>
+
+                <div  id="dj_list">
                 {% for song in song_queue %}
                     <!-- One track in the playlist -->
                     <div class="media pt-3" id="song_queue_{{ song.song_id }}">
@@ -48,6 +45,7 @@
                         </div>
                     </div>
                 {% endfor %}
+           		</div>
 
                 <!-- One track in the playlist -->
                 {#                <div class="media pt-3" id="song_0">#}
@@ -66,8 +64,10 @@
 
         <!-- This is the POLL -->
         <div class="col">
-            <h3>SONG POOL</h3>
-            <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="poll_list">
+            <div class="mb-3 p-3 bg-dark text-light  rounded box-shadow poll_list">
+            	<h5 class ="border-bottom border-white pb-2 mb-0">Listeners' Pool</h5>
+
+            	<div  id="poll_list">
                 {% for song in song_pool %}
                     <div class="media pt-3" id="poll_song_div">
                         <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
@@ -76,27 +76,44 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <strong class="text-gray-dark">{{ song.song_name }}</strong>
                             </div>
-                            {% if is_host %}
-                                <button type="button" id="add-song-to-queue-btn">Add to Queue</button>
-                            {% endif %}
+                            <button type="button" id="add-song-to-queue-btn">Add to Queue</button>
                             <input type="hidden" id="song_id" value="{{ song.song_id }}"/>
                             <input type="hidden" id="song_name" value="{{ song.song_name }}"/>
                         </div>
                     </div>
                 {% endfor %}
+            	</div>
             </div>
+
+                        <!-- This is the list of people in this room -->
+            <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
+                <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
+
+                <!-- One user -->
+                {% for u in users%}
+                <div class="media text-muted pt-3" id="user_1">
+                    <!-- The profile img -->
+                   <!--  <img src="SOME URL" alt="" class="mr-2 rounded" width="25"> -->
+                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <strong class="text-gray-dark">{{u.username}}</strong>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+        		</div>
 
         </div>
         <div class="col">
             <!-- This is the search panel -->
-            <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
-                <div class="input-group">
+            <div class=" p-3 bg-light text-dark rounded box-shadow search" id="panel">
+                <div class="input-group mb-0">
                     <input type="text" class="form-control" id="search-query" placeholder="Search for...">
                     <button id="search-button" class="btn-search" type="button">Search</button>
                     <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
                 </div>
                 <!-- A list of results -->
-                <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search-results">
+                <div id="search-results">
 
                     <!-- One track -->
                     <div class="media pt-3" id="song_0">
@@ -104,7 +121,7 @@
                         <!-- The thumbnail of this video -->
                         <!-- Maybe also use API to get a thumbnail -->
                         <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded"
-                             width="25">
+                             width="15">
                         <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <strong class="text-gray-dark">{{ name_of_video }}</strong>
@@ -117,35 +134,15 @@
 
             </div>
 
-            <!-- This is the list of people in this room -->
-            <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
-                <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
-
-                <!-- One user -->
-                {% for u in users %}
-                    <div class="media text-muted pt-3" id="user_1">
-                        <!-- The profile img -->
-                        <!--  <img src="SOME URL" alt="" class="mr-2 rounded" width="25"> -->
-                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <strong class="text-gray-dark">{{ u.username }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                <!-- Add people to this room -->
-                <button type="button" class=" float-right btn btn-lg" onclick="openForm()">
-                    <span class="glyphicon">&#x2b;</span>
-                </button>
-
                 <!-- Sam Chat Room -->
-                <textarea id="chat-log" cols="20" rows="10"></textarea><br/>
+            <div class = "my-3 p-3 bg-light text-dark rounded box-shadow chat-room">
+                <textarea id="chat-log" cols="24" rows="5"></textarea><br/>
                 <input id="chat-message-input" type="text" size="10"/><br/>
                 <input id="chat-message-submit" type="button" value="Send"/>
             </div>
         </div>
-    </div>
 
+    </div>
 
 
     <div class="form-popup" id="popupForm">
@@ -329,15 +326,9 @@
                 case YT.PlayerState.PLAYING:
                     console.log("onHostPlayerStateChange, case: YT.PlayerState.PLAYING");
 
-                    // TODO: Highlight currently playing song - cannot do it now b/c refreshing will delete the css
-                    //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
-
+                    // Highlight currently playing song
                     const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    console.log(currVideoId);
-                    const currVideoTitle = getVideoTitleFromId(currVideoId);
-                    console.log(currVideoTitle);
-                    $('#now-playing').html(currVideoTitle);
+                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
 
                     break;
                 case YT.PlayerState.PAUSED:
@@ -369,13 +360,9 @@
                 case YT.PlayerState.PLAYING:
                     console.log("onListenerPlayerStateChange, case: YT.PlayerState.PLAYING");
 
-                    // TODO: Highlight currently playing song - cannot do it now b/c refreshing will delete the css
-                    //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
-
+                    // Highlight currently playing song
                     const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    const currVideoTitle = getVideoTitleFromId(currVideoId);
-                    $('#now-playing').html(currVideoTitle);
+                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
 
                     break;
             }
@@ -424,14 +411,18 @@
 
         // Helper function to clean up video input from URL/ID to just ID
         function cleanVideoIdInput(input) {
+            console.log('cleanVideoIdInput input: ' + input);
             var videoId = input;
+            console.log('cleanVideoIdInput videoId: ' + videoId);
 
             // It's okay if they input a URL
             if (videoId.includes('youtube.com')) {
                 videoId = input.split('v=')[1];
+                console.log('\tcleanVideoIdInput videoId: ' + videoId);
             } else if (videoId.includes('youtu.be')) {
                 // Shortened URL form: https://youtu.be/JQbjS0_ZfJ0
                 videoId = input.split('.be/')[1];
+                console.log('\tcleanVideoIdInput videoId: ' + videoId);
             }
 
             // If there are other URL parameters
@@ -503,6 +494,7 @@
                 }
             });
 
+            console.log('returning videoTitle: ' + videoTitle);
             return videoTitle;
         }
 
@@ -712,9 +704,7 @@
                             '    <div class="d-flex justify-content-between align-items-center w-100">' +
                             '      <strong class="text-gray-dark">' + v_name + '</strong>' +
                             '    </div>' +
-                            {% if is_host %}
-                                '<button type="button" id="add-song-to-queue-btn">Add to Queue</button>' +
-                            {% endif %}
+                            '<button type="button" id="add-song-to-queue-btn">Add to Queue</button>' +
                             '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
                             '       <input type="hidden" id="song_name" value="' + v_name + '"/>' +
                             '</div>' +
@@ -769,10 +759,8 @@
                         var v_id = data.songs[i]['id'];
                         var v_name = data.songs[i]['name'];
 
-                        var elementId = 'song_queue_' + v_id;
-
                         $('#dj_list').append(
-                            '<div class="media pt-3" id="' + elementId + '">' +
+                            '<div class="media pt-3" id="song_0">' +
                             '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
                             '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
                             '    <div class="d-flex justify-content-between align-items-center w-100">' +
