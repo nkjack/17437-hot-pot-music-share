@@ -636,7 +636,7 @@
          */
         $("#poll_list").on("click", "#add-song-to-queue-btn", function (event) {
             event.preventDefault();
-            var search_form = $(this).closest("#poll_list");
+            var search_form = $(this).closest("#poll_song_div");
             var room_id = $("#room_id");
             var song_id = search_form.find("#song_id");
             var song_name = search_form.find("#song_name");
