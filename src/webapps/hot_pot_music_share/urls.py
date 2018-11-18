@@ -37,4 +37,8 @@ urlpatterns = [
     re_path(r'^player/(?P<room_name>[^/]+)/$', player_views.room, name='player-room'),
     path('player', player_views.youtube_player),
 
+
+    #img
+    re_path(r'^profile-photo/room/(?P<pk>\w+)/$', views.get_img, name = 'img'),
+
 ]

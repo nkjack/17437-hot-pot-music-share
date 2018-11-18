@@ -11,11 +11,11 @@
             {% for room in popular %}
                 <a href="{% url 'room' room.id %}" class="col-sm-4">
 
-                    <div class="card bg-light rounded">
-                        {% if room.cover_pic %}
-                            <img class="mr-4" src="{% url 'img' username %}" width="90" alt="">
 
-                        {% endif %}
+                  <div class="card bg-light rounded">
+                 {% if room.cover_pic %}
+                    <img class="mr-4" src="{% url 'img' room.pk %}" width="90" alt = "">
+                  {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ room.name }}</h5>
                             <p class="card-text">{{ room.description }}</p>
@@ -63,8 +63,8 @@
                     </div>
                 {% endif %}
             <!--             <input type="checkbox" name="private" value="private" checked>A Private Room? -->
-            <input type="submit" name="create_room" value="create" class="btn">Create</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            <input type="submit" name="create_room" value="create" class="btn create">Create</button>
+            <button type="button" class="btn" onclick="closeForm()">Close</button>
         </form>
     </div>
     <script>

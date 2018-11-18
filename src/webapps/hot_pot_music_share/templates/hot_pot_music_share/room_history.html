@@ -15,7 +15,7 @@
 
                     <div class="card bg-light rounded">
                    {% if room.cover_pic %}
-                      <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
+                      <img class="mr-4" src="{% url 'img' room.pk %}" width="90" alt = "">
 
                     {% endif %}
                       <div class="card-body">
@@ -39,29 +39,29 @@
         
         <!-- rows of rooms -->
         <div class="row-card">
-              <div class="col-sm-4">
 
                 <!-- One single room -->
-                {% for room in visited %}
-                  <a href="{% url 'room' room.pk %}" class="col-sm-4">
+                {% for history in visited %}
+                  <a href="{% url 'room' history.visited_room.pk %}" class="col-sm-4">
 
                     <div class="card bg-light rounded">
-                   {% if room.cover_pic %}
-                      <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
+                   {% if history.visited_room.cover_pic %}
+                      <img class="mr-4" src="{% url 'img' history.visited_room.pk %}" width="90" alt = "">
 
                     {% endif %}
                       <div class="card-body">
-                        <h5 class="card-title">{{ room.name }}</h5>
-                        <p class="card-text">{{room.description }}</p>
-                        <p class="card-text"><small class="text-muted">DJ: {{room.owner.username}}</small></p>
+                        <h5 class="card-title">{{ history.visited_room.name }}</h5>
+                        <p class="card-text">{{history.visited_room.description }}</p>
+                        <p class="card-text"><small class="text-muted">DJ: {{history.visited_room.owner.username}}</small></p>
+                        <p class="card-text"><small class="text-muted">visted at: {{history.join_date}}</small></p>
                       </div>
                     </div>
                   
                 </a>
                 {% endfor %}
 
-            </div>
         </div>
+
   <script>
     function editMyOwn(){
 
