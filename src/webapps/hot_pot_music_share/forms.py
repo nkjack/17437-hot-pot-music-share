@@ -1,14 +1,4 @@
 from django import forms
-from django.forms import  CheckboxInput
-from hot_pot_music_share.models import Marker
-
-
-class MarkerForm(forms.ModelForm):
-    class Meta:
-        model = Marker
-        fields = ('room_name', 'lat', 'lng')
-
-
 from django.core.validators import RegexValidator, EmailValidator
 
 from hot_pot_music_share.models import *
@@ -115,12 +105,12 @@ class RoomForm(forms.ModelForm):
                            widget=forms.TextInput(attrs=
                                                   {'class': 'form-control mb-3', 'maxlength': '15',
                                                    }))
-    isMarked = forms.BooleanField(required = False, initial= True, label = 'Mark Geo Location',
-                                  widget = forms.CheckboxInput())
+    # isMarked = forms.BooleanField(required=False, initial=True, label='Mark Geo Location',
+    #                               widget=forms.CheckboxInput())
 
     class Meta:
         model = Room
-        fields = ['name', 'cover_pic', 'description', 'owner', 'isMarked']
+        fields = ['name', 'cover_pic', 'description', 'owner']
 
     def clean(self):
         cleaned_data = super(RoomForm, self).clean()
@@ -130,3 +120,9 @@ class RoomForm(forms.ModelForm):
             raise forms.ValidationError('Room name is already taken.')
 
         return cleaned_data
+
+
+class MarkerForm(forms.ModelForm):
+    class Meta:
+        model = Marker
+        fields = ('lat', 'lng')

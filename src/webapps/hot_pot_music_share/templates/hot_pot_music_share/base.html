@@ -2,62 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{title}}</title>
+    <title>{{ title }}</title>
     {% load static %}
-    <link rel="icon" href="{% static 'hot_pot_music_share/img/logo.png' %}"> 
+    <link rel="icon" href="{% static 'hot_pot_music_share/img/logo.png' %}">
+
+    <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
+    <script src="{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'hot_pot_music_share/js/home.js' %}"></script>
+
     <link href=" {% static 'hot_pot_music_share/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/room.css' %}">
     <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/vertical_scrollBar.css' %}">
 </head>
 <body>
-    <!-- The nav bar -->
-  <div id="wrapper">
+<!-- The nav bar -->
+<div id="wrapper">
     <div id="sidebar-wrapper">
-      <img class = "float-right menu" id = "menu" onclick = "toggleNav()" src = "{% static 'hot_pot_music_share/img/menu.png' %}" width = "50">
-      <ul class="sidebar-nav">
-          <li class="sidebar-brand">
-            <a class="figure" href = "room_history.html">
-              {% if img %}
-                <img class="mr-4" src="{% url 'img' username %}" width="90" alt = "">
-              {% else %}
-                <img class="mr-4" src="{% static 'hot_pot_music_share/img/user_1.png' %}" width="90" alt = "myImage">
-              {% endif %}
-              <p class = "username">{{username}}</p>
-            </a>
-          </li>
-          <li>
-              <a href="{% url 'home' username %}">Home</a>
-          </li>
-          <li>
-              <a href="{% url 'history' %}">My Rooms</a>
-          </li>
-          <li>
-              <a href="profile.html">Settings</a>
-          </li>
-          <li>
-              <a href="{% url 'logout' %}">Logout</a>
-          </li>
+        <img class="float-right menu" id="menu" onclick="toggleNav()"
+             src="{% static 'hot_pot_music_share/img/menu.png' %}" width="50">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a class="figure" href="room_history.html">
+                    {% if img %}
+                        <img class="mr-4" src="{% url 'img' username %}" width="90" alt="">
+                    {% else %}
+                        <img class="mr-4" src="{% static 'hot_pot_music_share/img/user_1.png' %}" width="90"
+                             alt="myImage">
+                    {% endif %}
+                    <p class="username">{{ username }}</p>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'home' username %}">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'history' %}">My Rooms</a>
+            </li>
+            <li>
+              <a href="{% url 'map_of_rooms' %}">Map</a>
+            </li>
+            <li>
+                <a href="profile.html">Settings</a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">Logout</a>
+            </li>
         </ul>
     </div>
 
 
-
     <div class="page-content-wrapper">
-      <div class ="home_container">
+        <div class="home_container">
 
-      {% block content %}{% endblock %}
-  
-     </div>
+            {% block content %}{% endblock %}
+
+        </div>
     </div>
-  </div>
-  <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
-  <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
-  <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
-  <script src = "{% static 'hot_pot_music_share/js/home.js' %}"></script>
-  <script>
-      function toggleNav() {
-          $("#wrapper").toggleClass("toggled");
-      };
-  </script>
+
+</div>
+<script>
+    function toggleNav() {
+        $("#wrapper").toggleClass("toggled");
+    };
+</script>
+{% block script %}
+    {#To be filled in by optional JS in child docs#}
+{% endblock %}
 </body>
 </html>
