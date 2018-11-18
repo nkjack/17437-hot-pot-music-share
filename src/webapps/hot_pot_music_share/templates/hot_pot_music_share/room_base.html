@@ -31,7 +31,7 @@
                 <h1>SONG QUEUE</h1>
                 {% for song in song_queue %}
                     <!-- One track in the playlist -->
-                    <div class="media pt-3" id="song_0">
+                    <div class="media pt-3" id="song_queue_{{ song.song_id }}">
                         <!-- The thumbnail of this video -->
                         <!-- Maybe also use API to get a thumbnail -->
                         <img src="https://img.youtube.com/vi/{{ song.song_id }}/1.jpg" alt="" class="mr-2 rounded"
@@ -233,7 +233,7 @@
                 // Play the video, if needed
                 if (data['is_playing'] === 'true' && player.getPlayerState() != YT.PlayerState.PLAYING) {
                     console.log("\tHost is playing and I am not, so I will play...");
-                    playVideoWrapper();
+                    player.playVideo();
                 } else if (data['is_playing'] === 'false' && player.getPlayerState() != YT.PlayerState.PAUSED) {
                     console.log("\tHost is not playing and I am, so I will pause...");
                     player.pauseVideo();
@@ -298,8 +298,9 @@
                 },
                 events: {
                     {% if is_host %}
-                        'onStateChange': onPlayerStateChange,
+                        'onStateChange': onHostPlayerStateChange,
                     {% else %}
+                        'onStateChange': onListenerPlayerStateChange,
                         'onReady': onPlayerReady,
                     {% endif %}
                 }
@@ -313,45 +314,55 @@
         }
 
 
-        function onPlayerStateChange(event) {
+        function onHostPlayerStateChange(event) {
             const playerStatus = event.data;
 
-            // Send message via sockets
             switch (playerStatus) {
-                /*
                 case YT.PlayerState.PLAYING:
-                    console.log("onPlayerStateChange, case: YT.PlayerState.PLAYING");
+                    console.log("onHostPlayerStateChange, case: YT.PlayerState.PLAYING");
+
+                    // Highlight currently playing song
+                    const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+
                     break;
                 case YT.PlayerState.PAUSED:
-                    console.log("onPlayerStateChange, case: YT.PlayerState.PAUSED");
+                    console.log("onHostPlayerStateChange, case: YT.PlayerState.PAUSED");
                     break;
                 case YT.PlayerState.BUFFERING:
-                    console.log("onPlayerStateChange, case: YT.PlayerState.BUFFERING");
-                    // Do nothing.
+                    console.log("onHostPlayerStateChange, case: YT.PlayerState.BUFFERING");
                     break;
                 case YT.PlayerState.CUED:
-                    console.log("onPlayerStateChange, case: YT.PlayerState.CUED");
-                    // Do nothing.
+                    console.log("onHostPlayerStateChange, case: YT.PlayerState.CUED");
                     break;
-                */
                 case YT.PlayerState.ENDED:
-                    console.log("onPlayerStateChange, case: YT.PlayerState.ENDED");
+                    console.log("onHostPlayerStateChange, case: YT.PlayerState.ENDED");
                     // TODO: Start playing next song in the queue
                     // Delete currently playing song from queue and play next one
                     nextVideo();
                     break;
-                default:
-                    // Host syncs up Listeners whenever Host's player state changes
-                    syncListeners();
-                    return;
+            }
+
+            // Host syncs up Listeners whenever Host's player state changes
+            syncListeners();
+            return;
+        }
+
+        function onListenerPlayerStateChange(event) {
+            const playerStatus = event.data;
+
+            switch (playerStatus) {
+                case YT.PlayerState.PLAYING:
+                    console.log("onListenerPlayerStateChange, case: YT.PlayerState.PLAYING");
+
+                    // Highlight currently playing song
+                    const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+
+                    break;
             }
         }
 
-        // Wrapper for playVideo so 'now playing' gets changed as well
-        function playVideoWrapper() {
-            // Play video
-            player.playVideo();
-        }
 
         // Host will call this function so Listeners will sync
         function syncListeners() {
@@ -496,7 +507,7 @@
         function changeVideoById(videoId) {
             player.stopVideo();
             player.cueVideoById(videoId);
-            playVideoWrapper();
+            player.playVideo();
         }
 
         // On the event the Host wants to go to the next video OR end of currently playing video
