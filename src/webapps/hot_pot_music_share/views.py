@@ -310,6 +310,7 @@ def room(request, room_id):
     if not RoomHistory.visitedBefore(request.user, room, localtime(now())):
         history = RoomHistory.objects.create(user=request.user, visited_room=room)
         history.save()
+    listeners = RoomHistory.getCurrentListeners(room)
 
     print('song_queue: ' + str(song_queue.songs.all()))
 
@@ -339,10 +340,10 @@ def history(request):
 
 
 def map_of_rooms(request):
-    context = {}
+    context = {'username': request.user.username}
     all_markers = Marker.objects.all()
     context['all_markers'] = all_markers
-    return render(request, 'hot_pot_music_share/maps/map_of_rooms.html', context)
+    return render(request, 'hot_pot_music_share/maps/room_map.html', context)
 
 
 from hot_pot_music_share.forms import *
