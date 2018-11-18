@@ -5,7 +5,8 @@
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
     <div class="row">
         <div class="col video_col">
-            <h1 id="now-playing my-0"></h1>
+            <h1 id="now-playing"></h1>
+
             <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
             <div id="player"></div>
             <br>
@@ -15,37 +16,28 @@
                 <button onclick="syncToHost()">Sync To Host</button><br>
             {% else %}
                 <button onclick="nextVideo()">Next Video</button><br>
-
-                Video ID or URL:
-                <input id="add-to-song-queue-input" type="text" size="10"/>
-                <button onclick="addToSongQueue()">Add to Song Queue</button><br>
             {% endif %}
-
-            <!-- Both Hosts and Listeners can add to Song Pool -->
-            Video ID or URL:
-            <input id="add-to-song-pool-input" type="text" size="10"/>
-            <button onclick="addToSongPool()">Add to Song Pool</button>
 
             <!-- The playlist -->
             <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
-                <h5 class ="border-bottom border-dark pb-2 mb-0">DJ Playlist</h5>
+                <h5 class="border-bottom border-dark pb-2 mb-0">DJ Playlist</h5>
 
-                <div  id="dj_list">
-                {% for song in song_queue %}
-                    <!-- One track in the playlist -->
-                    <div class="media pt-3" id="song_queue_{{ song.song_id }}">
-                        <!-- The thumbnail of this video -->
-                        <!-- Maybe also use API to get a thumbnail -->
-                        <img src="https://img.youtube.com/vi/{{ song.song_id }}/1.jpg" alt="" class="mr-2 rounded"
-                             width="35">
-                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <strong class="text-gray-dark">{{ song.song_name }}</strong>
+                <div id="dj_list">
+                    {% for song in song_queue %}
+                        <!-- One track in the playlist -->
+                        <div class="media pt-3" id="song_queue_{{ song.song_id }}">
+                            <!-- The thumbnail of this video -->
+                            <!-- Maybe also use API to get a thumbnail -->
+                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/1.jpg" alt="" class="mr-2 rounded"
+                                 width="35">
+                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-           		</div>
+                    {% endfor %}
+                </div>
 
                 <!-- One track in the playlist -->
                 {#                <div class="media pt-3" id="song_0">#}
@@ -65,46 +57,64 @@
         <!-- This is the POLL -->
         <div class="col">
             <div class="mb-3 p-3 bg-dark text-light  rounded box-shadow poll_list">
-            	<h5 class ="border-bottom border-white pb-2 mb-0">Listeners' Pool</h5>
+                <h5 class="border-bottom border-white pb-2 mb-0">Listeners' Pool</h5>
 
-            	<div  id="poll_list">
-                {% for song in song_pool %}
-                    <div class="media pt-3" id="poll_song_div">
-                        <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
-                             width="100">
-                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <strong class="text-gray-dark">{{ song.song_name }}</strong>
+                <div id="poll_list">
+                    {% for song in song_pool %}
+                        <div class="media pt-3" id="poll_song_div">
+                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
+                                 width="100">
+                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>
+                                </div>
+                                <button type="button" id="add-song-to-queue-btn">Add to Queue</button>
+                                <input type="hidden" id="song_id" value="{{ song.song_id }}"/>
+                                <input type="hidden" id="song_name" value="{{ song.song_name }}"/>
                             </div>
-                            <button type="button" id="add-song-to-queue-btn">Add to Queue</button>
-                            <input type="hidden" id="song_id" value="{{ song.song_id }}"/>
-                            <input type="hidden" id="song_name" value="{{ song.song_name }}"/>
                         </div>
-                    </div>
-                {% endfor %}
-            	</div>
+                    {% endfor %}
+                </div>
             </div>
 
-                        <!-- This is the list of people in this room -->
+            <!-- This is the list of people in this room -->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
                 <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
 
                 <!-- One user -->
-                {% for u in users%}
-                <div class="media text-muted pt-3" id="user_1">
-                    <!-- The profile img -->
-                   <!--  <img src="SOME URL" alt="" class="mr-2 rounded" width="25"> -->
-                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                        <div class="d-flex justify-content-between align-items-center w-100">
-                            <strong class="text-gray-dark">{{u.username}}</strong>
+                {% for u in users %}
+                    <div class="media text-muted pt-3" id="user_1">
+                        <!-- The profile img -->
+                        <!--  <img src="SOME URL" alt="" class="mr-2 rounded" width="25"> -->
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <strong class="text-gray-dark">{{ u.username }}</strong>
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endfor %}
-        		</div>
+            </div>
 
         </div>
         <div class="col">
+            <!-- Direct URL/VideoId Input to song queue/pool -->
+            <div class=" p-3 bg-light text-dark rounded box-shadow" id="direct-input-panel">
+                {% if is_host %}
+                    <!--Only Hosts can add to song queue-->
+                    Video URL/ID:
+                    <input id="add-to-song-queue-input" type="text" size="15"/>
+                    <button onclick="addToSongQueue()">Add to Queue</button><br>
+                {% endif %}
+                <!-- Both Hosts and Listeners can add to song pool -->
+                Video URL/ID:
+                <input id="add-to-song-pool-input" type="text" size="15"/>
+                <button onclick="addToSongPool()">Add to Pool</button>
+
+                <!-- To be filled by JS on success -->
+                <span id="direct-input-success"></span>
+            </div>
+            <hr>
+
             <!-- This is the search panel -->
             <div class=" p-3 bg-light text-dark rounded box-shadow search" id="panel">
                 <div class="input-group mb-0">
@@ -134,10 +144,12 @@
 
             </div>
 
-                <!-- Sam Chat Room -->
-            <div class = "my-3 p-3 bg-light text-dark rounded box-shadow chat-room">
+            <!-- Sam Chat Room -->
+            <div class="my-3 p-3 bg-light text-dark rounded box-shadow chat-room">
+                Chat room: <br>
                 <textarea id="chat-log" cols="24" rows="5"></textarea><br/>
-                <input id="chat-message-input" type="text" size="10"/><br/>
+                <input id="chat-message-input" type="text" size="10"/>
+
                 <input id="chat-message-submit" type="button" value="Send"/>
             </div>
         </div>
@@ -327,8 +339,8 @@
                     console.log("onHostPlayerStateChange, case: YT.PlayerState.PLAYING");
 
                     // Highlight currently playing song
-                    const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+                    //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+                    //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
 
                     break;
                 case YT.PlayerState.PAUSED:
@@ -361,8 +373,8 @@
                     console.log("onListenerPlayerStateChange, case: YT.PlayerState.PLAYING");
 
                     // Highlight currently playing song
-                    const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+                    //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+                    //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
 
                     break;
             }
@@ -464,6 +476,12 @@
                 'song_id': videoId,
                 'song_name': videoTitle,
             }));
+
+            // Give success message
+            if (videoTitle) {
+                $("#direct-input-success").css({"color": "#31c122"});
+                $("#direct-input-success").text("Successfully added " + videoTitle);
+            }
         }
 
         function addToSongPool() {
@@ -479,6 +497,12 @@
                 'song_id': videoId,
                 'song_name': videoTitle,
             }));
+
+            // Give success message
+            if (videoTitle) {
+                $("#direct-input-success").css({"color": "#31c122"});
+                $("#direct-input-success").text("Successfully added " + videoTitle);
+            }
         }
 
         // Helper function to get youtube song title from ID
