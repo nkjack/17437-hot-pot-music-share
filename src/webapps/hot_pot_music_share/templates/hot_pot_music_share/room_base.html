@@ -3,9 +3,14 @@
 
 {% block content %}
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
+    <input type="hidden" id="is_host" value="{{ is_host }}"/>
+
     <div class="row">
         <div class="col">
-            <h1 id="now-playing"></h1>
+            <!-- To be filled in by JS whenever player starts playing -->
+            <strong>Now playing:</strong>
+            <i id="now-playing"></i>
+
             <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
             <div id="player"></div>
             <br>
@@ -28,7 +33,7 @@
 
             <!-- The playlist -->
             <div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
-                <h1>SONG QUEUE</h1>
+                <h3>SONG QUEUE</h3>
                 {% for song in song_queue %}
                     <!-- One track in the playlist -->
                     <div class="media pt-3" id="song_queue_{{ song.song_id }}">
@@ -61,7 +66,7 @@
 
         <!-- This is the POLL -->
         <div class="col">
-            <h1>SONG POOL</h1>
+            <h3>SONG POOL</h3>
             <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="poll_list">
                 {% for song in song_pool %}
                     <div class="media pt-3" id="poll_song_div">
@@ -71,7 +76,9 @@
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <strong class="text-gray-dark">{{ song.song_name }}</strong>
                             </div>
-                            <button type="button" id="add-song-to-queue-btn">Add to Queue</button>
+                            {% if is_host %}
+                                <button type="button" id="add-song-to-queue-btn">Add to Queue</button>
+                            {% endif %}
                             <input type="hidden" id="song_id" value="{{ song.song_id }}"/>
                             <input type="hidden" id="song_name" value="{{ song.song_name }}"/>
                         </div>
@@ -115,16 +122,16 @@
                 <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
 
                 <!-- One user -->
-                {% for u in users%}
-                <div class="media text-muted pt-3" id="user_1">
-                    <!-- The profile img -->
-                   <!--  <img src="SOME URL" alt="" class="mr-2 rounded" width="25"> -->
-                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                        <div class="d-flex justify-content-between align-items-center w-100">
-                            <strong class="text-gray-dark">{{u.username}}</strong>
+                {% for u in users %}
+                    <div class="media text-muted pt-3" id="user_1">
+                        <!-- The profile img -->
+                        <!--  <img src="SOME URL" alt="" class="mr-2 rounded" width="25"> -->
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <strong class="text-gray-dark">{{ u.username }}</strong>
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endfor %}
                 <!-- Add people to this room -->
                 <button type="button" class=" float-right btn btn-lg" onclick="openForm()">
@@ -322,9 +329,15 @@
                 case YT.PlayerState.PLAYING:
                     console.log("onHostPlayerStateChange, case: YT.PlayerState.PLAYING");
 
-                    // Highlight currently playing song
+                    // TODO: Highlight currently playing song - cannot do it now b/c refreshing will delete the css
+                    //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+                    //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+
                     const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+                    console.log(currVideoId);
+                    const currVideoTitle = getVideoTitleFromId(currVideoId);
+                    console.log(currVideoTitle);
+                    $('#now-playing').html(currVideoTitle);
 
                     break;
                 case YT.PlayerState.PAUSED:
@@ -356,9 +369,13 @@
                 case YT.PlayerState.PLAYING:
                     console.log("onListenerPlayerStateChange, case: YT.PlayerState.PLAYING");
 
-                    // Highlight currently playing song
+                    // TODO: Highlight currently playing song - cannot do it now b/c refreshing will delete the css
+                    //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+                    //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+
                     const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-                    $(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+                    const currVideoTitle = getVideoTitleFromId(currVideoId);
+                    $('#now-playing').html(currVideoTitle);
 
                     break;
             }
@@ -407,18 +424,14 @@
 
         // Helper function to clean up video input from URL/ID to just ID
         function cleanVideoIdInput(input) {
-            console.log('cleanVideoIdInput input: ' + input);
             var videoId = input;
-            console.log('cleanVideoIdInput videoId: ' + videoId);
 
             // It's okay if they input a URL
             if (videoId.includes('youtube.com')) {
                 videoId = input.split('v=')[1];
-                console.log('\tcleanVideoIdInput videoId: ' + videoId);
             } else if (videoId.includes('youtu.be')) {
                 // Shortened URL form: https://youtu.be/JQbjS0_ZfJ0
                 videoId = input.split('.be/')[1];
-                console.log('\tcleanVideoIdInput videoId: ' + videoId);
             }
 
             // If there are other URL parameters
@@ -490,7 +503,6 @@
                 }
             });
 
-            console.log('returning videoTitle: ' + videoTitle);
             return videoTitle;
         }
 
@@ -700,7 +712,9 @@
                             '    <div class="d-flex justify-content-between align-items-center w-100">' +
                             '      <strong class="text-gray-dark">' + v_name + '</strong>' +
                             '    </div>' +
-                            '<button type="button" id="add-song-to-queue-btn">Add to Queue</button>' +
+                            {% if is_host %}
+                                '<button type="button" id="add-song-to-queue-btn">Add to Queue</button>' +
+                            {% endif %}
                             '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
                             '       <input type="hidden" id="song_name" value="' + v_name + '"/>' +
                             '</div>' +
@@ -755,8 +769,10 @@
                         var v_id = data.songs[i]['id'];
                         var v_name = data.songs[i]['name'];
 
+                        var elementId = 'song_queue_' + v_id;
+
                         $('#dj_list').append(
-                            '<div class="media pt-3" id="song_0">' +
+                            '<div class="media pt-3" id="' + elementId + '">' +
                             '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
                             '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
                             '    <div class="d-flex justify-content-between align-items-center w-100">' +
