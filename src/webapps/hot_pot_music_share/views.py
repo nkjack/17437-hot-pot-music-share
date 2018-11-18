@@ -48,18 +48,18 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-        song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
-        song_0.save()
-        # JQbjS0_ZfJ0
-        song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
-        song_1.save()
-
+        # song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
+        # song_0.save()
+        # # JQbjS0_ZfJ0
+        # song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
+        # song_1.save()
+        #
         song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
-        song_pool.songs.add(song_0)
+        # song_pool.songs.add(song_0)
         song_pool.save()
-
+        #
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
-        song_queue.songs.add(song_1)
+        # song_queue.songs.add(song_1)
         song_queue.save()
 
         import random
@@ -131,6 +131,7 @@ def search_song(request):
 
 
 @login_required
+@transaction.atomic
 def add_song_to_room_playlist_ajax(request):
     context = {}
 
@@ -157,9 +158,8 @@ def add_song_to_room_playlist_ajax(request):
         s = Song(song_id=searched_song_id, song_name=searched_song_name)
         s.save()
 
-
     s = Song.objects.get(song_id=searched_song_id)
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r):
         p.songs.add(s)
 
     # context['room'] = room
@@ -170,6 +170,7 @@ def add_song_to_room_playlist_ajax(request):
 
 
 @login_required
+@transaction.atomic
 def add_song_from_pool_to_queue(request):
     context = {}
 
@@ -178,7 +179,7 @@ def add_song_from_pool_to_queue(request):
     searched_song_name = request.POST['song_name']
 
     r = Room.objects.get(id=room_id)
-    p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")
 
     if not Song.objects.filter(song_id__exact=searched_song_id):
         s = Song(song_id=searched_song_id, song_name=searched_song_name)

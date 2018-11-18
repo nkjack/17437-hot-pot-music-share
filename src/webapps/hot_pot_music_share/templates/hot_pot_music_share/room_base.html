@@ -682,12 +682,40 @@
                 .always(function (xhr, status) {
                     console.log("fetch songs from poll request is finished!");
                 });
-            /*
-            $.post("/add-marker", {"room_name": room_name, "lng": lng, "lat": lat})
-                .done(function(data) {
-                    alert("saved!");
-            });
-            */
+
         });
+
+        /*
+        function ajaxAddSongToListRequest(method_url, method_data, metod, htmlEntry, newList){
+            $.ajax({
+                // The URL for the request
+                url: method_url,
+                data : method_data,
+                // Whether this is a POST or GET request
+                type: method,
+                // The type of data we expect back
+                dataType: "json",
+            })
+                .done(function (data) {
+                    console.log(data);
+                    newList.empty();
+                    for (var i = 0; i < data.songs.length; i++) {
+                        var v_id = data.songs[i]['id'];
+                        var v_name = data.songs[i]['name'];
+                        newList.append(htmlEntry);
+
+                    }
+                })
+                .fail(function (xhr, status, errorThrown) {
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+                    console.dir(xhr);
+                })
+                // Code to run regardless of success or failure;
+                .always(function (xhr, status) {
+                    console.log("fetch songs from poll request is finished!");
+                });
+        }
+        */
     </script>
 {% endblock %}
