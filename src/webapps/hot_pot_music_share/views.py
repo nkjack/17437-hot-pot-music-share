@@ -49,8 +49,8 @@ def home(request, username):
 
             song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
             song_0.save()
-
-            song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
+            # JQbjS0_ZfJ0
+            song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
             song_1.save()
 
 
@@ -166,6 +166,32 @@ def add_song_to_room_playlist_ajax(request):
     # print (context['songs'])
     # context['user'] = user
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
+@login_required
+def add_song_from_pool_to_queue(request):
+    context = {}
+
+    room_id = request.POST['room_id']
+    searched_song_id = request.POST['song_id']
+    searched_song_name = request.POST['song_name']
+
+    r = Room.objects.get(id=room_id)
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
+
+    if not Song.objects.filter(song_id__exact=searched_song_id):
+        s = Song(song_id=searched_song_id, song_name=searched_song_name)
+        s.save()
+
+    s = Song.objects.get(song_id=searched_song_id)
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+        p.songs.add(s)
+
+    # context['room'] = room
+    context['songs'] = p.songs.all()
+    # print (context['songs'])
+    # context['user'] = user
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
 
 
 # Integrate actual Profile model later
