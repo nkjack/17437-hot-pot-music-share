@@ -48,18 +48,18 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-        song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
-        song_0.save()
-        # JQbjS0_ZfJ0
-        song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
-        song_1.save()
-
+        # song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
+        # song_0.save()
+        # # JQbjS0_ZfJ0
+        # song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
+        # song_1.save()
+        #
         song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
-        song_pool.songs.add(song_0)
+        # song_pool.songs.add(song_0)
         song_pool.save()
-
+        #
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
-        song_queue.songs.add(song_1)
+        # song_queue.songs.add(song_1)
         song_queue.save()
 
         import random
@@ -131,6 +131,7 @@ def search_song(request):
 
 
 @login_required
+@transaction.atomic
 def add_song_to_room_playlist_ajax(request):
     context = {}
 
@@ -157,9 +158,8 @@ def add_song_to_room_playlist_ajax(request):
         s = Song(song_id=searched_song_id, song_name=searched_song_name)
         s.save()
 
-
     s = Song.objects.get(song_id=searched_song_id)
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="pool"):
         p.songs.add(s)
 
     # context['room'] = room
@@ -170,6 +170,7 @@ def add_song_to_room_playlist_ajax(request):
 
 
 @login_required
+@transaction.atomic
 def add_song_from_pool_to_queue(request):
     context = {}
 
@@ -185,7 +186,7 @@ def add_song_from_pool_to_queue(request):
         s.save()
 
     s = Song.objects.get(song_id=searched_song_id)
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id):
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="queue"):
         p.songs.add(s)
 
     # context['room'] = room
@@ -383,3 +384,27 @@ def get_img(request, pk):
         raise Http404
     content_type = guess_type(room.cover_pic.name)
     return HttpResponse(room.cover_pic, content_type=content_type)
+
+
+
+@login_required
+def get_pool_songs_from_room(request):
+    context = {}
+    room_id = request.GET['room_id']
+    r = Room.objects.get(id=room_id)
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")    # context['room'] = room
+    context['songs'] = p.songs.all()
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
+
+@login_required
+@transaction.atomic
+def get_queue_songs_from_room(request):
+    context = {}
+    room_id = request.GET['room_id']
+    r = Room.objects.get(id=room_id)
+    p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
+    context['songs'] = p.songs.all()
+    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+
+

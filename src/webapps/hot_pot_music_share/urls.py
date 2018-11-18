@@ -10,6 +10,8 @@ urlpatterns = [
     path('search-song', views.search_song, name='search-song'),
     path('add-song-to-room-playlist-ajax', views.add_song_to_room_playlist_ajax),
     path('add-song-from-pool-to-queue', views.add_song_from_pool_to_queue),
+    path('get-pool-songs-from-room', views.get_pool_songs_from_room),
+    path('get-queue-songs-from-room', views.get_queue_songs_from_room),
     path('map-of-rooms', views.map_of_rooms, name = 'map_of_rooms'),
 
     # Maps urls
