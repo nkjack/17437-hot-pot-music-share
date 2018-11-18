@@ -51,19 +51,18 @@
 
                     </div>
                     <div class="my-3">
-                        <p class="font-weight-bold mb-0 ">{{ form.description.label }}</p>
-                        <p class="mx-4">{{ form.description }}</p>
+                        <p class="font-weight-bold mb-0 ">{{ form.description.label }}{{ form.description }}</p>
 
                     </div>
                     <div>
-                        <p class="font-weight-bold mb-0 ">Room Photo</p>
+                        <p class="font-weight-bold mb-0 ">Room Photo
 
-                        {{ form.cover_pic }}
+                        {{ form.cover_pic }}</p>
 
                     </div>
                 {% endif %}
             <!--             <input type="checkbox" name="private" value="private" checked>A Private Room? -->
-            <input type="submit" name="create_room" value="create" class="btn create">Create</button>
+            <input type="submit" name="create_room" value="Create" class="btn create"></button>
             <button type="button" class="btn" onclick="closeForm()">Close</button>
         </form>
     </div>

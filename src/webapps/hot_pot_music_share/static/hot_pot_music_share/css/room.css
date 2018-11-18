@@ -116,3 +116,26 @@ a:hover, a:visited, a:link, a:active{
     padding-top: 500px;
     height: 80%;
   }
+#people{
+  height: 28%;
+  width: 100%
+  position: absolute;
+}
+.search{
+  max-height: 500px;
+  height: 48%;
+  width: 100%;
+  overflow-y: scroll;
+}
+.poll_list{
+  height:69%;
+}
+.video_col{
+  height:100%;
+}
+
+.chat-room{
+  height:48%;
+  width: 95%;
+  position: absolute;
+}

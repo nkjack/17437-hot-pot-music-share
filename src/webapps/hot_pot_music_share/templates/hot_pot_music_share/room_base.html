@@ -4,8 +4,8 @@
 {% block content %}
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
     <div class="row">
-        <div class="col">
-            <h1 id="now-playing"></h1>
+        <div class="col video_col">
+            <h1 id="now-playing my-0"></h1>
             <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
             <div id="player"></div>
             <br>
@@ -27,8 +27,10 @@
             <button onclick="addToSongPool()">Add to Song Pool</button>
 
             <!-- The playlist -->
-            <div class="my-3 p-3 bg-light text-dark  rounded box-shadow" id="dj_list">
-                <h1>SONG QUEUE</h1>
+            <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
+                <h5 class ="border-bottom border-dark pb-2 mb-0">DJ Playlist</h5>
+
+                <div  id="dj_list">
                 {% for song in song_queue %}
                     <!-- One track in the playlist -->
                     <div class="media pt-3" id="song_queue_{{ song.song_id }}">
@@ -43,6 +45,7 @@
                         </div>
                     </div>
                 {% endfor %}
+           		</div>
 
                 <!-- One track in the playlist -->
                 {#                <div class="media pt-3" id="song_0">#}
@@ -61,8 +64,10 @@
 
         <!-- This is the POLL -->
         <div class="col">
-            <h1>SONG POOL</h1>
-            <div class="my-3 p-3 bg-dark text-light  rounded box-shadow" id="poll_list">
+            <div class="mb-3 p-3 bg-dark text-light  rounded box-shadow poll_list">
+            	<h5 class ="border-bottom border-white pb-2 mb-0">Listeners' Pool</h5>
+
+            	<div  id="poll_list">
                 {% for song in song_pool %}
                     <div class="media pt-3" id="poll_song_div">
                         <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
@@ -77,40 +82,10 @@
                         </div>
                     </div>
                 {% endfor %}
+            	</div>
             </div>
 
-        </div>
-        <div class="col">
-            <!-- This is the search panel -->
-            <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="search-query" placeholder="Search for...">
-                    <button id="search-button" class="btn-search" type="button">Search</button>
-                    <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
-                </div>
-                <!-- A list of results -->
-                <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="search-results">
-
-                    <!-- One track -->
-                    <div class="media pt-3" id="song_0">
-
-                        <!-- The thumbnail of this video -->
-                        <!-- Maybe also use API to get a thumbnail -->
-                        <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded"
-                             width="25">
-                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <strong class="text-gray-dark">{{ name_of_video }}</strong>
-                                <span class="d-block">{{ author }}</span>
-                                <span class="d-block"> {{ timespan }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- This is the list of people in this room -->
+                        <!-- This is the list of people in this room -->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
                 <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
 
@@ -126,19 +101,48 @@
                     </div>
                 </div>
                 {% endfor %}
-                <!-- Add people to this room -->
-                <button type="button" class=" float-right btn btn-lg" onclick="openForm()">
-                    <span class="glyphicon">&#x2b;</span>
-                </button>
+        		</div>
+
+        </div>
+        <div class="col">
+            <!-- This is the search panel -->
+            <div class=" p-3 bg-light text-dark rounded box-shadow search" id="panel">
+                <div class="input-group mb-0">
+                    <input type="text" class="form-control" id="search-query" placeholder="Search for...">
+                    <button id="search-button" class="btn-search" type="button">Search</button>
+                    <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
+                </div>
+                <!-- A list of results -->
+                <div id="search-results">
+
+                    <!-- One track -->
+                    <div class="media pt-3" id="song_0">
+
+                        <!-- The thumbnail of this video -->
+                        <!-- Maybe also use API to get a thumbnail -->
+                        <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded"
+                             width="15">
+                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <strong class="text-gray-dark">{{ name_of_video }}</strong>
+                                <span class="d-block">{{ author }}</span>
+                                <span class="d-block"> {{ timespan }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
                 <!-- Sam Chat Room -->
-                <textarea id="chat-log" cols="20" rows="10"></textarea><br/>
+            <div class = "my-3 p-3 bg-light text-dark rounded box-shadow chat-room">
+                <textarea id="chat-log" cols="24" rows="5"></textarea><br/>
                 <input id="chat-message-input" type="text" size="10"/><br/>
                 <input id="chat-message-submit" type="button" value="Send"/>
             </div>
         </div>
-    </div>
 
+    </div>
 
 
     <div class="form-popup" id="popupForm">
