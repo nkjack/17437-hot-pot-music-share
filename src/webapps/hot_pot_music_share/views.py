@@ -48,18 +48,28 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-        # song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
+        # song_0 = Song.objects.create(song_id='3WSgJCYIewM', song_name='Drake - In My Feelings')
         # song_0.save()
-        # # JQbjS0_ZfJ0
-        # song_1 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Kendrick Lamar, SZA - All The Stars')
+
+        # song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
         # song_1.save()
-        #
-        song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
-        # song_pool.songs.add(song_0)
-        song_pool.save()
-        #
-        song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
+
+        # song_2 = Song.objects.create(song_id='10yrPDf92hY', song_name='Kendrick Lamar - M.A.A.D. City (Feat. MC eiht)')
+        # song_2.save()
+
+        # song_3 = Song.objects.create(song_id='6vwNcNOTVzY', song_name='Kanye West - Gold Digger ft. Jamie Foxx')
+        # song_3.save()
+
+        # song_queue.songs.add(song_0)
         # song_queue.songs.add(song_1)
+        # song_queue.songs.add(song_2)
+        # song_queue.songs.add(song_3)
+
+        song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
+        song_pool.save()
+        song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
+
+
         song_queue.save()
 
         import random
@@ -139,17 +149,6 @@ def add_song_to_room_playlist_ajax(request):
     searched_song_id = request.POST['song_id']
     searched_song_name = request.POST['song_name']
 
-    # if not User.objects.filter(username__exact="noam"):
-    #     u = User.objects.create(username="noam")
-    #     u.save()
-
-    # if not Room.objects.filter(name__exact="noam_room"):
-    #     u = User.objects.get(username="noam")
-    #     r = Room.objects.create(user_manager=u, name="noam_room")
-    #     r.save()
-    #     p = Playlist.objects.create(belongs_to_room=r)
-    #     p.save()
-
     r = Room.objects.get(id=room_id)
     # r = Room.objects.get(name="noam_room")
     p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")
@@ -162,10 +161,7 @@ def add_song_to_room_playlist_ajax(request):
     if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="pool"):
         p.songs.add(s)
 
-    # context['room'] = room
     context['songs'] = p.songs.all()
-    # print (context['songs'])
-    # context['user'] = user
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
@@ -189,10 +185,7 @@ def add_song_from_pool_to_queue(request):
     if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="queue"):
         p.songs.add(s)
 
-    # context['room'] = room
     context['songs'] = p.songs.all()
-    # print (context['songs'])
-    # context['user'] = user
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
@@ -270,8 +263,6 @@ def register(request):
                     "email"] = "Welcome to Hot Pot Music Share. Please check your mailbox to find verification link to complete registration"
                 return render(request, 'user_auth/email_confirmation.html', context)
 
-            # login(request, new_user)
-            # return HttpResponseRedirect(reverse('home',args=[new_user.username]))
             else:
                 context['error'] = "Please check if all the field satisfy requirements or the username is already taken"
                 return render(request, 'user_auth/login.html', context)
@@ -365,11 +356,8 @@ def add_marker(request):
     return JsonResponse(data={})
 
 
-# return render(request, 'hot_pot_music_share/maps/base_map.html', context)
 
 
-# @ulogin_required
-# @transaction.atomic
 def get_markers(request):
     all_markers = Marker.objects.all()
     context = {'markers': all_markers}
@@ -384,7 +372,6 @@ def get_img(request, pk):
         raise Http404
     content_type = guess_type(room.cover_pic.name)
     return HttpResponse(room.cover_pic, content_type=content_type)
-
 
 
 @login_required
@@ -408,3 +395,43 @@ def get_queue_songs_from_room(request):
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
+# Return name of top song and remove from song queue
+def get_top_of_song_queue(request, room_id):
+    # TODO: What to do if no more songs in song_queue
+
+    # Get song queue for this room
+    room = Room.objects.get(id=room_id)
+    song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
+
+    # If empty, return nothing
+    if song_queue.songs.count() == 0:
+        return HttpResponse('')
+    else:
+        top_song = song_queue.songs.first()
+
+        print('Got top song: ' + top_song.song_name)
+
+        context = {'song': top_song}
+
+        """ song.json is as follows:
+        {
+            "id" : "{{song.song_id}}",
+            "name" : "{{song.song_name}}"
+        }
+        """
+
+        return render(request, 'hot_pot_music_share/youtube/song.json', context, content_type='application/json')
+
+# Delete song with specified song_id from song_queue of specified room_id
+def delete_from_song_queue(request, room_id, song_id):
+    # Get song queue for this room
+    room = Room.objects.get(id=room_id)
+    song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
+
+    # Delete from song queue
+    song_queue.songs.filter(song_id=song_id).delete()
+    print('Deleted song with song_id: ' + song_id)
+
+    # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
+
+    return HttpResponse('')
