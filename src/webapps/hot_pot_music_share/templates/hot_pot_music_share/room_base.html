@@ -1,5 +1,9 @@
 {% extends 'hot_pot_music_share/base.html' %}
 
+{% block head %}
+    {% load static %}
+    <script src="{% static "hot_pot_music_share/js/room/sync_playlists.js" %}"></script>
+{% endblock %}
 
 {% block content %}
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
@@ -112,7 +116,7 @@
                 <!-- Both Hosts and Listeners can add to song pool -->
                 Video URL/ID:
                 <input id="add-to-song-pool-input" type="text" size="15"/>
-                <button onclick="addToSongPool()">Add to Pool</button>
+                <button onclick="addToSongPool()">Add to Pool</button><br>
 
 
                 <!-- To be filled by JS on success -->

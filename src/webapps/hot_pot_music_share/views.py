@@ -48,23 +48,19 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-        song_0 = Song.objects.create(song_id='3WSgJCYIewM', song_name='Drake - In My Feelings')
-        song_0.save()
+
 
         song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
         song_1.save()
-
-        song_2 = Song.objects.create(song_id='10yrPDf92hY', song_name='Kendrick Lamar - M.A.A.D. City (Feat. MC eiht)')
+        song_2 = Song.objects.create(song_id='09R8_2nJtjg', song_name='Maroon 5 - Sugar')
         song_2.save()
-
-        song_3 = Song.objects.create(song_id='6vwNcNOTVzY', song_name='Kanye West - Gold Digger ft. Jamie Foxx')
+        song_3 = Song.objects.create(song_id='nfWlot6h_JM', song_name='Taylor Swift - Shake It Off')
         song_3.save()
 
         song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
         song_pool.save()
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
 
-        song_queue.songs.add(song_0)
         song_queue.songs.add(song_1)
         song_queue.songs.add(song_2)
         song_queue.songs.add(song_3)
