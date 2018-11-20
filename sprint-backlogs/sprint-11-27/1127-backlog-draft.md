@@ -27,6 +27,10 @@
 ## Rui Backlog
 -------------------------------------------------------------------------------
 
+### Bug Fixes
+- Trying to log in with non-existing username displays DB error message to the user
+- Clicking on email link should automatically login and go to home page
+
 ### UI Fixes
 - Room view clean up [4 hours]
 	- Work with Noam on how the pop window of search results and pool songs will use our previous ajax requests with our room.
