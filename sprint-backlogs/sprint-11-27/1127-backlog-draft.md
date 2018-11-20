@@ -23,20 +23,21 @@
 -------------------------------------------------------------------------------
 
 ### UI Fixes
-- Room view clean up
+- Room view clean up [4 hours]
 	- Work with Noam on how the pop window of search results and pool songs will use our previous ajax requests with our room.
-- Better chat box
+- Better chat box, which can be expandable and support emoji
 
 ### Settings
-- Create Room, Add more init. settings (i.e. location)
-- Room Setting page (modify existing room settings)
+- Create Room, Add more init. settings (i.e. location)[1 hour]
+- Room Setting page (modify existing room settings) [1 hour]
 	- Also, give the owner the ability to upgrate listener to dj and vice versa (work with Noam on it)
-- Profile Setting page
+- Profile Setting page [2 hour]
+	- Reset Password
 
 
 ### Additional Features
 - Search Room by name or by tag
-- Voting for rooms
+- Voting for rooms [2 hours]
 
 ### Nice to have
 - Private/Public Room. Private room needs password, etc.
