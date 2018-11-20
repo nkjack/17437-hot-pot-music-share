@@ -5,7 +5,7 @@
 ## Sam Backlog
 -------------------------------------------------------------------------------
 
-### Refactoring [2 hours]
+### Refactoring [3 hours]
 - Clean up JS files
 - Restructure dir/files
 
@@ -16,7 +16,12 @@
 - Test out sync playback
 
 ### Room Issues [2 hours]
+- If queue is empty, display a message instead of youtube error
 - Auto play if queue is empty and a song is added (periodic refresh to check this)
+- Use channels instead of periodic refresh for updating pool/queue
+
+### List of users in the room [2 hours]
+- Use channels to display current users in the room
 
 -------------------------------------------------------------------------------
 ## Rui Backlog
@@ -38,6 +43,10 @@
 ### Bug Fixes From Sprint 2
 - Adding from Search -> Pool ('Add to Queue' button shows up for Listeners)
 - Adding from Pool -> Queue (Songs added in arbitrary order)
+
+### DJ Queue
+- DJ has their own private playlist
+- Figure out UI so it's not cluttered/overwhelming
 
 ### Room features
 - Playlist modification features: Up/Downvote, Remove/Hide, Reorder, Click-to-play
