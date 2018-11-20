@@ -31,6 +31,15 @@
 - Room Setting page (modify existing room settings)
 - Profile Setting page
 
+
+### Additional Features
+- Search Room by name or by tag
+- Voting for rooms
+
+### Nice to have
+-  Private/Public Room. Private room needs password, etc.
+- Drag to re-order playlists
+
 -------------------------------------------------------------------------------
 ## Noam Backlog
 -------------------------------------------------------------------------------
