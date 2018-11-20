@@ -34,11 +34,6 @@ urlpatterns = [
     # history
     path('myRooms', views.history, name="history"),
 
-    # Sam Player stuff TODO: Delete
-    re_path(r'^get-top-of-song-queue/(?P<room_id>[^/]+)/$', views.get_top_of_song_queue, name='get-top-of-song-queue'),
-    re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
-            views.delete_from_song_queue, name='delete-from-song-queue'),
-
     # img
     re_path(r'^profile-photo/room/(?P<pk>\w+)/$', views.get_img, name='img'),
 
