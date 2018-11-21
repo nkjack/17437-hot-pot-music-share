@@ -116,20 +116,9 @@ def search_song(request):
                                song_name=search_result['snippet']['title']))
 
     print('printing videos: ' + str(videos))
-
-    # room = Room.objects.get(id=room_id) # FIXME: Who to set user_manager to?
-    # playlist_obj = Playlist.objects.get(belongs_to_room=room)
-
-    # pprint.pprint(result)
-    #
-    # r = Room.objects.get(name="noam_room")
-    # p = Playlist.objects.get(belongs_to_room=r)
-    # context['playlist'] = p
     context['songs'] = videos
 
-    # context['search_results'] = videos
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
-    # return render(request, 'hot_pot_music_share/youtube/room.html', context)
 
 
 @login_required
