@@ -3,7 +3,6 @@
 {% block head %}
     {% load static %}
 
-
 {% endblock %}
 
 {% block content %}
@@ -692,7 +691,7 @@
                 });
         });
 
-        /*****************************************************************************************8
+        /*****************************************************************************************
          ADD SONG FROM SEARCH TO POOL
          */
         $("#search-results").on("click", "#add-song-btn", function (event) {
@@ -730,7 +729,7 @@
         });
 
 
-        /*****************************************************************************************8
+        /*****************************************************************************************
          ADD SONG FROM POOL TO QUEUE
          */
         $("#poll_list").on("click", "#add-song-to-queue-btn", function (event) {
@@ -753,21 +752,19 @@
                 // The type of data we expect back
                 dataType: "json",
             })
-                .done(function (data) {
-                    updateChangesQueueSongs(data);
-                })
-                .fail(function (xhr, status, errorThrown) {
-                    console.log("Error: " + errorThrown);
-                    console.log("Status: " + status);
-                    console.dir(xhr);
-                })
-                // Code to run regardless of success or failure;
-                .always(function (xhr, status) {
-                    console.log("fetch songs from poll request is finished!");
-                });
-
+            .done(function (data) {
+                updateChangesQueueSongs(data);
+            })
+            .fail(function (xhr, status, errorThrown) {
+                console.log("Error: " + errorThrown);
+                console.log("Status: " + status);
+                console.dir(xhr);
+            })
+            // Code to run regardless of success or failure;
+            .always(function (xhr, status) {
+                console.log("fetch songs from poll request is finished!");
+            });
         });
-
 
     </script>
 
