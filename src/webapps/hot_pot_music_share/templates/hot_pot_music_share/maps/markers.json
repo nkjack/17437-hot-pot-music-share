@@ -1,7 +1,0 @@
-{
-  "markers":[
-    {% for marker in markers %}
-    {% include 'hot_pot_music_share/maps/marker.json' %}
-    {% if not forloop.last %}, {% endif %}{% endfor %}
-  ]
-}

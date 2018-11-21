@@ -1,0 +1,7 @@
+{
+  "songs":[
+    {% for song in songs %}
+    {% include 'hot_pot/room/song.json' %}
+    {% if not forloop.last %}, {% endif %}{% endfor %}
+  ]
+}
