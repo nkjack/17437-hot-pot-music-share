@@ -102,25 +102,7 @@ $("#search-results").on("click", "#add-song-btn", function (event) {
         dataType: "json",
     })
         .done(function (data) {
-            console.log(data);
-            $("#poll_list").empty();
-            for (var i = 0; i < data.songs.length; i++) {
-                var v_id = data.songs[i]['id'];
-                var v_name = data.songs[i]['name'];
-
-                $('#poll_list').append(
-                    '<div class="media pt-3" id="poll_song_div">' +
-                    '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
-                    '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
-                    '    <div class="d-flex justify-content-between align-items-center w-100">' +
-                    '      <strong class="text-gray-dark">' + v_name + '</strong>' +
-                    '    </div>' +
-                    '<button type="button" id="add-song-to-queue-btn">Add to Queue</button>' +
-                    '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
-                    '       <input type="hidden" id="song_name" value="' + v_name + '"/>' +
-                    '</div>' +
-                    '</div>');
-            }
+            updateChangesPoolSongs(data);
         })
         .fail(function (xhr, status, errorThrown) {
             console.log("Error: " + errorThrown);
