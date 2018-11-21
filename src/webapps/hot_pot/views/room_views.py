@@ -34,7 +34,7 @@ def room(request, room_id):
 
     context = {'username': request.user.username,
                'room_id': room_id,
-               'room_name_json': mark_safe(json.dumps(room_name)),
+               'room_name': room_name,
                'title': 'Room ' + room_name,
                'is_host': is_host,
                'song_pool': song_pool.songs.all(),
