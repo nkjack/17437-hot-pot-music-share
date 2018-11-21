@@ -1,7 +1,7 @@
 <!DOCTYPE html >
   <head>
             {% load static %}
-      <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
+      <script src = "{% static 'hot_pot/js/jquery-3.3.1.min.js' %}"></script>
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
@@ -27,7 +27,7 @@
     </form>
     <li>
         {% for marker in all_markers %}
-            <ul>{{ marker.room_name }}-{{ marker.lat }}-{{ marker.lng }}</ul>
+            <ul>{{ marker.room.name }}-{{ marker.lat }}-{{ marker.lng }}</ul>
         {% endfor %}
     </li>
 
@@ -127,6 +127,7 @@
       var map;
       var marker;
 
+
       function initMap() {
         var CMU = {lat: 40.442680, lng: -79.94210};
         map = new google.maps.Map(document.getElementById('map'), {
@@ -156,13 +157,19 @@
         }
 
           $.get('get-markers', function(data) {
+              console.log(data);
+
+              var markers = [];
               for(var i = 0; i < data.markers.length; i++) {
-                  // Add course by course number
-                  var id = data.markers[i]['id'];
-                  var room_name = data.markers[i]['room_name'];
-                  var address = data.markers[i]['address'];
-                  var lat = data.markers[i]['lat'];
-                  var lng = data.markers[i]['lng'];
+                  markers.push(data.markers[i])
+              }
+              Array.prototype.forEach.call(markers, function(markerElem){
+                  console.log(markerElem);
+                  var id = markerElem['marker_id'];
+                  var room_name = markerElem['room_name'];
+                  var room_id= markerElem['room_id'];
+                  var lat = markerElem['lat'];
+                  var lng = markerElem['lng'];
                   var point = new google.maps.LatLng(
                       parseFloat(lat),
                       parseFloat(lng));
@@ -173,20 +180,26 @@
                   infowincontent.appendChild(strong);
                   infowincontent.appendChild(document.createElement('br'));
 
-                  var text = document.createElement('text');
-                  text.textContent = address;
-                  infowincontent.appendChild(text);
+                  var btn_to_room = document.createElement('button');
+                  btn_to_room.addEventListener("click", function(){
+                     {#alert(1);#}
+                      window.location = "http://localhost:8000/room/"+room_id+"/";
+                  });
+                  btn_to_room.textContent = "Go to room";
+                  infowincontent.appendChild(btn_to_room);
+
                   var marker1 = new google.maps.Marker({
                     map: map,
                     position: point
                   });
 
-                  marker1.addListener('click', function() {
-                    infoWindow.setContent(infowincontent);
-                    infoWindow.open(map, marker1);
+                  marker1.id = "marker-"+id;
+                  marker1.addListener('click', function(){
+                      infoWindow.setContent(infowincontent);
+                      infoWindow.open(map, marker1);
                   });
-              }
-          });
+              })});
+
 
         google.maps.event.addListener(map, 'click', function(event) {
             if (!marker || !marker.setPosition) {

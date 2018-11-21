@@ -48,8 +48,6 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-
-
         song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
         song_1.save()
         song_2 = Song.objects.create(song_id='09R8_2nJtjg', song_name='Maroon 5 - Sugar')
@@ -130,8 +128,8 @@ def search_song(request):
     context['songs'] = videos
 
     # context['search_results'] = videos
-    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
-    # return render(request, 'hot_pot_music_share/youtube/room.html', context)
+    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
+    # return render(request, 'hot_pot/youtube/room.html', context)
 
 
 @login_required
@@ -156,7 +154,7 @@ def add_song_to_room_playlist_ajax(request):
         p.songs.add(s)
 
     context['songs'] = p.songs.all()
-    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
 
 
 @login_required
@@ -180,7 +178,7 @@ def add_song_from_pool_to_queue(request):
         p.songs.add(s)
 
     context['songs'] = p.songs.all()
-    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
 
 
 # Integrate actual Profile model later
@@ -243,7 +241,7 @@ def register(request):
 
                 token = default_token_generator.make_token(new_user)
                 email_body = """
-				Welcome to hot_pot_music_share. Please click the link below to verify your email address and complete registration:
+				Welcome to hot_pot. Please click the link below to verify your email address and complete registration:
 				http://%s%s
 				""" % (request.get_host(),
                        reverse('confirm', args=(new_user.username, token)))
@@ -329,10 +327,10 @@ def map_of_rooms(request):
     context = {'username': request.user.username}
     all_markers = Marker.objects.all()
     context['all_markers'] = all_markers
-    return render(request, 'hot_pot_music_share/maps/room_map.html', context)
+    return render(request, 'hot_pot/maps/room_map.html', context)
 
 
-from hot_pot_music_share.forms import *
+from hot_pot.forms import *
 from django.http import Http404
 from django.http import JsonResponse
 
@@ -355,7 +353,7 @@ def get_markers(request):
     all_markers = Marker.objects.all()
     context = {'markers': all_markers}
 
-    return render(request, 'hot_pot_music_share/maps/markers.json', context, content_type='application/json')
+    return render(request, 'hot_pot/maps/markers.json', context, content_type='application/json')
 
 
 @login_required
@@ -374,7 +372,7 @@ def get_pool_songs_from_room(request):
     r = Room.objects.get(id=room_id)
     p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")  # context['room'] = room
     context['songs'] = p.songs.all()
-    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
 
 
 @login_required
@@ -385,7 +383,7 @@ def get_queue_songs_from_room(request):
     r = Room.objects.get(id=room_id)
     p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
     context['songs'] = p.songs.all()
-    return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
 
 
 # Return name of top song and remove from song queue
@@ -413,7 +411,7 @@ def get_top_of_song_queue(request, room_id):
         }
         """
 
-        return render(request, 'hot_pot_music_share/youtube/song.json', context, content_type='application/json')
+        return render(request, 'hot_pot/youtube/song.json', context, content_type='application/json')
 
 
 # Delete song with specified song_id from song_queue of specified room_id

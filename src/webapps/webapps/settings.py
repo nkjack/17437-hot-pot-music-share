@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hot_pot_music_share',
+    'hot_pot',
     'channels',
 ]
 
@@ -66,7 +66,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'hot_pot_music_share','templates','hot_pot_music_share')],
+        'DIRS': [os.path.join(BASE_DIR, 'hot_pot','templates','hot_pot')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,15 +128,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "hot_pot_music_share/static")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "hot_pot/static")]
 
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot_music_share/')
+PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot/')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot_music_share/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot/media')
 
 CORS_ORIGIN_ALLOW_ALL = True
 

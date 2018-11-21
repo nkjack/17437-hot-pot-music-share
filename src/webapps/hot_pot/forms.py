@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator, EmailValidator
 
-from hot_pot_music_share.models import *
+from hot_pot.models import *
 
 
 class RegistrationForm(forms.Form):

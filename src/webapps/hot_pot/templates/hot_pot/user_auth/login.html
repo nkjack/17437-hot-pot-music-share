@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{% static 'hot_pot_music_share/img/logo.png' %}">
+    <link rel="icon" href="{% static 'hot_pot/img/logo.png' %}">
     <title>Hot Pot Signin</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{% static 'hot_pot_music_share/css/bootstrap.min.css' %} " rel="stylesheet">
+    <link href="{% static 'hot_pot/css/bootstrap.min.css' %} " rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{% static 'hot_pot_music_share/css/login.css' %}" rel="stylesheet">
+    <link href="{% static 'hot_pot/css/login.css' %}" rel="stylesheet">
 
 
   </head>
@@ -22,7 +22,7 @@
   <body>
     <!-- The tab for login and register -->
     <main class="form-signin">
-      <img class="center" src="{% static 'hot_pot_music_share/img/logo.png' %}" alt="" height="100" >
+      <img class="center" src="{% static 'hot_pot/img/logo.png' %}" alt="" height="100" >
       <ul class = "nav nav-tabs">
         <li class ="nav-item">
           <a class = "nav-link {{login_active}}" id = "login-tab"  href = "{% url 'login' %}" >Login</a>
@@ -97,9 +97,9 @@
     </main>
 
     <!-- Bootstrap JS -->
-  <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
-  <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
-  <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'hot_pot/js/popper.min.js' %}"></script>
+  <script src = "{% static 'hot_pot/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'hot_pot/js/bootstrap.min.js' %}"></script>
    
   </body>
 </html>

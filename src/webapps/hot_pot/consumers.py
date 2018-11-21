@@ -3,7 +3,7 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
-from hot_pot_music_share.models import Room, Song, Playlist
+from hot_pot.models import Room, Song, Playlist
 
 
 class PlayerConsumer(WebsocketConsumer):

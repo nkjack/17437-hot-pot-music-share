@@ -1,36 +1,8 @@
-<!DOCTYPE html >
-  <head>
-            {% load static %}
-      <script src = "{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
+{% extends 'hot_pot/base.html' %}
 
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>From Info Windows to a Database: Saving User-Added Form Data</title>
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 80%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
+{% block content %}
+
     <div id="map" height="460px" width="460px"></div>
-    <form>
-        <input type='button' value='Save' id="save-btn"/>
-    </form>
-    <li>
-        {% for marker in all_markers %}
-            <ul>{{ marker.room.name }}-{{ marker.lat }}-{{ marker.lng }}</ul>
-        {% endfor %}
-    </li>
-
 
     <script>
         // The boilerplate code below is copied from the Django 1.10 documentation.
@@ -218,5 +190,4 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y&callback=initMap">
     </script>
 
-  </body>
-</html>
+    {% endblock %}

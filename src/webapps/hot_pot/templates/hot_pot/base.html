@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     {% load static %}
-    <link rel="icon" href="{% static 'hot_pot_music_share/img/logo.png' %}">
+    <link rel="icon" href="{% static 'hot_pot/img/logo.png' %}">
 
-    <script src="{% static 'hot_pot_music_share/js/popper.min.js' %}"></script>
-    <script src="{% static 'hot_pot_music_share/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'hot_pot_music_share/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'hot_pot_music_share/js/home.js' %}"></script>
+    <script src="{% static 'hot_pot/js/popper.min.js' %}"></script>
+    <script src="{% static 'hot_pot/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'hot_pot/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'hot_pot/js/home.js' %}"></script>
 
-{#    <script src="{% static "hot_pot_music_share/js/room/sync_playlists.js" %}"></script>#}
-    <link href=" {% static 'hot_pot_music_share/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/room.css' %}">
-    <link rel="stylesheet" href="{% static 'hot_pot_music_share/css/vertical_scrollBar.css' %}">
+{#    <script src="{% static "hot_pot/js/room/sync_playlists.js" %}"></script>#}
+    <link href=" {% static 'hot_pot/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'hot_pot/css/room.css' %}">
+    <link rel="stylesheet" href="{% static 'hot_pot/css/vertical_scrollBar.css' %}">
 
     {% block head %}{% endblock %}
 </head>
@@ -23,14 +23,14 @@
 <div id="wrapper">
     <div id="sidebar-wrapper">
         <img class="float-right menu" id="menu" onclick="toggleNav()"
-             src="{% static 'hot_pot_music_share/img/menu.png' %}" width="50">
+             src="{% static 'hot_pot/img/menu.png' %}" width="50">
         <ul class="sidebar-nav">
             <li class="sidebar-brand">
                 <a class="figure" href="#">
                     {% if img %}
                         <img class="mr-4" src="{% url 'img' username %}" width="90" alt="">
                     {% else %}
-                        <img class="mr-4" src="{% static 'hot_pot_music_share/img/user_1.png' %}" width="90"
+                        <img class="mr-4" src="{% static 'hot_pot/img/user_1.png' %}" width="90"
                              alt="myImage">
                     {% endif %}
                     <p class="username">{{ username }}</p>

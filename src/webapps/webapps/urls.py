@@ -18,11 +18,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('hot_pot_music_share.urls'))
+    path('', include('hot_pot.urls'))
 ]
 
 #
 # urlpatterns = [
-#     path('hot_pot_music_share/', include('hot_pot_music_share.urls')),
-#     path('', hot_pot_music_share.views.global_stream)
+#     path('hot_pot/', include('hot_pot.urls')),
+#     path('', hot_pot.views.global_stream)
 # ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

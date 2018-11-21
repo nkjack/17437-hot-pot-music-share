@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from django.views.generic.base import RedirectView
 
-from hot_pot_music_share import views
+from hot_pot import views
 
 urlpatterns = [
 
@@ -36,5 +36,10 @@ urlpatterns = [
 
     # img
     re_path(r'^profile-photo/room/(?P<pk>\w+)/$', views.get_img, name='img'),
+
+    # Sam JS stuff
+    re_path(r'^get-top-of-song-queue/(?P<room_id>[^/]+)/$', views.get_top_of_song_queue, name='get-top-of-song-queue'),
+    re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
+            views.delete_from_song_queue, name='delete-from-song-queue'),
 
 ]
