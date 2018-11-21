@@ -1,0 +1,58 @@
+{% extends 'hot_pot_music_share/base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="card-deck mb-3">
+	<div class="card mb-4 my-3 box-shadow">
+        <div class="card-header ">
+            <h4 class="my-1 font-weight-normal">Room {{room.name}}</h4>
+        </div>
+        <div class="card-body">
+          	<form enctype = "multipart/form-data"  method = "POST">{% csrf_token %}
+
+          		<div class = "form-group my-3 mx-3">
+
+			    	<div class = 'error' >
+			    		{{roomForm.errors}}
+			    		{{roomForm.non_field_errors}}
+			    	</div>
+
+			    	<div class = "my-3">
+						<p class = "font-weight-bold mb-0 ">{{roomForm.name.label}}</p>
+				    	<p class = "mx-4">{{roomForm.name}}</p>
+						
+					</div>
+
+					<div class = "my-3">
+						<p class = "font-weight-bold mb-0 ">
+							{{roomForm.isMarked.label}}{{roomForm.isMarked}}
+							<button id="change-location" onclick = "change_location()"><img src="{% static 'hot_pot_music_share/img/geo.png' %}" width = "25"></button>
+						</p>
+
+						
+					</div>
+
+					<div class = "my-3">
+						<p class = "font-weight-bold mb-0 ">{{roomForm.description.label}}</p>
+				    	<p class = "mx-4">{{roomForm.description}}</p>
+						
+					</div>
+					<div class = "my-3">
+						<p class = "font-weight-bold mb-0 ">Room Photo</p>
+						{% if roomForm.cover_pic.value %}
+				      <!-- <p class = "font-weight-bold mb-0 ">Profile Image</p> -->
+					      	
+					      <img  class ="mx-4" src = '{% url "room_img" room.pk %}' alt = "" width = "80" height = "80">
+					    {% endif%}
+				    	{{roomForm.cover_pic}}
+					
+					</div>
+
+				</div>
+
+          		<input  type="submit" class="btn btn-lg btn-block btn-outline-primary my-3" name = 'room_profile' value ="Submit">
+          	</form>
+        </div>
+    </div>
+</div>
+{% endblock %}

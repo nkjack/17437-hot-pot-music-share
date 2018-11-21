@@ -1,6 +1,6 @@
 # Create your models here.
 
-
+from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -12,7 +12,7 @@ from django.dispatch import receiver
 
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=42,label='Room Name',)
+    name = models.CharField(max_length=42)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     create_date = models.DateTimeField(auto_now=True)
     cover_pic = models.ImageField(upload_to='room-photo', blank=True,
@@ -81,18 +81,12 @@ class RoomHistory(models.Model):
 # cited from https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    # short_bio = models.TextField(max_length=420,default="")
-    # age = models.IntegerField(default=0)
-    # picture = models.ImageField(upload_to="profile-photos", blank=True)
-    # follows = models.ManyToManyField(User, related_name='follow')
+    bio = models.TextField(max_length=420, blank = True,  default="")
+    age = models.IntegerField(default=0, validators = [MinValueValidator(0)])
+    img = models.ImageField(upload_to="profile-photos", blank=True, default = 'profile-photo/user_1.png')
+    follows = models.ManyToManyField(User, related_name='follow')
 
     # favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
-    # my_rooms = models.ManyToManyField(Room, related_name='my_room')
-
-    # spotify_username = models.TextField(max_length=30, default="")
-    # token = models.TextField(max_length=420, default="")
-    # web_play_back_token = models.TextField(max_length=420, default="")
 
     def __str__(self):
         return self.user.username

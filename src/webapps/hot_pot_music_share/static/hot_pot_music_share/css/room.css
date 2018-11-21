@@ -116,3 +116,7 @@ a:hover, a:visited, a:link, a:active{
     padding-top: 500px;
     height: 80%;
   }
+
+.edit{
+  width: 30%;
+}

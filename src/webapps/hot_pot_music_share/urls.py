@@ -38,7 +38,11 @@ urlpatterns = [
     path('player', player_views.youtube_player),
 
 
-    #img
-    re_path(r'^profile-photo/room/(?P<pk>\w+)/$', views.get_img, name = 'img'),
+    # img
+    re_path(r'^profile-photo/room/(?P<pk>\w+)/$', views.get_room_img, name = 'room_img'),
+    re_path(r'^profile-photo/user/(?P<username>[a-zA-Z0-9_]{3,15})/$', views.get_user_img, name = 'user_img'),
 
+    # profiles
+    re_path(r'^edit-room/(?P<room_id>[^/]+)/$', views.edit_room, name = 'edit_room'),
+    path('edit-user', views.edit_user, name = 'user_profile')
 ]

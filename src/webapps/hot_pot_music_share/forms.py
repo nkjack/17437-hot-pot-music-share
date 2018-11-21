@@ -95,22 +95,34 @@ class LoginForm(forms.Form):
 
 
 class RoomForm(forms.ModelForm):
-    # additional fields
-    isMarked = forms.BooleanField(required=False, initial=True, label='Mark Geo Location',
-                                  widget=forms.CheckboxInput())
-
     class Meta:
         model = Room
-        fields = ['name', 'cover_pic', 'description', 'owner']
+        fields = ['name', 'cover_pic', 'description', 'isMarked']
         widgets = {
-                'name' :TextInput(attrs={'class': 'form-control mb-3', 'maxlength': '15'}),
-                'description': Textarea(attrs={'help_text': 'maxlength is 420',
+                'name' :forms.TextInput(attrs={'class': 'form-control mb-3', 'maxlength': '15'}),
+                'description': forms.Textarea(attrs={'help_text': 'maxlength is 420',
                                                                'maxlength': '420',
                                                                'rows': "3",
                                                                'class': 'form-control '}),
-                'cover_pic': FileInput()
+                'cover_pic': forms.FileInput(),
+                'isMarked':forms.CheckboxInput()
 
         }
+        labels = {
+            'name':'Room Name',
+            'description':'Description',
+            'cover_pic' :'Room Cover',
+            'isMarked' :'Mark Location'
+        }
+        error_messages = {
+            'name': {
+                'max_length':"This room name is too long. Maximum is 15 characters",
+            },
+            'description': {
+                'max_length':"This room description is too long. Maximum is 420 characters",
+            }
+        }
+ 
 
     def clean(self):
         cleaned_data = super(RoomForm, self).clean()
@@ -123,6 +135,27 @@ class RoomForm(forms.ModelForm):
 
 
 class MarkerForm(forms.ModelForm):
-    class Meta:
-        model = Marker
-        fields = ('lat', 'lng')
+  class Meta:
+      model = Marker
+      fields = ('lat', 'lng')
+
+class ProfileForm(forms.ModelForm):
+
+  class Meta:
+    model = Profile
+    fields = ['age','bio','img']
+
+    widgets = {
+        'age' :forms.NumberInput(attrs = {'class' : 'form-control mr-6' }),
+        'bio': forms.Textarea(attrs={'help_text': 'maxlength is 420',
+                                                       'maxlength': '420',
+                                                       'rows': "8",
+                                                       'class': 'form-control '}),
+        'img': forms.FileInput()
+
+    }
+    labels = {
+          'age':'Age',
+          'bio':'Description',
+          'img' :'Profile Image',
+      }

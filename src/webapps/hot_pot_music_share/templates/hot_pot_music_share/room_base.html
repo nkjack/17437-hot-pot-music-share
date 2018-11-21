@@ -1,7 +1,7 @@
 {% extends 'hot_pot_music_share/base.html' %}
 
-
 {% block content %}
+{% load static %}
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
     <div class="row">
         <div class="col">
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                 </div>
-
+                {% endfor %}
                 <!-- Add people to this room -->
                 <button type="button" class=" float-right btn btn-lg" onclick="openForm()">
                     <span class="glyphicon">&#x2b;</span>

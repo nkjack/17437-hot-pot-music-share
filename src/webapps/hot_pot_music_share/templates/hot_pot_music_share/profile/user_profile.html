@@ -1,0 +1,81 @@
+{% extends 'hot_pot_music_share/base.html' %}
+
+{% block content %}
+{% load static %}
+	<div class="card mb-4 my-3 box-shadow">
+        <div class="card-header ">
+            <h4 class="my-1 font-weight-normal">{{username}}</h4>
+        </div>
+        <div class="card-body">
+          	<form enctype = "multipart/form-data"  method = "POST">{% csrf_token %}
+
+          		<div class = "form-group my-3 mx-3">
+
+			    	<div class = 'error' >
+			    		{{profileForm.errors}}
+			    		{{profileForm.non_field_errors}}
+			    	</div>
+
+			    	<div class = "my-3">
+						<p class = "font-weight-bold mb-0 ">{{profileForm.age.label}}</p>
+				    	<p class = "mx-4">{{profileForm.age}}</p>
+						
+					</div>
+
+					<div class = "my-3">
+						<p class = "font-weight-bold mb-0 ">{{profileForm.bio.label}}</p>
+				    	<p class = "mx-4">{{profileForm.bio}}</p>
+						
+					</div>
+					<div class = "my-3">
+						<p class = "font-weight-bold mb-0 ">Profile Photo</p>
+						{% if profileForm.img.value %}
+				      <!-- <p class = "font-weight-bold mb-0 ">Profile Image</p> -->
+					      	
+					      <img  class ="mx-4" src = '{% url "user_img" username %}' alt = "" width = "80" height = "80">
+					    {% endif%}
+				    	{{profileForm.img}}
+					
+					</div>
+
+				</div>
+
+          		<input  type="submit" class="btn btn-lg btn-block btn-outline-primary my-3" name = 'user_profile' value ="Submit">
+          	</form>
+        </div>
+
+
+    </div>
+
+        <div class="my-3 p-3 rounded box-shadow">
+        <h6 class="border-bottom border-gray pb-2 mb-0">My Rooms</h6>
+<!--         <button class = "btn-secondary float-right" id = "editMyOwn" onclick = "editMyOwn()">Edit</button> -->
+        
+        <!-- rows of rooms -->
+        <div class="row-card">
+              
+                <!-- One single room -->
+                {% for room in owned %}
+                  <a href="{% url 'room' room.pk %}" class="col-sm-4">
+
+                    <div class="card bg-light rounded">
+                   {% if room.cover_pic %}
+                      <img class="mr-4" src="{% url 'room_img' room.pk %}" width="90" alt = "">
+
+                    {% endif %}
+                      <div class="card-body">
+                        <h5 class="card-title">{{ room.name }}</h5>
+                        <p class="card-text">{{room.description }}</p>
+                        <p class="card-text"><small class="text-muted">DJ: {{room.owner.username}}</small></p>
+                      </div>
+                    </div>
+                </a>
+                  <a href="{% url 'edit_room' room.pk %}" >
+                    <img src="{% static 'hot_pot_music_share/img/edit.png' %}" width = "25">
+                  </a>
+                {% endfor %}
+              
+
+            </div>
+        </div>
+{% endblock %}
