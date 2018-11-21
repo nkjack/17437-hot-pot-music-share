@@ -13,7 +13,7 @@ from hot_pot.models import Room, RoomHistory, Playlist, Song
 
 # YouTube API metadata needed for search
 DEVELOPER_KEY = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'
-YOUTUBE_API_SERVICE_NAME = 'youtube'
+YOUTUBE_API_SERVICE_NAME = 'room'
 YOUTUBE_API_VERSION = 'v3'
 MAX_SEARCH_RESULTS = 10
 
@@ -41,7 +41,7 @@ def room(request, room_id):
                'song_queue': song_queue.songs.all(),
                }
 
-    return render(request, 'room.html', context)
+    return render(request, 'room/room.html', context)
 
 
 @login_required
@@ -72,13 +72,13 @@ def search_song(request):
     # Add each result to the appropriate list, and then display the lists of
     # matching videos, channels, and playlists.
     for search_result in search_response.get('items', []):
-        if search_result['id']['kind'] == 'youtube#video':
+        if search_result['id']['kind'] == 'room#video':
             videos.append(Song(song_id=search_result['id']['videoId'],
                                song_name=search_result['snippet']['title']))
 
     context['songs'] = videos
 
-    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
 @login_required
@@ -104,7 +104,7 @@ def add_song_to_room_playlist_ajax(request):
         song_pool.songs.add(song)
 
     context['songs'] = song_pool.songs.all()
-    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
 # Add a single song
@@ -131,7 +131,7 @@ def add_song_from_pool_to_queue(request):
         song_queue.songs.add(song)
 
     context['songs'] = song_queue.songs.all()
-    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
 @login_required
@@ -141,7 +141,7 @@ def get_pool_songs_from_room(request):
     room = Room.objects.get(id=room_id)
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     context['songs'] = song_pool.songs.all()
-    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
 @login_required
@@ -152,7 +152,7 @@ def get_queue_songs_from_room(request):
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
     context['songs'] = song_queue.songs.all()
-    return render(request, 'hot_pot/youtube/songs.json', context, content_type='application/json')
+    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
 # Return name of top song and remove from song queue
@@ -180,7 +180,7 @@ def get_top_of_song_queue(request, room_id):
         }
         """
 
-        return render(request, 'hot_pot/youtube/song.json', context, content_type='application/json')
+        return render(request, 'hot_pot/room/song.json', context, content_type='application/json')
 
 
 # Delete song with specified song_id from song_queue of specified room_id
