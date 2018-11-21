@@ -3,6 +3,7 @@
 {% block content %}
 
     <div id="map" height="460px" width="460px"></div>
+{#    <input type="hidden" id="room-url" data-url="{% url 'room' 0 %}"/>#}
 
     <script>
         // The boilerplate code below is copied from the Django 1.10 documentation.
@@ -140,6 +141,7 @@
                   var id = markerElem['marker_id'];
                   var room_name = markerElem['room_name'];
                   var room_id= markerElem['room_id'];
+                  var room_description =  markerElem['room_description'];
                   var lat = markerElem['lat'];
                   var lng = markerElem['lng'];
                   var point = new google.maps.LatLng(
@@ -147,15 +149,30 @@
                       parseFloat(lng));
 
                   var infowincontent = document.createElement('div');
-                  var strong = document.createElement('strong');
-                  strong.textContent = room_name;
-                  infowincontent.appendChild(strong);
+                  var strong1 = document.createElement('strong');
+                  strong1.textContent = "Room name:";
+                  infowincontent.appendChild(strong1);
                   infowincontent.appendChild(document.createElement('br'));
+
+                  var header_room_name = document.createElement('h5');
+                  header_room_name.textContent = room_name;
+                  infowincontent.appendChild(header_room_name);
+                  {#infowincontent.appendChild(document.createElement('br'));#}
+
+                  var strong2 = document.createElement('strong');
+                  strong2.textContent = "Room description: ";
+                  infowincontent.appendChild(strong2);
+                  infowincontent.appendChild(document.createElement('br'));
+
+                  var header_room_description = document.createElement('p');
+                  header_room_description.textContent = room_description;
+                  infowincontent.appendChild(header_room_description);
+
 
                   var btn_to_room = document.createElement('button');
                   btn_to_room.addEventListener("click", function(){
-                     {#alert(1);#}
-                      window.location = "http://localhost:8000/room/"+room_id+"/";
+                      {#var p_url = $("#add-comment-url").attr("data-url");#}
+                      window.location = "/room/"+ room_id;
                   });
                   btn_to_room.textContent = "Go to room";
                   infowincontent.appendChild(btn_to_room);

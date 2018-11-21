@@ -30,7 +30,7 @@
             <ul>{{ marker.room.name }}-{{ marker.lat }}-{{ marker.lng }}</ul>
         {% endfor %}
     </li>
-
+    <input type="hidden" id="room-url" data-url="{% url 'room' %}"/>
 
     <script>
         // The boilerplate code below is copied from the Django 1.10 documentation.
@@ -168,6 +168,7 @@
                   var id = markerElem['marker_id'];
                   var room_name = markerElem['room_name'];
                   var room_id= markerElem['room_id'];
+                  var room_description =  markerElem['room_description'];
                   var lat = markerElem['lat'];
                   var lng = markerElem['lng'];
                   var point = new google.maps.LatLng(
@@ -175,15 +176,21 @@
                       parseFloat(lng));
 
                   var infowincontent = document.createElement('div');
-                  var strong = document.createElement('strong');
-                  strong.textContent = room_name;
-                  infowincontent.appendChild(strong);
+                  var strong1 = document.createElement('strong');
+                  strong1.textContent = room_name;
+
+                  var strong2 = document.createElement('strong');
+                  strong2.textContent = room_description;
+                  infowincontent.appendChild(strong1);
+                  infowincontent.appendChild(document.createElement('br'));
+                  infowincontent.appendChild(strong2);
                   infowincontent.appendChild(document.createElement('br'));
 
                   var btn_to_room = document.createElement('button');
                   btn_to_room.addEventListener("click", function(){
                      {#alert(1);#}
-                      window.location = "http://localhost:8000/room/"+room_id+"/";
+                      var p_url = $("#add-comment-url").attr("data-url");
+                      window.location = p_url+ "/"+ room_id+"/";
                   });
                   btn_to_room.textContent = "Go to room";
                   infowincontent.appendChild(btn_to_room);
