@@ -35,4 +35,12 @@ urlpatterns = [
     path('add-marker', map_views.add_marker),
     path('get-markers', map_views.get_markers),
 
+    # img
+    re_path(r'^profile-photo/room/(?P<pk>\w+)/$', home_views.get_room_img, name = 'room_img'),
+    re_path(r'^profile-photo/user/(?P<username>[a-zA-Z0-9_]{3,15})/$', home_views.get_user_img, name = 'user_img'),
+
+    # profiles
+    re_path(r'^edit-room/(?P<room_id>[^/]+)/$', home_views.edit_room, name = 'edit_room'),
+    path('edit-user', home_views.edit_user, name = 'user_profile')
+
 ]

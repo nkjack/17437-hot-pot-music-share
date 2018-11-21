@@ -6,37 +6,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    # short_bio = models.TextField(max_length=420,default="")
-    # age = models.IntegerField(default=0)
-    # picture = models.ImageField(upload_to="profile-photos", blank=True)
-    # follows = models.ManyToManyField(User, related_name='follow')
-
-    # favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
-    # my_rooms = models.ManyToManyField(Room, related_name='my_room')
-
-    # spotify_username = models.TextField(max_length=30, default="")
-    # token = models.TextField(max_length=420, default="")
-    # web_play_back_token = models.TextField(max_length=420, default="")
-
-    def __str__(self):
-        return self.user.username
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
-
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=42)
