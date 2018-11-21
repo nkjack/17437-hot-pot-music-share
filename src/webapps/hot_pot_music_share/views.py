@@ -48,8 +48,6 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-
-
         song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
         song_1.save()
         song_2 = Song.objects.create(song_id='09R8_2nJtjg', song_name='Maroon 5 - Sugar')
@@ -155,7 +153,7 @@ def add_song_to_room_playlist_ajax(request):
     if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="pool"):
         p.songs.add(s)
 
-    context['songs'] = p.songs.all()
+    context['songs'] = p.songs.all().order_by('id')
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
@@ -179,7 +177,7 @@ def add_song_from_pool_to_queue(request):
     if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=r, pl_type="queue"):
         p.songs.add(s)
 
-    context['songs'] = p.songs.all()
+    context['songs'] = p.songs.all().order_by('id')
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
@@ -297,15 +295,15 @@ def room(request, room_id):
         history.save()
     listeners = RoomHistory.getCurrentListeners(room)
 
-    print('song_queue: ' + str(song_queue.songs.all()))
+    print('song_queue: ' + str(song_queue.songs.all().order_by('id')))
 
     context = {'username': request.user.username,
                'room_id': room_id,
                'room_name_json': mark_safe(json.dumps(room_name)),
                'title': 'Room ' + room_name,
                'is_host': is_host,
-               'song_pool': song_pool.songs.all(),
-               'song_queue': song_queue.songs.all(),
+               'song_pool': song_pool.songs.all().order_by('id'),
+               'song_queue': song_queue.songs.all().order_by('id'),
                }
 
     return render(request, 'room_base.html', context)
@@ -373,7 +371,7 @@ def get_pool_songs_from_room(request):
     room_id = request.GET['room_id']
     r = Room.objects.get(id=room_id)
     p = Playlist.objects.get(belongs_to_room=r, pl_type="pool")  # context['room'] = room
-    context['songs'] = p.songs.all()
+    context['songs'] = p.songs.all().order_by('id')
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
@@ -384,7 +382,7 @@ def get_queue_songs_from_room(request):
     room_id = request.GET['room_id']
     r = Room.objects.get(id=room_id)
     p = Playlist.objects.get(belongs_to_room=r, pl_type="queue")
-    context['songs'] = p.songs.all()
+    context['songs'] = p.songs.all().order_by('id')
     return render(request, 'hot_pot_music_share/youtube/songs.json', context, content_type='application/json')
 
 
