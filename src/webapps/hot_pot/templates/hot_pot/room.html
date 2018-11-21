@@ -8,9 +8,8 @@
 
     <div class="row">
         <div class="col video_col">
+            <!----------------------------------------- YOUTUBE PLAYER START ------------------------------------------>
             <h1 id="now-playing"></h1>
-
-            <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
             <div id="player"></div>
             <br>
 
@@ -20,8 +19,9 @@
             {% else %}
                 <button type="button" class="btn btn-secondary text-light" onclick="nextVideo()">Next Video</button>
             {% endif %}
+            <!----------------------------------------- YOUTUBE PLAYER END -------------------------------------------->
 
-            <!-- The playlist -->
+            <!----------------------------------------- SONG QUEUE START ---------------------------------------------->
             <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
                 <h5 class="border-bottom border-dark pb-2 mb-0">Song Queue</h5>
 
@@ -55,10 +55,12 @@
                 {#                    </div>#}
                 {#                </div>#}
             </div>
+
+            <!----------------------------------------- SONG QUEUE END ------------------------------------------------>
         </div>
 
-        <!-- This is the POLL -->
         <div class="col">
+            <!----------------------------------------- SONG POOL START ----------------------------------------------->
             <div class="mb-3 p-3 bg-dark text-light rounded box-shadow poll_list">
                 <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
 
@@ -82,7 +84,9 @@
                 </div>
             </div>
 
-            <!-- This is the list of people in this room -->
+            <!----------------------------------------- SONG QUEUE END ------------------------------------------------>
+
+            <!----------------------------------------- PEOPLE LIST START --------------------------------------------->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
                 <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
 
@@ -99,9 +103,12 @@
                     </div>
                 {% endfor %}
             </div>
+            <!----------------------------------------- PEOPLE LIST END ----------------------------------------------->
 
         </div>
         <div class="col">
+            <!----------------------------------------- VIDEO SEARCH/INPUT START -------------------------------------->
+
             <!-- Direct URL/VideoId Input to song queue/pool -->
             <div class=" p-3 bg-light text-dark rounded box-shadow" id="direct-input-panel">
                 {% if is_host %}
@@ -151,7 +158,9 @@
 
             </div>
 
-            <!-- Sam Chat Room -->
+            <!----------------------------------------- VIDEO SEARCH/INPUT END ---------------------------------------->
+
+            <!----------------------------------------- CHAT ROOM START ----------------------------------------------->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow chat-room">
                 Chat room: <br>
                 <textarea id="chat-log" cols="24" rows="5"></textarea><br/>
@@ -159,6 +168,7 @@
 
                 <input id="chat-message-submit" type="button" value="Send"/>
             </div>
+            <!----------------------------------------- CHAT ROOM END ------------------------------------------------->
         </div>
 
     </div>
@@ -178,6 +188,7 @@
 
 
 {% block script %}
+    <!-- Include all necessary js files from static folder (Important this is at the end so that elements load) -->
     {% load static %}
     <script src="{% static "js/room/sync_playlists.js" %}"></script>
     <script src="{% static "js/room/search.js" %}"></script>
@@ -187,6 +198,7 @@
     <script src="{% static "js/room/chat.js" %}"></script>
     <script src="{% static "js/room/youtube_player.js" %}"></script>
 
+    <!-- Leftover in-line JS script block for UI related things -->
     <script>
         /*
             $(document).ready(function () {
