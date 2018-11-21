@@ -95,22 +95,22 @@ class LoginForm(forms.Form):
 
 
 class RoomForm(forms.ModelForm):
-    cover_pic = forms.ImageField(required=False, widget=forms.FileInput())
-    description = forms.CharField(widget=forms.Textarea(attrs={'help_text': 'maxlength is 420',
-                                                               'maxlength': '420',
-                                                               'rows': "3",
-                                                               'class': 'form-control '}))
-    name = forms.CharField(required=False, max_length=15,
-                           label='Room Name',
-                           widget=forms.TextInput(attrs=
-                                                  {'class': 'form-control mb-3', 'maxlength': '15',
-                                                   }))
-    # isMarked = forms.BooleanField(required=False, initial=True, label='Mark Geo Location',
-    #                               widget=forms.CheckboxInput())
+    # additional fields
+    isMarked = forms.BooleanField(required=False, initial=True, label='Mark Geo Location',
+                                  widget=forms.CheckboxInput())
 
     class Meta:
         model = Room
         fields = ['name', 'cover_pic', 'description', 'owner']
+        widgets = {
+                'name' :TextInput(attrs={'class': 'form-control mb-3', 'maxlength': '15'}),
+                'description': Textarea(attrs={'help_text': 'maxlength is 420',
+                                                               'maxlength': '420',
+                                                               'rows': "3",
+                                                               'class': 'form-control '}),
+                'cover_pic': FileInput()
+
+        }
 
     def clean(self):
         cleaned_data = super(RoomForm, self).clean()

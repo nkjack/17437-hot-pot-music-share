@@ -47,6 +47,7 @@ def home(request, username):
         new_history = RoomHistory.objects.create(user=request.user,
                                                  visited_room=new_room)
         new_history.save()
+        new_marker = 
 
         song_0 = Song.objects.create(song_id='9R3-0-Xg_Ro', song_name='Fourier Series')
         song_0.save()
@@ -291,8 +292,8 @@ def confirm_email(request, username, token):
 
         user.is_active = True
         user.save()
-
-        return HttpResponseRedirect(reverse('login'))
+        login(request, user)
+        return HttpResponseRedirect('home', args=[request.user.username])
     else:
         return HttpResponse('Invalid Link')
 
@@ -305,7 +306,7 @@ def room(request, room_id):
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
-    # Update user room history if this user has never been to this room
+    # Create new room history if this user has never been to this room
     if not RoomHistory.visitedBefore(request.user, room, localtime(now())):
         history = RoomHistory.objects.create(user=request.user, visited_room=room)
         history.save()
