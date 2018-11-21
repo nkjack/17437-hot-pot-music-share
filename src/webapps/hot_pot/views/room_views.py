@@ -41,7 +41,7 @@ def room(request, room_id):
                'song_queue': song_queue.songs.all(),
                }
 
-    return render(request, 'room_base.html', context)
+    return render(request, 'room.html', context)
 
 
 @login_required
