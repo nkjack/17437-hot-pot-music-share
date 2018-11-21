@@ -19,6 +19,7 @@
 - If queue is empty, display a message instead of youtube error
 - Auto play if queue is empty and a song is added (periodic refresh to check this)
 - Use channels instead of periodic refresh for updating pool/queue
+- Display message if a DJ is not in the room ('dead room')
 
 ### List of users in the room [2 hours]
 - Use channels to display current users in the room
