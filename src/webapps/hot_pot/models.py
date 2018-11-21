@@ -1,6 +1,3 @@
-# Create your models here.
-
-
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -8,7 +5,35 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-########## maps
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # short_bio = models.TextField(max_length=420,default="")
+    # age = models.IntegerField(default=0)
+    # picture = models.ImageField(upload_to="profile-photos", blank=True)
+    # follows = models.ManyToManyField(User, related_name='follow')
+
+    # favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
+    # my_rooms = models.ManyToManyField(Room, related_name='my_room')
+
+    # spotify_username = models.TextField(max_length=30, default="")
+    # token = models.TextField(max_length=420, default="")
+    # web_play_back_token = models.TextField(max_length=420, default="")
+
+    def __str__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
 
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
@@ -39,7 +64,7 @@ class RoomHistory(models.Model):
     has_left = models.BooleanField(default=False)
 
     @staticmethod
-    def getCurrentListeners(room, time="1970-01-01T00:00+00:00"):
+    def get_current_listeners(room, time="1970-01-01T00:00+00:00"):
         history = RoomHistory.objects.filter(visited_room=room, has_left=False, join_date__gt=time)
         users = []
         for i in history:
@@ -47,7 +72,7 @@ class RoomHistory(models.Model):
         return users
 
     @staticmethod
-    def getvisitedRooms(user, time="1970-01-01T00:00+00:00"):
+    def get_visited_rooms(user, time="1970-01-01T00:00+00:00"):
         history = RoomHistory.objects.filter(user=user, join_date__gt=time)
         rooms = []
         for i in history:
@@ -55,15 +80,15 @@ class RoomHistory(models.Model):
         return rooms
 
     @staticmethod
-    def getVisitHistory(user, time="1970-01-01T00:00+00:00"):
+    def get_visit_history(user, time="1970-01-01T00:00+00:00"):
         return RoomHistory.objects.filter(user=user, join_date__gt=time)
 
-    def leaveRoom(self):
+    def leave_room(self):
         self.has_left = True
         return self.has_left
 
     @staticmethod
-    def visitedBefore(user, room, new_time):
+    def visited_before(user, room, new_time):
         try:
             history = RoomHistory.objects.get(user=user, visited_room=room)
 
@@ -72,41 +97,10 @@ class RoomHistory(models.Model):
             history.save()
             return True
         except ObjectDoesNotExist:
-            return False;
+            return False
 
     def __str__(self):
         return self.user.username
-
-
-# cited from https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    # short_bio = models.TextField(max_length=420,default="")
-    # age = models.IntegerField(default=0)
-    # picture = models.ImageField(upload_to="profile-photos", blank=True)
-    # follows = models.ManyToManyField(User, related_name='follow')
-
-    # favorite_rooms = models.ManyToManyField(Room, related_name='favorite')
-    # my_rooms = models.ManyToManyField(Room, related_name='my_room')
-
-    # spotify_username = models.TextField(max_length=30, default="")
-    # token = models.TextField(max_length=420, default="")
-    # web_play_back_token = models.TextField(max_length=420, default="")
-
-    def __str__(self):
-        return self.user.username
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 
 class Song(models.Model):
@@ -147,7 +141,6 @@ class Vote(models.Model):
         return self.user.username
 
 
-########## maps
 class Marker(models.Model):
     # id - django generate
     # address = models.CharField(max_length=80, default="")

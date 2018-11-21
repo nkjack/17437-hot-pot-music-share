@@ -75,7 +75,7 @@ def room_history(request):
     context = {'owned': '', 'visited': '', 'username': request.user.username}
     if request.method == 'GET':
         owned = Room.objects.filter(owner=request.user)
-        history = RoomHistory.getVisitHistory(request.user)
+        history = RoomHistory.get_visit_history(request.user)
 
         context['owned'] = owned
         context['visited'] = history

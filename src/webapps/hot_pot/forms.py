@@ -105,6 +105,7 @@ class RoomForm(forms.ModelForm):
                            widget=forms.TextInput(attrs=
                                                   {'class': 'form-control mb-3', 'maxlength': '15',
                                                    }))
+
     # isMarked = forms.BooleanField(required=False, initial=True, label='Mark Geo Location',
     #                               widget=forms.CheckboxInput())
 

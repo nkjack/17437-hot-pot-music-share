@@ -1,11 +1,9 @@
-import json
 from mimetypes import guess_type
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
-from django.utils.safestring import mark_safe
 from django.utils.timezone import localtime, now
 from googleapiclient.discovery import build
 
@@ -27,10 +25,10 @@ def room(request, room_id):
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
     # Update user room history if this user has never been to this room
-    if not RoomHistory.visitedBefore(request.user, room, localtime(now())):
+    if not RoomHistory.visited_before(request.user, room, localtime(now())):
         history = RoomHistory.objects.create(user=request.user, visited_room=room)
         history.save()
-    listeners = RoomHistory.getCurrentListeners(room)
+    listeners = RoomHistory.get_current_listeners(room)
 
     context = {'username': request.user.username,
                'room_id': room_id,
