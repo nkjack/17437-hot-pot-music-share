@@ -58,23 +58,13 @@ $("#panel").on("click", "#search-button", function (event) {
         dataType: "json",
     })
         .done(function (data) {
+            console.log(data);
             $("#search-results").empty();
             for (var i = 0; i < data.songs.length; i++) {
                 var v_id = data.songs[i]['id'];
                 var v_name = data.songs[i]['name'];
 
-                $('#search-results').append(
-                    '<div class="media pt-3" id="search-song-div">' +
-                    '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="200">' +
-                    '    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
-                    '       <div class="d-flex justify-content-between align-items-center w-100">' +
-                    '       <strong class="text-gray-dark">' + v_name + '</strong>' +
-                    '       <button type="button" id="add-song-btn">Add song</button>' +
-                    '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
-                    '       <input type="hidden" id="song_name" value="' + v_name + '"/>' +
-                    '     </div>' +
-                    '</div>' +
-                    '</div>');
+                $('#search-results').append(getEntryListForSearchResult(v_id, v_name));
             }
         })
         .fail(function (xhr, status, errorThrown) {
