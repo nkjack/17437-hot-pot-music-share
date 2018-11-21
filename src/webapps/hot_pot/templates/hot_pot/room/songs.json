@@ -1,7 +1,7 @@
 {
   "songs":[
     {% for song in songs %}
-    {% include 'hot_pot_music_share/youtube/song.json' %}
+    {% include 'hot_pot/room/song.json' %}
     {% if not forloop.last %}, {% endif %}{% endfor %}
   ]
 }

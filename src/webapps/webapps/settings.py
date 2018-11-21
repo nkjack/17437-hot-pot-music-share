@@ -25,14 +25,9 @@ SECRET_KEY = 'f%1%rmvjtn4deft2fj^dg5x6gob9sr%71-(su9mvhav!3h*vbe'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'redirect'
-LOGOUT_REDIRECT_URL = 'login'
+ALLOWED_HOSTS = ['localhost', 'hot-pot-music-share.herokuapp']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hot_pot_music_share',
+    'hot_pot',
     'channels',
 ]
 
@@ -57,16 +52,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'webapps.urls'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_HOST = 'smtp.andrew.cmu.edu'
-# EMAIL_HOST_USER = ''
-# EMAIL_HOST_PASSWORD = ''
-# EMAIL_USE_TLS = True
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'hot_pot_music_share','templates','hot_pot_music_share')],
+        'DIRS': [os.path.join(BASE_DIR, 'hot_pot','templates','hot_pot')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,20 +114,31 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "hot_pot_music_share/static")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "hot_pot/static")]
 
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot_music_share/')
+PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot/')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot_music_share/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot/media')
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# Django authentication model
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/home'
+
+# Email
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'default')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'default')
+EMAIL_PORT = 587
 
 # Channels
 ASGI_APPLICATION = 'webapps.routing.application'

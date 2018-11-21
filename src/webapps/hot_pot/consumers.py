@@ -3,7 +3,7 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
-from hot_pot_music_share.models import Room, Song
+from hot_pot.models import Room, Song, Playlist
 
 
 class PlayerConsumer(WebsocketConsumer):
@@ -114,13 +114,17 @@ class PlayerConsumer(WebsocketConsumer):
 
             # Add to room's song queue, if it doesn't exist
             room = Room.objects.get(name=self.room_name)
+
+            song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
+            song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
+
             # IMPORTANT: Only add the song if it doesn't already exist - otherwise multiple values for same key
-            if playlist is 'queue' and not room.song_queue.songs.filter(song_id=new_song.song_id).exists():
+            if playlist is 'queue' and not song_queue.songs.filter(song_id=new_song.song_id).exists():
                 print('Created and added new song: ' + str(new_song) + ' to queue')
-                room.song_queue.songs.add(new_song)
-            elif playlist is 'pool' and not room.song_pool.songs.filter(song_id=new_song.song_id).exists():
+                song_queue.songs.add(new_song)
+            elif playlist is 'pool' and not song_pool.songs.filter(song_id=new_song.song_id).exists():
                 print('Created and added new song: ' + str(new_song) + ' to pool')
-                room.song_pool.songs.add(new_song)
+                song_pool.songs.add(new_song)
 
     # Receive chat message from room group
     def chat_message(self, event):
