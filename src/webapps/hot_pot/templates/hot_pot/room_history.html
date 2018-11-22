@@ -5,14 +5,13 @@
     <!-- This is the rooms OWNED by this user -->
     <div class="my-3 p-3 rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0">Owned By Me</h6>
-<!--         <button class = "btn-secondary float-right" id = "editMyOwn" onclick = "editMyOwn()">Edit</button> -->
+        <button class = "btn-secondary float-right" id = "editMyOwn" onclick = "editMyOwn()">Edit</button>
         
-        <!-- rows of rooms -->
+<!--  -->
         <div class="row-card">
               
-                <!-- One single room -->
-                {% for room in owned %}
-                  <a href="{% url 'room' room.pk %}" class="col-sm-4">
+<!--                 {% for room in owned %}
+                  <a href="{% url 'room' room.id %}" class="col-sm-4">
 
                     <div class="card bg-light rounded">
                    {% if room.cover_pic %}
@@ -27,23 +26,21 @@
                     </div>
                 </a>
                   <a href="{% url 'edit_room' room.pk %}" >
-                    <img src="{% static 'hot_pot_music_share/img/edit.png' %}" width = "25">
+                    <img src="{% static 'hot_pot/img/edit.png' %}" width = "25">
                   </a>
-                {% endfor %}
+                {% endfor %} -->
               
 
             </div>
         </div>
 
-        <!-- This is the rooms which this user had joined -->
+<!--         This is the rooms which this user had joined -->
        <div class="my-3 p-3 rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0">visited</h6>
-<!--         <button class = "btn-primary float-right" id = "editOther">Edit</button> -->
+        <button class = "btn-primary float-right" id = "editOther">Edit</button>
         
-        <!-- rows of rooms -->
         <div class="row-card">
 
-                <!-- One single room -->
                 {% for history in visited %}
                   <a href="{% url 'room' history.visited_room.pk %}" class="col-sm-4">
 
