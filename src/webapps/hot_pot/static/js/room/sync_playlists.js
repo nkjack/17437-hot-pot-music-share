@@ -1,6 +1,6 @@
 function get_pool_songs_from_room() {
     var room_id = $("#room_id").attr('value');
-    console.log(room_id);
+    // console.log(room_id);
     $.ajax({
         // The URL for the request
         url: "/get-pool-songs-from-room",
@@ -27,20 +27,20 @@ function get_pool_songs_from_room() {
         })
         // Code to run regardless of success or failure;
         .always(function (xhr, status) {
-            console.log("The request is complete!");
+            // console.log("The request is complete!");
             // console.alert( "The request is complete!" );
         });
 }
 
 function updateChangesPoolSongs(data) {
-    console.log(data);
+    // console.log(data);
     $("#poll_list").empty();
     for (var i = 0; i < data.songs.length; i++) {
         var v_id = data.songs[i]['id'];
         var v_name = data.songs[i]['name'];
 
         const isHost = $('#is_host').val();
-        console.log('inside sync_playlists.js...' + isHost);
+        // console.log('inside sync_playlists.js...' + isHost);
 
         let addToQueueButtonHtml = '';
         if (isHost === 'True') {
@@ -85,20 +85,20 @@ function get_queue_songs_from_room() {
             updateChangesQueueSongs(json)
         })
         .fail(function (xhr, status, errorThrown) {
-            console.log("Sorry, there was a problem!");
-            console.log("Error: " + errorThrown);
-            console.log("Status: " + status);
+            // console.log("Sorry, there was a problem!");
+            // console.log("Error: " + errorThrown);
+            // console.log("Status: " + status);
             console.dir(xhr);
         })
         // Code to run regardless of success or failure;
         .always(function (xhr, status) {
-            console.log("The request is complete!");
+            // console.log("The request is complete!");
             // console.alert( "The request is complete!" );
         });
 }
 
 function updateChangesQueueSongs(data) {
-    console.log(data);
+    // console.log(data);
     $("#dj_list").empty();
     for (var i = 0; i < data.songs.length; i++) {
         var v_id = data.songs[i]['id'];
