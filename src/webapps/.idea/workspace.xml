@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="cc85d63e-78cd-4b1d-a494-ed4951e651e4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/map_of_rooms.html" beforeDir="false" afterPath="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/map_of_rooms.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/marker.json" beforeDir="false" afterPath="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/marker.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/room_map.html" beforeDir="false" afterPath="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/room_map.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,97 +16,22 @@
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="303395326">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.5" value="1" />
-          <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="html" value="22" />
-          <entry key="js" value="1" />
-          <entry key="json" value="4" />
-          <entry key="py" value="12" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="HTML" value="22" />
-          <entry key="JSON" value="4" />
-          <entry key="JavaScript" value="1" />
-          <entry key="Python" value="12" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="html" value="1568" />
-          <entry key="json" value="156" />
-          <entry key="py" value="3407" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="HTML" value="1568" />
-          <entry key="JSON" value="156" />
-          <entry key="Python" value="3407" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/views.py">
+        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/marker.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5886">
-              <caret line="218" column="40" selection-start-line="218" selection-start-column="40" selection-end-line="218" selection-end-column="40" />
-              <folding>
-                <element signature="e#48#107#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="189">
+              <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/youtube/room.html">
+        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="127" column="16" lean-forward="true" selection-start-line="127" selection-start-column="16" selection-end-line="127" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/base_map.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-729">
-              <caret line="118" column="4" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="86" column="8" selection-start-line="86" selection-start-column="8" selection-end-line="86" selection-end-column="8" />
-              <folding>
-                <element signature="e#29#72#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="405">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
@@ -111,8 +39,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/room_base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="68" column="30" lean-forward="true" selection-start-line="68" selection-start-column="30" selection-end-line="68" selection-end-column="30" />
+            <state relative-caret-position="311">
+              <caret line="658" column="32" lean-forward="true" selection-start-line="658" selection-end-line="659" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="405">
+              <caret line="22" column="27" lean-forward="true" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="51" column="21" lean-forward="true" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/room_map.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-270">
+              <caret line="169" selection-start-line="169" selection-end-line="169" />
             </state>
           </provider>
         </entry>
@@ -124,6 +79,7 @@
       <list>
         <option value="Python Script" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -131,11 +87,19 @@
     <findStrings>
       <find>add</find>
       <find>HttpRes</find>
-      <find>room</find>
       <find>saveData</find>
       <find>HttpResponse</find>
       <find>comm</find>
       <find>marker</find>
+      <find>ytplaye</find>
+      <find>songs.all</find>
+      <find>searc</find>
+      <find>navigator</find>
+      <find>create</find>
+      <find>room</find>
+      <find>hidden</find>
+      <find>data-url</find>
+      <find>map_of_</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -152,19 +116,20 @@
         <option value="$PROJECT_DIR$/hot_pot_music_share/models.py" />
         <option value="$PROJECT_DIR$/hot_pot_music_share/forms.py" />
         <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/markers.json" />
-        <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/marker.json" />
-        <option value="$PROJECT_DIR$/hot_pot_music_share/urls.py" />
         <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/base_map.html" />
-        <option value="$PROJECT_DIR$/hot_pot_music_share/views.py" />
         <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/room/search-entry.html" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/urls.py" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/static/hot_pot_music_share/js/room/room_helper.js" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/views.py" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/base.html" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/static/hot_pot_music_share/js/room/sync_playlists.js" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/room_base.html" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/home.html" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/marker.json" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/map_of_rooms.html" />
+        <option value="$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/room_map.html" />
       </list>
     </option>
-  </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="67" />
@@ -178,7 +143,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -220,12 +184,16 @@
             <path>
               <item name="webapps" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapps" type="462c0819:PsiDirectoryNode" />
-              <item name="webapps" type="462c0819:PsiDirectoryNode" />
+              <item name="hot_pot_music_share" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="hot_pot_music_share" type="462c0819:PsiDirectoryNode" />
+              <item name="maps" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -283,14 +251,18 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1541357938066</updated>
+      <workItem from="1542825630391" duration="12589000" />
     </task>
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="12589000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18206973" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18649696" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -313,7 +285,7 @@
       <window_info anchor="right" id="Database" order="4" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20475927" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18649696" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -339,24 +311,15 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/spotify/spotify-callback.html" />
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/home.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/spotify/spotify-post-auth.html" />
     <entry file="file://$USER_HOME$/.local/lib/python3.6/site-packages/spotipy/client.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -367,16 +330,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/spotify/get-spotify-username.html" />
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/spotify/spotify-room.html" />
-    <entry file="file://$PROJECT_DIR$/webapps/urls.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/static/hot_pot_music_share/js/jquery.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -386,12 +343,152 @@
         <state relative-caret-position="-2988" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/base_map.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-729">
+          <caret line="118" column="4" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/youtube/room.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="127" column="16" lean-forward="true" selection-start-line="127" selection-start-column="16" selection-end-line="127" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/room/search-entry.html" />
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="3375">
+          <caret line="128" selection-start-line="128" selection-end-line="128" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/static/hot_pot_music_share/css/room.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/youtube/songs.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/static/hot_pot_music_share/js/room/room_helper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="28" column="36" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="5" column="21" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/static/hot_pot_music_share/js/room/sync_playlists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1333">
+          <caret line="54" column="9" selection-start-line="54" selection-start-column="9" selection-end-line="54" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="65" column="24" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapps/routing.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapps/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/templates/hot_pot/maps/base_map.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4536" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/templates/hot_pot/maps/map_of_rooms.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/static/js/room/modify_playlists.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/static/js/room/youtube_player.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/static/js/room/sync_playlists.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/templates/hot_pot/room/room.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="214" lean-forward="true" selection-start-line="214" selection-end-line="214" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/views/auth_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/views/home_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-729">
+          <folding>
+            <element signature="e#0#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/views/map_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-206">
+          <folding>
+            <element signature="e#0#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/views/room_views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4594">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3406">
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webapps/urls.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hot_pot/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -403,75 +500,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/marker.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="19" column="21" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="405">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/base_map.html">
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/map_of_rooms.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-729">
-          <caret line="118" column="4" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
+        <state relative-caret-position="567">
+          <caret line="192" column="64" lean-forward="true" selection-start-line="191" selection-start-column="22" selection-end-line="192" selection-end-column="64" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/models.py">
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/marker.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="86" column="8" selection-start-line="86" selection-start-column="8" selection-end-line="86" selection-end-column="8" />
-          <folding>
-            <element signature="e#29#72#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="189">
+          <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/views.py">
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/maps/room_map.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5886">
-          <caret line="218" column="40" selection-start-line="218" selection-start-column="40" selection-end-line="218" selection-end-column="40" />
-          <folding>
-            <element signature="e#48#107#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-270">
+          <caret line="169" selection-start-line="169" selection-end-line="169" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/room_base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="68" column="30" lean-forward="true" selection-start-line="68" selection-start-column="30" selection-end-line="68" selection-end-column="30" />
+        <state relative-caret-position="311">
+          <caret line="658" column="32" lean-forward="true" selection-start-line="658" selection-end-line="659" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/youtube/room.html">
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="127" column="16" lean-forward="true" selection-start-line="127" selection-start-column="16" selection-end-line="127" selection-end-column="16" />
+        <state relative-caret-position="257">
+          <caret line="51" column="21" lean-forward="true" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/room/search-entry.html">
+    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/hot_pot_music_share/templates/hot_pot_music_share/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="20" selection-start-line="9" selection-start-column="20" selection-end-line="9" selection-end-column="20" />
+        <state relative-caret-position="405">
+          <caret line="22" column="27" lean-forward="true" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
         </state>
       </provider>
     </entry>

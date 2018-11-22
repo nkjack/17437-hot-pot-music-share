@@ -41,19 +41,6 @@
                         </div>
                     {% endfor %}
                 </div>
-
-                <!-- One track in the playlist -->
-                {#                <div class="media pt-3" id="song_0">#}
-                {#                    <!-- The thumbnail of this video -->#}
-                {#                    <!-- Maybe also use API to get a thumbnail -->#}
-                {#                    <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded" width="35">#}
-                {#                    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">#}
-                {#                        <div class="d-flex justify-content-between align-items-center w-100">#}
-                {#                            <strong class="text-gray-dark">{{ name_of_video }}</strong>#}
-                {#                            <span class="d-block">{{ author }}</span>#}
-                {#                        </div>#}
-                {#                    </div>#}
-                {#                </div>#}
             </div>
 
             <!----------------------------------------- SONG QUEUE END ------------------------------------------------>
@@ -84,7 +71,7 @@
                 </div>
             </div>
 
-            <!----------------------------------------- SONG QUEUE END ------------------------------------------------>
+            <!----------------------------------------- SONG POOL END ------------------------------------------------->
 
             <!----------------------------------------- PEOPLE LIST START --------------------------------------------->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
@@ -190,6 +177,7 @@
 {% block script %}
     <!-- Include all necessary js files from static folder (Important this is at the end so that elements load) -->
     {% load static %}
+    <script src="{% static "js/room/room_helper.js" %}"></script>
     <script src="{% static "js/room/sync_playlists.js" %}"></script>
     <script src="{% static "js/room/search.js" %}"></script>
     <script src="{% static "js/room/modify_playlists.js" %}"></script>
