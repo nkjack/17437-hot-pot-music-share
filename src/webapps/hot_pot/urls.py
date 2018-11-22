@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, re_path
 from django.views.generic.base import RedirectView
 
@@ -35,4 +37,4 @@ urlpatterns = [
     path('add-marker', map_views.add_marker),
     path('get-markers', map_views.get_markers),
 
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
