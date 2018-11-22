@@ -158,4 +158,5 @@ django_heroku.settings(locals())
 #   Need to use pgbouncer to limit db connections
 #   But need to disable sslmode required so pgbouncer can work
 # https://github.com/heroku/heroku-buildpack-pgbouncer/issues/118\#issuecomment-440834985
-del DATABASES['default']['OPTIONS']['sslmode']
+if 'OPTIONS' in DATABASES['default']:
+    del DATABASES['default']['OPTIONS']['sslmode']
