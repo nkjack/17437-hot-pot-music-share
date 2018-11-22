@@ -142,21 +142,20 @@ ASGI_APPLICATION = 'webapps.routing.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        # "BACKEND": "asgi_redis.RedisChannelLayer",
         'CONFIG': {
             "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
         },
     },
 }
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "redis_cache.RedisCache",
-#         "LOCATION": os.environ.get('REDIS_URL'),
-#     }
-# }
 
 # Configure Django App for Heroku.
 import django_heroku
 
 django_heroku.settings(locals())
+
+# The following line of code is absolutely essential for deployment
+#   Need to use pgbouncer to limit db connections
+#   But need to disable sslmode required so pgbouncer can work
+# https://github.com/heroku/heroku-buildpack-pgbouncer/issues/118\#issuecomment-440834985
+del DATABASES['default']['OPTIONS']['sslmode']

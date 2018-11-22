@@ -17,6 +17,7 @@ MAX_SEARCH_RESULTS = 10
 
 
 @login_required
+@transaction.atomic
 def room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     room_name = room.name
@@ -141,6 +142,7 @@ def add_song_from_pool_to_queue(request):
 
 
 @login_required
+@transaction.atomic
 def get_pool_songs_from_room(request):
     context = {}
     room_id = request.GET['room_id']
@@ -161,7 +163,8 @@ def get_queue_songs_from_room(request):
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
-# Return name of top song and remove from song queue
+# Return name of top song and remove from song queu
+@transaction.atomic
 def get_top_of_song_queue(request, room_id):
     # TODO: What to do if no more songs in song_queue
 
@@ -190,6 +193,7 @@ def get_top_of_song_queue(request, room_id):
 
 
 # Delete song with specified song_id from song_queue of specified room_id
+@transaction.atomic
 def delete_from_song_queue(request, room_id, song_id):
     # Get song queue for this room
     room = Room.objects.get(id=room_id)

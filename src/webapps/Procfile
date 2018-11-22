@@ -1,1 +1,1 @@
- web: daphne -b 0.0.0.0 -p $PORT webapps.asgi:application
+ web: bin/start-pgbouncer daphne -b 0.0.0.0 -p $PORT webapps.asgi:application
