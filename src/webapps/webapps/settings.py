@@ -134,6 +134,7 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/home'
 
 # Email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'default')

@@ -15,10 +15,10 @@ urlpatterns = [
 
     # Home
     re_path(r'^username/(?P<username>[a-zA-Z0-9_]{3,15})/$', home_views.home, name='home'),
-    path('myRooms', home_views.room_history, name="history"),
+    path('myRooms/', home_views.room_history, name="history"),
 
     # Room
-    re_path(r'^room/(?P<room_id>[^/]+)/$', room_views.room, name='room'),
+    re_path(r'^room/(?P<pk>\w+)/$', room_views.room, name='room'),
     re_path(r'^profile-photo/room/(?P<pk>\w+)/$', room_views.get_img, name='img'),
     path('search-song', room_views.search_song, name='search-song'),
     path('add-song-to-room-playlist-ajax', room_views.add_song_to_room_playlist_ajax),

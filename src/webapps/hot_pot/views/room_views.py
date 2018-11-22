@@ -11,7 +11,7 @@ from hot_pot.models import Room, RoomHistory, Playlist, Song
 
 # YouTube API metadata needed for search
 DEVELOPER_KEY = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'
-YOUTUBE_API_SERVICE_NAME = 'room'
+YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 MAX_SEARCH_RESULTS = 10
 
@@ -35,8 +35,8 @@ def room(request, room_id):
                'room_name': room_name,
                'title': 'Room ' + room_name,
                'is_host': is_host,
-               'song_pool': song_pool.songs.all(),
-               'song_queue': song_queue.songs.all(),
+               'song_pool': song_pool.songs.all().order_by('id'),
+               'song_queue': song_queue.songs.all().order_by('id'),
                }
 
     return render(request, 'room/room.html', context)
@@ -52,10 +52,14 @@ def get_img(request, pk):
 
 
 def search_song(request):
+    print("Entered search_song")
     context = {}
     query = request.GET['query']
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
+    print("youtube thing was built...")
 
+    print("Making search_response...")
+    print("\t query = ", query)
     # Call the search.list method to retrieve results matching the specified query term.
     search_response = youtube.search().list(
         q=query,
@@ -64,17 +68,21 @@ def search_song(request):
         type='video',
         videoCategoryId='10',  # only songs!
     ).execute()
+    print("Made search_response...")
 
     videos = []
+
 
     # Add each result to the appropriate list, and then display the lists of
     # matching videos, channels, and playlists.
     for search_result in search_response.get('items', []):
-        if search_result['id']['kind'] == 'room#video':
+        if search_result['id']['kind'] == 'youtube#video':
             videos.append(Song(song_id=search_result['id']['videoId'],
                                song_name=search_result['snippet']['title']))
 
     context['songs'] = videos
+
+    print("videos after = " + str(videos))
 
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
@@ -101,7 +109,7 @@ def add_song_to_room_playlist_ajax(request):
     if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=room, pl_type="pool"):
         song_pool.songs.add(song)
 
-    context['songs'] = song_pool.songs.all()
+    context['songs'] = song_pool.songs.all().order_by('id')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
@@ -128,7 +136,7 @@ def add_song_from_pool_to_queue(request):
     if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=room, pl_type="queue"):
         song_queue.songs.add(song)
 
-    context['songs'] = song_queue.songs.all()
+    context['songs'] = song_queue.songs.all().order_by('id')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
@@ -138,7 +146,7 @@ def get_pool_songs_from_room(request):
     room_id = request.GET['room_id']
     room = Room.objects.get(id=room_id)
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
-    context['songs'] = song_pool.songs.all()
+    context['songs'] = song_pool.songs.all().order_by('id')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
@@ -149,7 +157,7 @@ def get_queue_songs_from_room(request):
     room_id = request.GET['room_id']
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
-    context['songs'] = song_queue.songs.all()
+    context['songs'] = song_queue.songs.all().order_by('id')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 

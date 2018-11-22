@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from hot_pot.forms import RoomForm
+from hot_pot.forms import RoomForm, ProfileForm
 from hot_pot.models import Room, RoomHistory, Song, Playlist, Marker
 
 
@@ -72,13 +72,14 @@ def home(request, username):
 @login_required
 def room_history(request):
     context = {'owned': '', 'visited': '', 'username': request.user.username}
+    owned = Room.objects.filter(owner=request.user)
+    history = RoomHistory.get_visited_rooms(request.user)
+    context['owned'] = owned
+    context['visited'] = history
     if request.method == 'GET':
-        owned = Room.objects.filter(owner=request.user)
-        history = RoomHistory.getVisitHistory(request.user)
 
         context['form'] = RoomForm(initial={'owner': request.user})
-        context['owned'] = owned
-        context['visited'] = history
+
     
     elif (request.POST.get('create_room')):
         form = RoomForm(request.POST, request.FILES, initial={'owner': request.user})
@@ -105,7 +106,7 @@ def room_history(request):
             m = Marker.objects.create(lat=lat, lng=lng, room=new_room)
             m.save()
             # 40.440624, -79.995888 pitt
-            return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
+            return HttpResponseRedirect(reverse('room', args=[new_room.id]))
 
     return render(request, 'room_history.html', context)
 
