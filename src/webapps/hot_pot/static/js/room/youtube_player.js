@@ -198,6 +198,9 @@ function addToSongQueue() {
         $("#direct-input-success").css({"color": "#31c122"});
         $("#direct-input-success").text("Successfully added " + videoTitle);
     }
+
+    // Sync up song queue
+    get_queue_songs_from_room();
 }
 
 function addToSongPool() {
@@ -219,6 +222,9 @@ function addToSongPool() {
         $("#direct-input-success").css({"color": "#31c122"});
         $("#direct-input-success").text("Successfully added " + videoTitle);
     }
+
+    // Sync up song pool
+    get_pool_songs_from_room();
 }
 
 // Helper function to get youtube song title from ID
@@ -268,6 +274,9 @@ function nextVideo() {
         // videoId could be undefined if no more songs left (FIXME: UI error message)
         changeVideoById(videoId);
     }
+
+    // Sync up song queue
+    get_queue_songs_from_room();
 }
 
 // Make GET call to 'delete-from-song-queue'
