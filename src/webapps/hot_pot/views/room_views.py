@@ -1,6 +1,7 @@
 from mimetypes import guess_type
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
@@ -206,3 +207,25 @@ def delete_from_song_queue(request, room_id, song_id):
     # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
 
     return HttpResponse('')
+
+
+# Add user to room's current_users when they join (called by consumers.py - don't need a request parameter)
+def add_user_to_room(username, room_name):
+    room = Room.objects.get(name=room_name)
+    user = User.objects.get(username=username)
+
+    room.users.add(user)
+
+# Remove user from room's current_users when they leave (called by consumers.py - don't need a request parameter)
+def remove_user_from_room(username, room_name):
+    room = Room.objects.get(name=room_name)
+    user = User.objects.get(username=username)
+
+    room.users.remove(user)
+
+# Get all the users in the room
+def get_users_in_room(request, room_name):
+    room = Room.objects.get(name=room_name)
+    context = {'users' : room.users.all()}
+
+    return render(request, 'hot_pot/room/users.json', context, content_type='application/json')

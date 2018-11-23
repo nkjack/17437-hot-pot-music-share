@@ -5,36 +5,39 @@ from django.views.generic.base import RedirectView
 
 from hot_pot.views import auth_views, room_views, map_views, home_views
 
-urlpatterns = [
+urlpatterns = \
+    [
 
-    # Auth (login, registration, logout)
-    path('', RedirectView.as_view(url='login'), name="go_to_login"),
-    path('login', auth_views.custom_login, name='login'),
-    path('register', auth_views.register, name='register'),
-    re_path(r'^confirm-email/username=(?P<username>[0-9A-Za-z_]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-            auth_views.confirm_email, name='confirm'),
-    path('logout', auth_views.custom_logout, name='logout'),
+        # Auth (login, registration, logout)
+        path('', RedirectView.as_view(url='login'), name="go_to_login"),
+        path('login', auth_views.custom_login, name='login'),
+        path('register', auth_views.register, name='register'),
+        re_path(r'^confirm-email/username=(?P<username>[0-9A-Za-z_]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+                auth_views.confirm_email, name='confirm'),
+        path('logout', auth_views.custom_logout, name='logout'),
 
-    # Home
-    re_path(r'^username/(?P<username>[a-zA-Z0-9_]{3,15})/$', home_views.home, name='home'),
-    path('myRooms', home_views.room_history, name="history"),
+        # Home
+        re_path(r'^username/(?P<username>[a-zA-Z0-9_]{3,15})/$', home_views.home, name='home'),
+        path('myRooms', home_views.room_history, name="history"),
 
-    # Room
-    re_path(r'^room/(?P<room_id>[^/]+)/$', room_views.room, name='room'),
-    re_path(r'^profile-photo/room/(?P<pk>\w+)/$', room_views.get_img, name='img'),
-    path('search-song', room_views.search_song, name='search-song'),
-    path('add-song-to-room-playlist-ajax', room_views.add_song_to_room_playlist_ajax),
-    path('add-song-from-pool-to-queue', room_views.add_song_from_pool_to_queue),
-    path('get-pool-songs-from-room', room_views.get_pool_songs_from_room),
-    path('get-queue-songs-from-room', room_views.get_queue_songs_from_room),
-    re_path(r'^get-top-of-song-queue/(?P<room_id>[^/]+)/$', room_views.get_top_of_song_queue,
-            name='get-top-of-song-queue'),
-    re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
-            room_views.delete_from_song_queue, name='delete-from-song-queue'),
+        # Room
+        re_path(r'^room/(?P<room_id>[^/]+)/$', room_views.room, name='room'),
+        re_path(r'^profile-photo/room/(?P<pk>\w+)/$', room_views.get_img, name='img'),
+        path('search-song', room_views.search_song, name='search-song'),
+        path('add-song-to-room-playlist-ajax', room_views.add_song_to_room_playlist_ajax),
+        path('add-song-from-pool-to-queue', room_views.add_song_from_pool_to_queue),
+        path('get-pool-songs-from-room', room_views.get_pool_songs_from_room),
+        path('get-queue-songs-from-room', room_views.get_queue_songs_from_room),
+        re_path(r'^get-top-of-song-queue/(?P<room_id>[^/]+)/$', room_views.get_top_of_song_queue,
+                name='get-top-of-song-queue'),
+        re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
+                room_views.delete_from_song_queue, name='delete-from-song-queue'),
+        re_path(r'^get-users-from-room/(?P<room_name>[^/]+)/$', room_views.get_users_in_room,
+                name='get-users-from-room'),
 
-    # Maps
-    path('map-of-rooms', map_views.map_of_rooms, name='map_of_rooms'),
-    path('add-marker', map_views.add_marker),
-    path('get-markers', map_views.get_markers),
+        # Maps
+        path('map-of-rooms', map_views.map_of_rooms, name='map_of_rooms'),
+        path('add-marker', map_views.add_marker),
+        path('get-markers', map_views.get_markers),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
