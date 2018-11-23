@@ -25,6 +25,7 @@
             <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
                 <h5 class="border-bottom border-dark pb-2 mb-0">Song Queue</h5>
 
+
                 <div id="dj_list">
                     {% for song in song_queue %}
                         <!-- One track in the playlist -->
@@ -39,6 +40,9 @@
                                 </div>
                             </div>
                         </div>
+                    {% empty %}
+                        <!-- TODO: Better style for this message? -->
+                        <h6>No songs in the queue! Playing top Billboard songs.</h6>
                     {% endfor %}
                 </div>
             </div>
@@ -75,6 +79,7 @@
 
             <!----------------------------------------- PEOPLE LIST START --------------------------------------------->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
+                <!-- FIXME: This hides behind usernames -->
                 <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
 
                 <!-- One user -->

@@ -92,12 +92,17 @@ function get_queue_songs_from_room() {
 function updateChangesQueueSongs(data) {
     // console.log(data);
     $("#dj_list").empty();
-    for (var i = 0; i < data.songs.length; i++) {
-        var v_id = data.songs[i]['id'];
-        var v_name = data.songs[i]['name'];
+    if (data.songs.length > 0) {
+        for (var i = 0; i < data.songs.length; i++) {
+            var v_id = data.songs[i]['id'];
+            var v_name = data.songs[i]['name'];
 
-        $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name));
+            $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name));
 
+        }
+    } else {
+        // TODO: Better style for this message?
+        $('#dj_list').append('<h6>No songs in the queue! Playing top Billboard songs.</h6>');
     }
 }
 

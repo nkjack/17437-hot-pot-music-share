@@ -1,3 +1,4 @@
+import json
 from mimetypes import guess_type
 
 from django.contrib.auth.decorators import login_required
@@ -175,11 +176,13 @@ def get_top_of_song_queue(request, room_id):
 
     # If empty, return nothing
     if song_queue.songs.count() == 0:
-        return HttpResponse('')
+        print('[room_views.get_top_of_song_queue] No more songs!')
+
+        return HttpResponse(status=204) # Successful, but no more content
     else:
         top_song = song_queue.songs.first()
 
-        print('Got top song: ' + top_song.song_name)
+        print('[room_views.get_top_of_song_queue] Got top song: ' + top_song.song_name)
 
         context = {'song': top_song}
 
@@ -200,13 +203,19 @@ def delete_from_song_queue(request, room_id, song_id):
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
-    # Delete from song queue
-    song_queue.songs.filter(song_id=song_id).delete()
-    print('Deleted song with song_id: ' + song_id)
+    # If empty, return nothing
+    if song_queue.songs.count() == 0:
+        print('[room_views.delete_from_song_queue] No more songs!')
 
-    # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
+        return HttpResponse(status=204) # Successful, but no more content
+    else:
+        # Delete from song queue
+        song_queue.songs.filter(song_id=song_id).delete()
+        print('Deleted song with song_id: ' + song_id)
 
-    return HttpResponse('')
+        # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
+
+        return HttpResponse('')
 
 
 # Add user to room's current_users when they join (called by consumers.py - don't need a request parameter)
