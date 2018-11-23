@@ -107,7 +107,7 @@ class RoomHistory(models.Model):
 
 class Song(models.Model):
     song_id = models.CharField(max_length=100)
-    song_name = models.CharField(max_length=42)
+    song_name = models.CharField(max_length=100)
 
     # votes_score = models.IntegerField(default=0)
 
