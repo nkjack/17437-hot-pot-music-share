@@ -210,8 +210,9 @@ def delete_from_song_queue(request, room_id, song_id):
         return HttpResponse(status=204) # Successful, but no more content
     else:
         # Delete from song queue
-        song_queue.songs.filter(song_id=song_id).delete()
-        print('Deleted song with song_id: ' + song_id)
+        song = song_queue.songs.get(song_id=song_id)
+        song_queue.songs.remove(song)
+        print('Removed song with song_id: ' + song_id)
 
         # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
 
