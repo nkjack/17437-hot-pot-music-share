@@ -33,6 +33,7 @@ urlpatterns = [
             room_views.delete_from_song_queue, name='delete-from-song-queue'),
 
     path('delete-from-song-queue-post', room_views.delete_from_song_queue_post),
+    path('change-song-queue-order', room_views.change_song_queue_order),
 
 
     # Maps

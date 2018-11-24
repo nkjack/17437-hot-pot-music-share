@@ -73,3 +73,41 @@ $("#dj_list").on("click", "#dlt-song-btn", function (event) {
             console.log("fetch songs from poll request is finished!");
         });
 });
+
+/*****************************************************************************************
+ REORDER SONG_QUEUE
+ */
+$("#dj_list").on("click", "#up-song-btn", function (event) {
+    event.preventDefault();
+    var entry_div = $(this).closest("#entry-song-queue-div");
+    var room_id = $("#room_id");
+    var index = Array.from(entry_div.parentNode.children).indexOf(entry_div);
+
+    alert(index);
+
+    $.ajax({
+        // The URL for the request
+        url: "/change-song-queue-order",
+        data: {
+            room_id: room_id.val(),
+            prev_position: index,
+            new_position: index - 1,
+        },
+        // Whether this is a POST or GET request
+        type: "POST",
+        // The type of data we expect back
+        dataType: "json",
+    })
+        .done(function (data) {
+            updateChangesQueueSongs(data);
+        })
+        .fail(function (xhr, status, errorThrown) {
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        })
+        // Code to run regardless of success or failure;
+        .always(function (xhr, status) {
+            console.log("fetch songs from poll request is finished!");
+        });
+});
