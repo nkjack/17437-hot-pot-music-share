@@ -53,18 +53,6 @@ function updateChangesPoolSongs(data) {
             v_thumbs_up,
             is_voted,
             isHost));
-        // if (isHost === 'True') {
-        //     $('#poll_list').append(getEntryListForPoolQueueForHost(v_id,
-        //         v_name,
-        //         v_thumbs_up,
-        //         is_voted));
-        // }
-        // else {
-        //     $('#poll_list').append(getEntryListForPoolQueueForListener(v_id,
-        //         v_name,
-        //         v_thumbs_up,
-        //         is_voted));
-        // }
     }
 }
 
@@ -109,7 +97,10 @@ function updateChangesQueueSongs(data) {
         var v_id = data.songs[i]['id'];
         var v_name = data.songs[i]['name'];
 
-        $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name));
+        const isHost = $('#is_host').val();
+        console.log('inside sync_playlists.js...' + isHost);
+
+        $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost));
 
     }
 }

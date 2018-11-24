@@ -38,6 +38,6 @@ $(document).ready(function () {  // Runs when the document is ready
     });
 
     // instead of extra code in html all done in ajax -- commented by noam
-    get_pool_songs_from_room()
-
+    get_pool_songs_from_room();
+    get_queue_songs_from_room();
 }); // End of $(document).ready

@@ -3,11 +3,12 @@ from mimetypes import guess_type
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import HttpResponse, Http404, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils.timezone import localtime, now
 from googleapiclient.discovery import build
 
 from hot_pot.models import Room, RoomHistory, Playlist, Song
+from hot_pot.views.room_helper import sql_get_all_songs_from_playlist
 
 # YouTube API metadata needed for search
 DEVELOPER_KEY = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'
@@ -202,50 +203,26 @@ def get_top_of_song_queue(request, room_id):
 
 
 # Delete song with specified song_id from song_queue of specified room_id
-def delete_from_song_queue(request, room_id, song_id):
+def delete_from_song_queue(request):
     # Get song queue for this room
-    room = Room.objects.get(id=room_id)
+    song_id = request.POST['song_id']
+    room_id = request.POST['room_id']
+    room = get_object_or_404(Room, id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
     # Delete from song queue
-    song_queue.songs.filter(song_id=song_id).delete()
-    print('Deleted song with song_id: ' + song_id)
+    rows = song_queue.songs.filter(song_id=song_id)
+
+    if rows.count() > 0:
+        rows.delete()
+        print('Deleted song with song_id: ' + song_id + ' from room ' + str(room.id))
+
+    context = {}
+    context['songs'] = song_queue.songs.all().order_by('id')
+    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
     # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
-
-    return HttpResponse('')
-
-
-from django.db import connection
+    # return HttpResponse('')
 
 
-def sql_get_all_songs_from_playlist(room_id, user_id, pl_type):
-    # sql for songs with user
-    c = connection.cursor()
-    query = "SELECT s.song_id, s.song_name, s.thumbs_up, " \
-            "case when v.user_id is NULL then 'False' else 'True' end " \
-            "FROM hot_pot_song s " \
-            "LEFT OUTER JOIN hot_pot_uservotes v " \
-            "ON (s.id = v.song_id AND v.user_id = {}) " \
-            "JOIN hot_pot_playlist_songs pls " \
-            "ON (pls.song_id = s.id)" \
-            "JOIN hot_pot_playlist pl " \
-            "ON (pl.id = pls.playlist_id AND pl.pl_type = '{}')" \
-            "WHERE s.song_room_id = {} " \
-            "ORDER BY s.thumbs_up DESC ".format(user_id, pl_type,room_id)
-
-    s = c.execute(query)
-    # s = c.execute("select pl.song_id, pl.playlist_id, pl.id from hot_pot_playlist_songs pl")
-    data = {}
-    data['songs'] = []
-    for s in s.fetchall():
-        song = {}
-        song['id'] = s[0]
-        song['name'] = s[1]
-        song['thumbs_up'] = s[2]
-        song['is_voted'] = s[3]
-
-        data['songs'].append(song)
-
-    return data
 

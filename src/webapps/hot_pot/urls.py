@@ -27,8 +27,12 @@ urlpatterns = [
     path('get-queue-songs-from-room', room_views.get_queue_songs_from_room),
     re_path(r'^get-top-of-song-queue/(?P<room_id>[^/]+)/$', room_views.get_top_of_song_queue,
             name='get-top-of-song-queue'),
-    re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
-            room_views.delete_from_song_queue, name='delete-from-song-queue'),
+
+    # should be POST request -- commented by noam
+    # re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
+    #         room_views.delete_from_song_queue, name='delete-from-song-queue'),
+    path('delete-from-song-queue', room_views.delete_from_song_queue),
+
 
     # Maps
     path('map-of-rooms', map_views.map_of_rooms, name='map_of_rooms'),
