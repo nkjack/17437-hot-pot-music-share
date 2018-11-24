@@ -285,7 +285,7 @@ function changeVideoById(videoId) {
 function nextVideo() {
     // Make GET request to get current playing song from top of song queue
     const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-    if (currVideoId) {
+    if (!player.getPlaylist()) {
         deleteFromSongQueue(currVideoId);
     }
 
@@ -305,6 +305,8 @@ function nextVideo() {
         // Didn't get a video from the queue, start the fallback playlist
         console.log('No songs in the queue, loading Billboard playlist...');
 
+        player.stopVideo();
+
         const randomIndex = getRandom(0, 200);
 
         player.loadPlaylist({
@@ -313,7 +315,7 @@ function nextVideo() {
             index: randomIndex,
         });
 
-        playRandomTrack();
+        player.playVideo();
     }
 
     // Sync up song queue

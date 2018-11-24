@@ -195,7 +195,8 @@ def get_top_of_song_queue(request, room_id):
 
         return HttpResponse(status=204)  # Successful, but no more content
     else:
-        top_song = song_queue.songs.first()
+        song_queue_ordered = song_queue.songs.all().order_by('rank')  # Need to order by manual sort order
+        top_song = song_queue_ordered.first()
 
         print('[room_views.get_top_of_song_queue] Got top song: ' + top_song.song_name)
 
@@ -276,7 +277,8 @@ def delete_from_song_queue(request, room_id, song_id):
         return HttpResponse(status=204)  # Successful, but no more content
     else:
         # Delete from song queue
-        song_queue.songs.filter(song_id=song_id).delete()
+        song = Song.objects.get(song_id=song_id, song_room=room)
+        song_queue.songs.remove(song)
         print('Deleted song with song_id: ' + song_id)
 
         # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
@@ -298,8 +300,8 @@ def change_song_queue_order(request):
 
     print("new_pos - {}, prev_pos = {}, amount_songs".format(new_position, prev_position, all_queue_songs.count()))
 
-    if new_position >= 1 and new_position <= all_queue_songs.count() \
-            and prev_position >= 1 and prev_position <= all_queue_songs.count():
+    if (1 < new_position <= all_queue_songs.count()
+            and 1 < prev_position <= all_queue_songs.count()):
         # downvote
         if prev_position < new_position:
             print("downvote")
