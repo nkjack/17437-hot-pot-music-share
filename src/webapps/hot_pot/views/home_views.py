@@ -64,18 +64,18 @@ def home(request, username):
         m.save()
         # 40.440624, -79.995888 pitt
 
-        return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
+        return HttpResponseRedirect(reverse('room', args=[new_room.id]))
     else:
         return render(request, 'home.html', context)
 
 
 @login_required
 def room_history(request):
-    context = {'owned': '', 'visited': '', 'username': request.user.username}
+    context = {'owned': '', 'history': '', 'username': request.user.username}
     owned = Room.objects.filter(owner=request.user)
     history = RoomHistory.get_visited_rooms(request.user)
     context['owned'] = owned
-    context['visited'] = history
+    context['history'] = history
     if request.method == 'GET':
 
         context['form'] = RoomForm(initial={'owner': request.user})
@@ -112,8 +112,8 @@ def room_history(request):
 
 
 @login_required
-def get_room_img(request, pk):
-    room = get_object_or_404(Room, pk=pk)
+def get_room_img(request, room_id):
+    room = get_object_or_404(Room, id = room_id)
     if not room.cover_pic:
         raise Http404
     content_type = guess_type(room.cover_pic.name)
@@ -136,7 +136,7 @@ def edit_room(request, room_id):
     if request.method == 'GET':
         roomForm = RoomForm(instance = room)
         context['roomForm'] = roomForm
-        return render(request, '/profile/room_profile.html', context)
+        return render(request, 'hot_pot/profile/room_profile.html', context)
 
     elif request.POST.get('room_profile'):
         roomForm = RoomForm(request.POST, request.FILES, instance = room)
@@ -149,7 +149,7 @@ def edit_room(request, room_id):
             return render(request, 'profile/room_profile.html', context)
     else:
         context['error'] = 'Invalid Post Request'
-        return render(request,'profile/room_profile.html',context)
+        return render(request,'hot_pot/profile/room_profile.html',context)
 
 
 
@@ -162,7 +162,7 @@ def edit_user(request):
         context['profileForm'] = profileForm
         context['owned'] = owned
 
-        return render(request, 'profile/user_profile.html', context)
+        return render(request, 'hot_pot/profile/user_profile.html', context)
 
     elif request.POST.get("user_profile"):
         profileForm = ProfileForm(request.POST, request.FILES, instance = request.user.profile)
@@ -174,4 +174,4 @@ def edit_user(request):
             return render(request, 'profile/user_profile.html', context)
     else:
         context['error'] = 'Invalid Post Request'
-        return render(request,'profile/user_profile.html',context)
+        return render(request,'hot_pot/profile/user_profile.html',context)

@@ -18,8 +18,8 @@ urlpatterns = [
     path('myRooms/', home_views.room_history, name="history"),
 
     # Room
-    re_path(r'^room/(?P<pk>\w+)/$', room_views.room, name='room'),
-    re_path(r'^profile-photo/room/(?P<pk>\w+)/$', room_views.get_img, name='img'),
+    re_path(r'^room/(?P<room_id>\w+)/$', room_views.room, name='room'),
+    re_path(r'^profile-photo/room/(?P<room_id>\w+)/$', room_views.get_img, name='img'),
     path('search-song', room_views.search_song, name='search-song'),
     path('add-song-to-room-playlist-ajax', room_views.add_song_to_room_playlist_ajax),
     path('add-song-from-pool-to-queue', room_views.add_song_from_pool_to_queue),
@@ -36,7 +36,7 @@ urlpatterns = [
     path('get-markers', map_views.get_markers),
 
     # img
-    re_path(r'^profile-photo/room/(?P<pk>\w+)/$', home_views.get_room_img, name = 'room_img'),
+    re_path(r'^profile-photo/room/(?P<room_id>\w+)/$', home_views.get_room_img, name = 'room_img'),
     re_path(r'^profile-photo/user/(?P<username>[a-zA-Z0-9_]{3,15})/$', home_views.get_user_img, name = 'user_img'),
 
     # profiles

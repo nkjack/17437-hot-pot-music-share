@@ -5,17 +5,16 @@
     <!-- This is the rooms OWNED by this user -->
     <div class="my-3 p-3 rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0">Owned By Me</h6>
-        <button class = "btn-secondary float-right" id = "editMyOwn" onclick = "editMyOwn()">Edit</button>
         
 <!--  -->
         <div class="row-card">
               
-<!--                 {% for room in owned %}
+                {% for room in owned %}
                   <a href="{% url 'room' room.id %}" class="col-sm-4">
 
                     <div class="card bg-light rounded">
                    {% if room.cover_pic %}
-                      <img class="mr-4" src="{% url 'room_img' room.pk %}" width="90" alt = "">
+                      <img class="mr-4" src="{% url 'room_img' room.id %}" width="90" alt = "">
 
                     {% endif %}
                       <div class="card-body">
@@ -25,10 +24,10 @@
                       </div>
                     </div>
                 </a>
-                  <a href="{% url 'edit_room' room.pk %}" >
-                    <img src="{% static 'hot_pot/img/edit.png' %}" width = "25">
+                  <a href="{% url 'edit_room' room.id %}" >
+                    <img src="{% static 'img/edit.png' %}" width = "25">
                   </a>
-                {% endfor %} -->
+                {% endfor %}
               
 
             </div>
@@ -37,16 +36,15 @@
 <!--         This is the rooms which this user had joined -->
        <div class="my-3 p-3 rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0">visited</h6>
-        <button class = "btn-primary float-right" id = "editOther">Edit</button>
         
         <div class="row-card">
 
                 {% for history in visited %}
-                  <a href="{% url 'room' history.visited_room.pk %}" class="col-sm-4">
+                  <a href="{% url 'room' history.visited_room.id %}" class="col-sm-4">
 
                     <div class="card bg-light rounded">
                    {% if history.visited_room.cover_pic %}
-                      <img class="mr-4" src="{% url 'room_img' history.visited_room.pk %}" width="90" alt = "">
+                      <img class="mr-4" src="{% url 'room_img' history.visited_room.id %}" width="90" alt = "">
 
                     {% endif %}
                       <div class="card-body">
@@ -102,10 +100,6 @@
 
         function closeForm() {
             document.getElementById("create_room_div").style.display = "none";
-        }
-        function editMyOwn(){
-
-          document.getElementById("checkbox1").style.display = 'block';
         }
     </script>
 
