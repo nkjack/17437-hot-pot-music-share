@@ -25,6 +25,7 @@
             <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
                 <h5 class="border-bottom border-dark pb-2 mb-0">Song Queue</h5>
 
+
                 <div id="dj_list">
                     {% for song in song_queue %}
                         <!-- One track in the playlist -->
@@ -39,6 +40,9 @@
                                 </div>
                             </div>
                         </div>
+                    {% empty %}
+                        <!-- TODO: Better style for this message? -->
+                        <h6>No songs in the queue! Playing top Billboard songs.</h6>
                     {% endfor %}
                 </div>
             </div>
@@ -75,6 +79,7 @@
 
             <!----------------------------------------- PEOPLE LIST START --------------------------------------------->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
+                <!-- FIXME: This hides behind usernames -->
                 <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
 
                 <!-- One user -->
@@ -182,24 +187,70 @@
     <script src="{% static "js/room/search.js" %}"></script>
     <script src="{% static "js/room/modify_playlists.js" %}"></script>
 
+    <script src="{% static "js/reconnecting-websocket.min.js" %}"></script>
     <script src="{% static "js/room/sockets.js" %}"></script>
     <script src="{% static "js/room/chat.js" %}"></script>
     <script src="{% static "js/room/youtube_player.js" %}"></script>
+    <script src="{% static "js/room/current_users.js" %}"></script>
 
     <!-- Leftover in-line JS script block for UI related things -->
     <script>
-        /*
-            $(document).ready(function () {
-                $("#addFriendForm").submit(function () {
-                    var names = $('#friendList input:checked').map(function () {
-                        return this.name;
-                    }).get();
 
-                    alert(names);
-                    return false;
-                });
+        // The boilerplate code below is copied from the Django 1.10 documentation.
+        // It establishes the necessary HTTP header fields and cookies to use
+        // Django CSRF protection with jQuery Ajax requests.
+
+        $(document).ready(function () {  // Runs when the document is ready
+            // using jQuery
+            // https://docs.djangoproject.com/en/1.10/ref/csrf/
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            var csrftoken = getCookie('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
             });
-            */
+
+            // Call this immediately (don't wait 5 seconds to get current list of users)
+            updateCurrentUsersList();
+
+        }); // End of $(document).ready
+
+        /*
+        $(document).ready(function () {
+            $("#addFriendForm").submit(function () {
+                var names = $('#friendList input:checked').map(function () {
+                    return this.name;
+                }).get();
+
+                alert(names);
+                return false;
+            });
+        });
+        */
 
         function openForm() {
 

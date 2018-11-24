@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -25,7 +24,7 @@ SECRET_KEY = 'f%1%rmvjtn4deft2fj^dg5x6gob9sr%71-(su9mvhav!3h*vbe'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'hot-pot-music-share.herokuapp']
+ALLOWED_HOSTS = ['localhost', 'hot-pot-music-share.herokuapp.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -38,7 +37,6 @@ INSTALLED_APPS = [
     'hot_pot',
     'channels',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,7 +53,7 @@ ROOT_URLCONF = 'webapps.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'hot_pot','templates','hot_pot')],
+        'DIRS': [os.path.join(BASE_DIR, 'hot_pot', 'templates', 'hot_pot')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,7 +68,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'webapps.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -80,7 +77,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -100,7 +96,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -116,18 +111,19 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "hot_pot/static")]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "hot_pot/static/")]
 
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-PROJECT_ROOT = os.path.join(BASE_DIR,'/hot_pot/')
+PROJECT_ROOT = os.path.join(BASE_DIR, '/hot_pot/')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'hot_pot/media')
 
 CORS_ORIGIN_ALLOW_ALL = True
-
 
 # Django authentication model
 LOGIN_URL = '/login'
@@ -147,7 +143,20 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
         },
     },
 }
+
+
+# Configure Django App for Heroku.
+import django_heroku
+
+django_heroku.settings(locals())
+
+# The following line of code is absolutely essential for deployment
+#   Need to use pgbouncer to limit db connections
+#   But need to disable sslmode required so pgbouncer can work
+# https://github.com/heroku/heroku-buildpack-pgbouncer/issues/118\#issuecomment-440834985
+if 'OPTIONS' in DATABASES['default']:
+    del DATABASES['default']['OPTIONS']['sslmode']

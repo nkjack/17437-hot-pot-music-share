@@ -38,7 +38,7 @@ def save_user_profile(sender, instance, **kwargs):
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=42)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', blank=True)
     create_date = models.DateTimeField(auto_now=True)
     cover_pic = models.ImageField(upload_to='room-photo', blank=True,
                                   default='room-photo/logo.png',
@@ -48,6 +48,8 @@ class Room(models.Model):
     isMarked = models.BooleanField(default=True, blank=True)
 
     thumbs_up = models.IntegerField(default=0)
+
+    users = models.ManyToManyField(User, related_name='current_users') # Keep track of current users in the room
 
     # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
     # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
@@ -105,7 +107,7 @@ class RoomHistory(models.Model):
 
 class Song(models.Model):
     song_id = models.CharField(max_length=100)
-    song_name = models.CharField(max_length=42)
+    song_name = models.CharField(max_length=100)
 
     # votes_score = models.IntegerField(default=0)
 

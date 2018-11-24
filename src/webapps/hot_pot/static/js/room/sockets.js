@@ -1,9 +1,11 @@
 /****************************************** SOCKET SETUP ******************************************************/
 var roomName = $('input#room_name').val();
 
-var socket = new WebSocket(
-    'ws://' + window.location.host +
-    '/ws/room/' + roomName + '/');
+var wsStart = (window.location.protocol === "https:") ? "wss://" : "ws://";
+var wsUrl = wsStart + window.location.host +
+    '/ws/room/' + roomName + '/';
+console.log('Creating WebSocket on URL: ' + wsUrl);
+var socket = new ReconnectingWebSocket(wsUrl);
 
 
 var sentSyncRequestTime;  // TODO: Possible synchronize playback with RTT/2 (but didn't work well in practice)

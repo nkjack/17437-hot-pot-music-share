@@ -1,6 +1,8 @@
+import json
 from mimetypes import guess_type
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
@@ -17,6 +19,7 @@ MAX_SEARCH_RESULTS = 10
 
 
 @login_required
+@transaction.atomic
 def room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     room_name = room.name
@@ -141,6 +144,7 @@ def add_song_from_pool_to_queue(request):
 
 
 @login_required
+@transaction.atomic
 def get_pool_songs_from_room(request):
     context = {}
     room_id = request.GET['room_id']
@@ -161,7 +165,8 @@ def get_queue_songs_from_room(request):
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
-# Return name of top song and remove from song queue
+# Return name of top song and remove from song queu
+@transaction.atomic
 def get_top_of_song_queue(request, room_id):
     # TODO: What to do if no more songs in song_queue
 
@@ -171,11 +176,13 @@ def get_top_of_song_queue(request, room_id):
 
     # If empty, return nothing
     if song_queue.songs.count() == 0:
-        return HttpResponse('')
+        print('[room_views.get_top_of_song_queue] No more songs!')
+
+        return HttpResponse(status=204) # Successful, but no more content
     else:
         top_song = song_queue.songs.first()
 
-        print('Got top song: ' + top_song.song_name)
+        print('[room_views.get_top_of_song_queue] Got top song: ' + top_song.song_name)
 
         context = {'song': top_song}
 
@@ -190,15 +197,44 @@ def get_top_of_song_queue(request, room_id):
 
 
 # Delete song with specified song_id from song_queue of specified room_id
+@transaction.atomic
 def delete_from_song_queue(request, room_id, song_id):
     # Get song queue for this room
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
-    # Delete from song queue
-    song_queue.songs.filter(song_id=song_id).delete()
-    print('Deleted song with song_id: ' + song_id)
+    # If empty, return nothing
+    if song_queue.songs.count() == 0:
+        print('[room_views.delete_from_song_queue] No more songs!')
 
-    # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
+        return HttpResponse(status=204) # Successful, but no more content
+    else:
+        # Delete from song queue
+        song_queue.songs.filter(song_id=song_id).delete()
+        print('Deleted song with song_id: ' + song_id)
 
-    return HttpResponse('')
+        # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
+
+        return HttpResponse('')
+
+
+# Add user to room's current_users when they join (called by consumers.py - don't need a request parameter)
+def add_user_to_room(username, room_name):
+    room = Room.objects.get(name=room_name)
+    user = User.objects.get(username=username)
+
+    room.users.add(user)
+
+# Remove user from room's current_users when they leave (called by consumers.py - don't need a request parameter)
+def remove_user_from_room(username, room_name):
+    room = Room.objects.get(name=room_name)
+    user = User.objects.get(username=username)
+
+    room.users.remove(user)
+
+# Get all the users in the room
+def get_users_in_room(request, room_name):
+    room = Room.objects.get(name=room_name)
+    context = {'users' : room.users.all()}
+
+    return render(request, 'hot_pot/room/users.json', context, content_type='application/json')

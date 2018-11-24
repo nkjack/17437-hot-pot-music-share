@@ -1,8 +1,8 @@
 /****************************************** YOUTUBE PLAYER ****************************************************/
 var isHost = $('input#is_host').val() === "True";
 
-// Youtube API Key
-ytApiKey = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y';
+ytApiKey = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'; // Youtube API Key
+billboardPlaylistId = 'PL55713C70BA91BD6E'; // Top 200 Billboard songs (to play as fallback)
 
 // 2. This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
@@ -31,15 +31,35 @@ function onYouTubeIframeAPIReady() {
         }
     }
 
-    player = new YT.Player('player', {
-        height: '293',
-        width: '480',
-        videoId: videoId,
-        playerVars: {
-            'start': 0,
-        },
-        events: events
-    });
+    if (videoId == null) {
+        console.log('No songs in the queue, playing Billboard playlist...');
+        const randomIndex = getRandom(0, 200);
+
+        player = new YT.Player('player', {
+            height: '293',
+            width: '480',
+            playerVars: {
+                'start': 0,
+                'listType': 'playlist',
+                'list': billboardPlaylistId,
+                'index': randomIndex,
+            },
+            events: events
+        });
+
+        playRandomTrack();
+    } else {
+        player = new YT.Player('player', {
+            height: '293',
+            width: '480',
+            videoId: videoId,
+            playerVars: {
+                'start': 0,
+            },
+            events: events
+        });
+    }
+
 }
 
 // 4. The API will call this function when the video player is ready.
@@ -198,6 +218,9 @@ function addToSongQueue() {
         $("#direct-input-success").css({"color": "#31c122"});
         $("#direct-input-success").text("Successfully added " + videoTitle);
     }
+
+    // Sync up song queue
+    get_queue_songs_from_room();
 }
 
 function addToSongPool() {
@@ -219,6 +242,9 @@ function addToSongPool() {
         $("#direct-input-success").css({"color": "#31c122"});
         $("#direct-input-success").text("Successfully added " + videoTitle);
     }
+
+    // Sync up song pool
+    get_pool_songs_from_room();
 }
 
 // Helper function to get youtube song title from ID
@@ -259,15 +285,39 @@ function changeVideoById(videoId) {
 function nextVideo() {
     // Make GET request to get current playing song from top of song queue
     const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-    deleteFromSongQueue(currVideoId);
+    if (currVideoId) {
+        deleteFromSongQueue(currVideoId);
+    }
 
     // Make GET request to get top song
     const videoId = getTopOfSongQueue();
 
     if (videoId) {
-        // videoId could be undefined if no more songs left (FIXME: UI error message)
+        // Got a video from the queue
         changeVideoById(videoId);
+
+    } else if (player.getPlaylist()) {
+        // Didn't get a video from the queue, and playing the fallback playlist
+        console.log('Still no songs in the queue, playing next song in Billboard playlist...');
+
+        playRandomTrack();
+    } else {
+        // Didn't get a video from the queue, start the fallback playlist
+        console.log('No songs in the queue, loading Billboard playlist...');
+
+        const randomIndex = getRandom(0, 200);
+
+        player.loadPlaylist({
+            listType: 'playlist',
+            list: billboardPlaylistId,
+            index: randomIndex,
+        });
+
+        playRandomTrack();
     }
+
+    // Sync up song queue
+    get_queue_songs_from_room();
 }
 
 // Make GET call to 'delete-from-song-queue'
@@ -276,15 +326,16 @@ function deleteFromSongQueue(videoId) {
         async: false, // Wait for GET request to finish
         url: '/delete-from-song-queue/' + $('input#room_id').val() + '/' + videoId,
         type: "GET",
-        dataType: "json",
     })
-        .done(function (data) {
+        .done(function (data, statusText, xhr) {
+            if (xhr.status === 204) {
+                // Means NO more songs in the queue
+                return;
+            }
             videoId = String(data.id);
             videoName = String(data.name);
 
-            console.log("Got pop-song-queue response: " + videoId + ", " + videoName);
-
-            changeVideoById(videoId);
+            console.log("Got delete-from-song-queue response: " + videoId + ", " + videoName);
         })
         .fail(function (xhr, status, errorThrown) {
             console.log("Error: " + errorThrown);
@@ -302,7 +353,13 @@ function getTopOfSongQueue() {
         type: "GET",
         dataType: "json",
     })
-        .done(function (data) {
+        .done(function (data, statusText, xhr) {
+            if (xhr.status === 204) {
+                // Means NO more songs in the queue
+                console.log('Got get-top-of-song-queue response: NONE');
+                return false;
+            }
+
             videoId = String(data.id);
             videoName = String(data.name);
 
@@ -313,5 +370,18 @@ function getTopOfSongQueue() {
             console.log("Status: " + status);
             console.dir(xhr);
         });
+
     return videoId;
 }
+
+// Get random integer in range
+var getRandom = function (min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+};
+
+// Helper function to play random video in the playlist
+function playRandomTrack() {
+    const randomIndex = getRandom(0, 200);
+    console.log('playRandomTrack at randomIndex:' + randomIndex);
+    player.playVideoAt(randomIndex);
+};
