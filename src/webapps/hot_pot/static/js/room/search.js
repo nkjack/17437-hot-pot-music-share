@@ -1,6 +1,5 @@
 /* NOAM JS START **********************************************************************************************/
 
-
 $("#panel").on("click", "#search-button", function (event) {
     var panel = $(this).closest("#panel");
     var query = panel.find("#search-query");

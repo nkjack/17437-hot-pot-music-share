@@ -28,18 +28,18 @@
 
                 <div id="dj_list">
                     {% for song in song_queue %}
-                        <!-- One track in the playlist -->
-                        <div class="media pt-3" id="song_queue_{{ song.song_id }}">
-                            <!-- The thumbnail of this video -->
-                            <!-- Maybe also use API to get a thumbnail -->
-                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
-                                 width="100">
-                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-                                <div class="d-flex justify-content-between align-items-center w-100">
-                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>
-                                </div>
-                            </div>
-                        </div>
+{#                        <!-- One track in the playlist -->#}
+{#                        <div class="media pt-3" id="song_queue_{{ song.song_id }}">#}
+{#                            <!-- The thumbnail of this video -->#}
+{#                            <!-- Maybe also use API to get a thumbnail -->#}
+{#                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"#}
+{#                                 width="100">#}
+{#                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">#}
+{#                                <div class="d-flex justify-content-between align-items-center w-100">#}
+{#                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
                     {% empty %}
                         <!-- TODO: Better style for this message? -->
                         <h6>No songs in the queue! Playing top Billboard songs.</h6>
@@ -56,22 +56,22 @@
                 <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
 
                 <div id="poll_list">
-                    {% for song in song_pool %}
-                        <div class="media pt-3" id="poll_song_div">
-                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
-                                 width="100">
-                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-                                <div class="d-flex justify-content-between align-items-center w-100">
-                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>
-                                </div>
-                                {% if is_host %}
-                                    <button type="button" id="add-song-to-queue-btn">Add to Queue</button>
-                                {% endif %}
-                                <input type="hidden" id="song_id" value="{{ song.song_id }}"/>
-                                <input type="hidden" id="song_name" value="{{ song.song_name }}"/>
-                            </div>
-                        </div>
-                    {% endfor %}
+                    {#                    {% for song in song_pool %}#}
+                    {#                        <div class="media pt-3" id="poll_song_div">#}
+                    {#                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"#}
+                    {#                                 width="100">#}
+                    {#                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">#}
+                    {#                                <div class="d-flex justify-content-between align-items-center w-100">#}
+                    {#                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>#}
+                    {#                                </div>#}
+                    {#                                {% if is_host %}#}
+                    {#                                    <button type="button" id="add-song-to-queue-btn">Add to Queue</button>#}
+                    {#                                {% endif %}#}
+                    {#                                <input type="hidden" id="song_id" value="{{ song.song_id }}"/>#}
+                    {#                                <input type="hidden" id="song_name" value="{{ song.song_name }}"/>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    {% endfor %}#}
                 </div>
             </div>
 
@@ -184,8 +184,10 @@
     {% load static %}
     <script src="{% static "js/room/room_helper.js" %}"></script>
     <script src="{% static "js/room/sync_playlists.js" %}"></script>
+    <script src="{% static "js/room/on_room_ready.js" %}"></script>
     <script src="{% static "js/room/search.js" %}"></script>
     <script src="{% static "js/room/modify_playlists.js" %}"></script>
+    <script src="{% static "js/room/voting.js" %}"></script>
 
     <script src="{% static "js/reconnecting-websocket.min.js" %}"></script>
     <script src="{% static "js/room/sockets.js" %}"></script>
@@ -195,49 +197,6 @@
 
     <!-- Leftover in-line JS script block for UI related things -->
     <script>
-
-        // The boilerplate code below is copied from the Django 1.10 documentation.
-        // It establishes the necessary HTTP header fields and cookies to use
-        // Django CSRF protection with jQuery Ajax requests.
-
-        $(document).ready(function () {  // Runs when the document is ready
-            // using jQuery
-            // https://docs.djangoproject.com/en/1.10/ref/csrf/
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-
-            var csrftoken = getCookie('csrftoken');
-
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-
-            // Call this immediately (don't wait 5 seconds to get current list of users)
-            updateCurrentUsersList();
-
-        }); // End of $(document).ready
 
         /*
         $(document).ready(function () {

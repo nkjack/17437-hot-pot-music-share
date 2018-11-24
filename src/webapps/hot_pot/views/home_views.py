@@ -40,20 +40,26 @@ def home(request, username):
         new_history.save()
 
         # DEMO SONGS TODO: Delete later
-        song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0', song_name='Kendrick Lamar, SZA - All The Stars')
+        song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0',
+                                     song_name='Kendrick Lamar, SZA - All The Stars',
+                                     song_room=new_room)
         song_1.save()
-        song_2 = Song.objects.create(song_id='09R8_2nJtjg', song_name='Maroon 5 - Sugar')
+        song_2 = Song.objects.create(song_id='09R8_2nJtjg',
+                                     song_name='Maroon 5 - Sugar',
+                                     song_room=new_room)
         song_2.save()
-        song_3 = Song.objects.create(song_id='nfWlot6h_JM', song_name='Taylor Swift - Shake It Off')
+        song_3 = Song.objects.create(song_id='nfWlot6h_JM',
+                                     song_name='Taylor Swift - Shake It Off',
+                                     song_room=new_room)
         song_3.save()
 
         song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
         song_pool.save()
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
 
-        song_queue.songs.add(song_1)
-        song_queue.songs.add(song_2)
-        song_queue.songs.add(song_3)
+        # song_queue.songs.add(song_1)
+        # song_queue.songs.add(song_2)
+        # song_queue.songs.add(song_3)
 
         song_queue.save()
 
