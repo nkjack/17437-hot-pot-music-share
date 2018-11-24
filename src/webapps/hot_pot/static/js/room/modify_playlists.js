@@ -81,9 +81,9 @@ $("#dj_list").on("click", "#up-song-btn", function (event) {
     event.preventDefault();
     var entry_div = $(this).closest("#entry-song-queue-div");
     var room_id = $("#room_id");
-    var index = Array.from(entry_div.parentNode.children).indexOf(entry_div);
 
-    alert(index);
+    var index = entry_div.find( "#position" ).val();
+    alert( "Index: " + index );
 
     $.ajax({
         // The URL for the request

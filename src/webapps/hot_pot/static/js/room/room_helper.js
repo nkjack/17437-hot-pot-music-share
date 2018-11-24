@@ -42,7 +42,7 @@ function getEntryListForSearchResult(vId, vName){
     '</div>';
 }
 
-function getEntryListForGlobalSongQueue(vId, vName, isHost){
+function getEntryListForGlobalSongQueue(vId, vName, isHost, index){
     let isHostHtml =  '';
 
     if (isHost == 'True'){
@@ -53,6 +53,7 @@ function getEntryListForGlobalSongQueue(vId, vName, isHost){
     
     let upRankHtml = '<button type="button" id="up-song-btn">Up</button>';
     let downRankHtml = '<button type="button" id="down-song-btn">Down</button>';
+    let positionInList = '<input type="hidden" id="position" value="'+index+'" />';
 
     return '<div class="media pt-3" id="entry-song-queue-div">' +
     '<img src="https://img.youtube.com/vi/' + vId + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
@@ -63,6 +64,7 @@ function getEntryListForGlobalSongQueue(vId, vName, isHost){
         isHostHtml +
         upRankHtml +
         downRankHtml +
+        positionInList +
     '   </div>' +
     '</div>';
 }

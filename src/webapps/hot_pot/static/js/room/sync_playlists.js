@@ -100,7 +100,7 @@ function updateChangesQueueSongs(data) {
         const isHost = $('#is_host').val();
         console.log('inside sync_playlists.js...' + isHost);
 
-        $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost));
+        $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost, i+1));
 
     }
 }

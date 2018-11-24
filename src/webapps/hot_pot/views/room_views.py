@@ -258,26 +258,43 @@ def delete_from_song_queue(request, room_id, song_id):
 @login_required
 def change_song_queue_order(request):
     room_id = request.POST['room_id']
-    prev_position = request.POST['prev_position']
-    new_position = request.POST['new_position']
+    prev_position = int(request.POST['prev_position'])
+    new_position = int(request.POST['new_position'])
 
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
-
     all_queue_songs = song_queue.songs.all().order_by("rank")
+
     if new_position >= 1 and new_position <= all_queue_songs.count() \
             and prev_position >= 1 and prev_position <= all_queue_songs.count():
+        # downvote
+        if prev_position < new_position:
+            all_queue_songs = song_queue.songs.all().order_by("rank")
+            print("changing permutation")
+            for song in all_queue_songs:
+                if song.rank < prev_position:
+                    continue
+                elif song.rank == prev_position:
+                    song.rank = new_position
+                elif song.rank <= new_position:
+                    song.rank -= 1
+                elif song.rank > new_position:
+                    continue
+                song.save()
 
-        for song in all_queue_songs:
-            if song.rank < prev_position:
-                continue
-            elif song.rank == prev_position:
-                song.rank = new_position
-            elif song.rank <= new_position:
-                song.rank -= 1
-            elif song.rank > new_position:
-                continue
-            song.save()
+        # upvote
+        elif prev_position > new_position:
+            all_queue_songs = song_queue.songs.all().order_by("-rank")
+            for song in all_queue_songs:
+                if song.rank > prev_position:
+                    continue
+                elif song.rank == prev_position:
+                    song.rank = new_position
+                elif song.rank <= new_position:
+                    song.rank += 1
+                elif song.rank < new_position:
+                    continue
+                song.save()
 
     context = {}
     context['songs'] = song_queue.songs.all().order_by('rank')
