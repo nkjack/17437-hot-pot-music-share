@@ -216,14 +216,18 @@ def delete_from_song_queue_post(request):
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
     # Delete from song queue
-    rows = song_queue.songs.filter(song_id=song_id)
+    song = Song.objects.get(song_id=song_id, song_room=room)
+    song_queue.songs.remove(song)
 
-    if rows.count() > 0:
-        rows.delete()
-        print('Deleted song with song_id: ' + song_id + ' from room ' + str(room.id))
+    # rows = song_queue.songs.filter(song_id=song_id)
+    #
+    # if rows.count() > 0:
+    #     # rows.delete()
+    #
+    #     print('Deleted song with song_id: ' + song_id + ' from room ' + str(room.id))
 
     context = {}
-    context['songs'] = song_queue.songs.all().order_by('id')
+    context['songs'] = song_queue.songs.all().order_by('rank')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
     # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
