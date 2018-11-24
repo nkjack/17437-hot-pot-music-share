@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from django.views.generic.base import RedirectView
 
-from hot_pot.views import auth_views, room_views, map_views, home_views
+from hot_pot.views import auth_views, room_views, map_views, home_views, voting_views
 
 urlpatterns = [
 
@@ -35,4 +35,7 @@ urlpatterns = [
     path('add-marker', map_views.add_marker),
     path('get-markers', map_views.get_markers),
 
+    #voting
+    path('vote-up', voting_views.vote_up),
+    path('vote-down', voting_views.vote_down),
 ]

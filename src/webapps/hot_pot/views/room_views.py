@@ -2,7 +2,7 @@ from mimetypes import guess_type
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.timezone import localtime, now
 from googleapiclient.discovery import build
@@ -99,18 +99,24 @@ def add_song_to_room_playlist_ajax(request):
     room = Room.objects.get(id=room_id)
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
 
-    # Don't create the song if it already exists (TODO: Is this what we want though?)
-    if not Song.objects.filter(song_id__exact=searched_song_id):
-        song = Song(song_id=searched_song_id, song_name=searched_song_name)
+    # Don't create the song if it already exists in room
+    if not Song.objects.filter(song_id__exact=searched_song_id, song_room=room):
+        song = Song(song_id=searched_song_id,
+                    song_name=searched_song_name,
+                    song_room=room)
         song.save()
 
     # Don't add the song if it already exists in the playlist
-    song = Song.objects.get(song_id=searched_song_id)
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=room, pl_type="pool"):
+    song = Song.objects.get(song_id=searched_song_id, song_room=room)
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id,
+                                   belongs_to_room=room,
+                                   pl_type="pool"):
         song_pool.songs.add(song)
 
-    context['songs'] = song_pool.songs.all().order_by('id')
-    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
+    json = sql_get_all_songs_from_playlist(room_id, request.user.id, "pool")
+    return JsonResponse(data=json)
+    # context['songs'] = song_pool.songs.all().order_by('id')
+    # return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
 # Add a single song
@@ -126,14 +132,19 @@ def add_song_from_pool_to_queue(request):
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
-    # Don't create the song if it already exists (TODO: Is this what we want though?)
-    if not Song.objects.filter(song_id__exact=searched_song_id):
-        song = Song(song_id=searched_song_id, song_name=searched_song_name)
+    # Don't create the song if it already exists in room
+    if not Song.objects.filter(song_id__exact=searched_song_id,
+                               song_room=room):
+        song = Song(song_id=searched_song_id,
+                    song_name=searched_song_name,
+                    song_room=room)
         song.save()
 
     # Don't add the song if it already exists in the playlist
     song = Song.objects.get(song_id=searched_song_id)
-    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id, belongs_to_room=room, pl_type="queue"):
+    if not Playlist.objects.filter(songs__song_id__exact=searched_song_id,
+                                   belongs_to_room=room,
+                                   pl_type="queue"):
         song_queue.songs.add(song)
 
     context['songs'] = song_queue.songs.all().order_by('id')
@@ -142,13 +153,14 @@ def add_song_from_pool_to_queue(request):
 
 @login_required
 def get_pool_songs_from_room(request):
-    context = {}
+    # context = {}
     room_id = request.GET['room_id']
-    room = Room.objects.get(id=room_id)
-    song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
-    context['songs'] = song_pool.songs.all().order_by('id')
-    return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
-
+    # room = Room.objects.get(id=room_id)
+    # song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
+    # context['songs'] = song_pool.songs.all().order_by('id')
+    # return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
+    json = sql_get_all_songs_from_playlist(room_id,request.user.id,"pool")
+    return JsonResponse(data=json)
 
 @login_required
 @transaction.atomic
@@ -202,3 +214,38 @@ def delete_from_song_queue(request, room_id, song_id):
     # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
 
     return HttpResponse('')
+
+
+from django.db import connection
+
+
+def sql_get_all_songs_from_playlist(room_id, user_id, pl_type):
+    # sql for songs with user
+    c = connection.cursor()
+    query = "SELECT s.song_id, s.song_name, s.thumbs_up, " \
+            "case when v.user_id is NULL then 'False' else 'True' end " \
+            "FROM hot_pot_song s " \
+            "LEFT OUTER JOIN hot_pot_uservotes v " \
+            "ON (s.id = v.song_id AND v.user_id = {}) " \
+            "JOIN hot_pot_playlist_songs pls " \
+            "ON (pls.song_id = s.id)" \
+            "JOIN hot_pot_playlist pl " \
+            "ON (pl.id = pls.playlist_id AND pl.pl_type = '{}')" \
+            "WHERE s.song_room_id = {} " \
+            "ORDER BY s.thumbs_up DESC ".format(user_id, pl_type,room_id)
+
+    s = c.execute(query)
+    # s = c.execute("select pl.song_id, pl.playlist_id, pl.id from hot_pot_playlist_songs pl")
+    data = {}
+    data['songs'] = []
+    for s in s.fetchall():
+        song = {}
+        song['id'] = s[0]
+        song['name'] = s[1]
+        song['thumbs_up'] = s[2]
+        song['is_voted'] = s[3]
+
+        data['songs'].append(song)
+
+    return data
+

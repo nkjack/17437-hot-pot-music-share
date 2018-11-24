@@ -1,4 +1,9 @@
-function getEntryListForPoolQueueForListener(v_id, v_name){
+function getEntryListForPoolQueueForListener(v_id, v_name, v_thumbs_up, is_voted){
+    let vote_btn_html = 'Upvote';
+    if (is_voted == 'True'){
+        vote_btn_html = 'Downvote';
+    }
+
     return '<div class="media pt-3" id="poll_song_div">' +
                 '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
                 '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
@@ -6,13 +11,21 @@ function getEntryListForPoolQueueForListener(v_id, v_name){
                 '      <strong class="text-gray-dark">' + v_name + '</strong>' +
                 '    </div>' +
                 // '<button type="button" id="add-song-to-queue-btn">Add to Queue</button>'
+                '<button type="button" id="vote-song-btn" value="'+vote_btn_html+'">'+vote_btn_html+'</button>' +
+                '    <div class="d-flex justify-content-between align-items-center w-100">' +
+                '      <strong class="text-gray-dark">Thumbs Up: ' + v_thumbs_up + '</strong>' +
+                '    </div>' +
                 '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
                 '       <input type="hidden" id="song_name" value="' + v_name + '"/>' +
                 '</div>' +
                 '</div>';
 }
 
-function getEntryListForPoolQueueForHost(v_id, v_name){
+function getEntryListForPoolQueueForHost(v_id, v_name, v_thumbs_up, is_voted){
+    let vote_btn_html = 'Upvote';
+    if (is_voted == 'True'){
+        vote_btn_html = 'Downvote';
+    }
     return '<div class="media pt-3" id="poll_song_div">' +
                 '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
                 '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
@@ -20,6 +33,10 @@ function getEntryListForPoolQueueForHost(v_id, v_name){
                 '      <strong class="text-gray-dark">' + v_name + '</strong>' +
                 '    </div>' +
                 '<button type="button" id="add-song-to-queue-btn">Add to Queue</button>' +
+                '<button type="button" id="vote-song-btn" value="'+vote_btn_html+'">'+vote_btn_html+'</button>' +
+                '    <div class="d-flex justify-content-between align-items-center w-100">' +
+                '      <strong class="text-gray-dark">Thumbs Up: ' + v_thumbs_up + '</strong>' +
+                '    </div>' +
                 '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
                 '       <input type="hidden" id="song_name" value="' + v_name + '"/>' +
                 '</div>' +
