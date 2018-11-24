@@ -49,7 +49,7 @@ $("#dj_list").on("click", "#dlt-song-btn", function (event) {
     console.log(room_id);
     $.ajax({
         // The URL for the request
-        url: "/delete-from-song-queue",
+        url: "/delete-from-song-queue-post",
         data: {
             room_id: room_id.val(),
             song_id: song_id.val(),

@@ -203,7 +203,9 @@ def get_top_of_song_queue(request, room_id):
 
 
 # Delete song with specified song_id from song_queue of specified room_id
-def delete_from_song_queue(request):
+@transaction.atomic
+@login_required
+def delete_from_song_queue_post(request):
     # Get song queue for this room
     song_id = request.POST['song_id']
     room_id = request.POST['room_id']
@@ -224,5 +226,23 @@ def delete_from_song_queue(request):
     # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
     # return HttpResponse('')
 
+@transaction.atomic
+def delete_from_song_queue(request, room_id, song_id):
+    # Get song queue for this room
+    room = Room.objects.get(id=room_id)
+    song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
+    # If empty, return nothing
+    if song_queue.songs.count() == 0:
+        print('[room_views.delete_from_song_queue] No more songs!')
+
+        return HttpResponse(status=204) # Successful, but no more content
+    else:
+        # Delete from song queue
+        song_queue.songs.filter(song_id=song_id).delete()
+        print('Deleted song with song_id: ' + song_id)
+
+        # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
+
+    return HttpResponse('')
 

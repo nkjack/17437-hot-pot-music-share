@@ -29,9 +29,10 @@ urlpatterns = [
             name='get-top-of-song-queue'),
 
     # should be POST request -- commented by noam
-    # re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
-    #         room_views.delete_from_song_queue, name='delete-from-song-queue'),
-    path('delete-from-song-queue', room_views.delete_from_song_queue),
+    re_path(r'^delete-from-song-queue/(?P<room_id>[^/]+)/(?P<song_id>[^/]+)$',
+            room_views.delete_from_song_queue, name='delete-from-song-queue'),
+
+    path('delete-from-song-queue-post', room_views.delete_from_song_queue_post),
 
 
     # Maps
