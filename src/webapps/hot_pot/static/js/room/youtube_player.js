@@ -203,6 +203,9 @@ function addToSongQueue() {
     const input = document.getElementById('add-to-song-queue-input').value;
     const videoId = cleanVideoIdInput(input);
 
+    // Clear the input
+    document.getElementById('add-to-song-queue-input').value = '';
+
     // Get Song Title
     const videoTitle = getVideoTitleFromId(videoId);
 
@@ -226,6 +229,9 @@ function addToSongQueue() {
 function addToSongPool() {
     const input = document.getElementById('add-to-song-pool-input').value;
     const videoId = cleanVideoIdInput(input);
+
+      // Clear the input
+    document.getElementById('add-to-song-pool-input').value = '';
 
     // Get Song Title
     const videoTitle = getVideoTitleFromId(videoId);
@@ -265,15 +271,6 @@ function getVideoTitleFromId(videoId) {
 }
 
 
-// TODO: Put function here to tie in Noam's search stuff to call 'changeVideoById
-/*
-function changeVideoOnClick() {
-    // Get the URL from the link clicked
-    changeVideoById(videoId);
-}
- */
-
-
 // Helper function to change the player itself to the new video ID
 function changeVideoById(videoId) {
     player.stopVideo();
@@ -283,9 +280,10 @@ function changeVideoById(videoId) {
 
 // On the event the Host wants to go to the next video OR end of currently playing video
 function nextVideo() {
-    // Make GET request to get current playing song from top of song queue
+    // Make GET request to delete song from top of song queue
     const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-    if (currVideoId) {
+    if (!player.getPlaylist()) {
+        // Only attempt to delete from song queue if not playing the fallback playlist
         deleteFromSongQueue(currVideoId);
     }
 
@@ -303,7 +301,9 @@ function nextVideo() {
         playRandomTrack();
     } else {
         // Didn't get a video from the queue, start the fallback playlist
-        console.log('No songs in the queue, loading Billboard playlist...');
+        console.log('No songs in the queue, loading and playing Billboard playlist...');
+
+        player.stopVideo();
 
         const randomIndex = getRandom(0, 200);
 
@@ -313,7 +313,7 @@ function nextVideo() {
             index: randomIndex,
         });
 
-        playRandomTrack();
+        player.playVideo();
     }
 
     // Sync up song queue
