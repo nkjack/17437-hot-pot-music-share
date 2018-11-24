@@ -48,18 +48,23 @@ function updateChangesPoolSongs(data) {
         const isHost = $('#is_host').val();
         console.log('inside sync_playlists.js...' + isHost);
 
-        if (isHost === 'True') {
-            $('#poll_list').append(getEntryListForPoolQueueForHost(v_id,
-                v_name,
-                v_thumbs_up,
-                is_voted));
-        }
-        else {
-            $('#poll_list').append(getEntryListForPoolQueueForListener(v_id,
-                v_name,
-                v_thumbs_up,
-                is_voted));
-        }
+        $('#poll_list').append(getEntryListForPoolQueue(v_id,
+            v_name,
+            v_thumbs_up,
+            is_voted,
+            isHost));
+        // if (isHost === 'True') {
+        //     $('#poll_list').append(getEntryListForPoolQueueForHost(v_id,
+        //         v_name,
+        //         v_thumbs_up,
+        //         is_voted));
+        // }
+        // else {
+        //     $('#poll_list').append(getEntryListForPoolQueueForListener(v_id,
+        //         v_name,
+        //         v_thumbs_up,
+        //         is_voted));
+        // }
     }
 }
 

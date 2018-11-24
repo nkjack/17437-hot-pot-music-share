@@ -28,7 +28,7 @@ $("#poll_list").on("click", "#vote-song-btn", function (event) {
         dataType: "json",
         })
         .done(function (data) {
-            console.log(data);
+            updateChangesPoolSongs(data);
         })
         .fail(function (xhr, status, errorThrown) {
             console.log("Error: " + errorThrown);
