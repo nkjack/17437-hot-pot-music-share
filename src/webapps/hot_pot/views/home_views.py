@@ -57,9 +57,9 @@ def home(request, username):
         song_pool.save()
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
 
-        song_queue.songs.add(song_1)
-        song_queue.songs.add(song_2)
-        song_queue.songs.add(song_3)
+        # song_queue.songs.add(song_1)
+        # song_queue.songs.add(song_2)
+        # song_queue.songs.add(song_3)
 
         song_queue.save()
 

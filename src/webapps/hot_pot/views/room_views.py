@@ -148,7 +148,10 @@ def add_song_from_pool_to_queue(request):
                                    pl_type="queue"):
         song_queue.songs.add(song)
 
-    context['songs'] = song_queue.songs.all().order_by('id')
+    song.rank = song_queue.songs.all().count()
+    song.save()
+
+    context['songs'] = song_queue.songs.all().order_by('rank')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
@@ -170,7 +173,7 @@ def get_queue_songs_from_room(request):
     room_id = request.GET['room_id']
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
-    context['songs'] = song_queue.songs.all().order_by('id')
+    context['songs'] = song_queue.songs.all().order_by('rank')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 

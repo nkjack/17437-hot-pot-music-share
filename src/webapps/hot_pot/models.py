@@ -110,6 +110,7 @@ class Song(models.Model):
     song_room = models.ForeignKey(Room, on_delete=models.CASCADE)
     thumbs_up = models.IntegerField(blank=True, default=0)
 
+    rank = models.IntegerField(blank=True, default=0)
     # belongs_to_playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
