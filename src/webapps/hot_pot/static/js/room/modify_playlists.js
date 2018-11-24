@@ -82,8 +82,8 @@ $("#dj_list").on("click", "#up-song-btn", function (event) {
     var entry_div = $(this).closest("#entry-song-queue-div");
     var room_id = $("#room_id");
 
-    var index = entry_div.find( "#position" ).val();
-    alert( "Index: " + index );
+    var index = parseInt(entry_div.find( "#position" ).val());
+    // alert( "Index: " + index );
 
     $.ajax({
         // The URL for the request
@@ -92,6 +92,43 @@ $("#dj_list").on("click", "#up-song-btn", function (event) {
             room_id: room_id.val(),
             prev_position: index,
             new_position: index - 1,
+        },
+        // Whether this is a POST or GET request
+        type: "POST",
+        // The type of data we expect back
+        dataType: "json",
+    })
+        .done(function (data) {
+            updateChangesQueueSongs(data);
+        })
+        .fail(function (xhr, status, errorThrown) {
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        })
+        // Code to run regardless of success or failure;
+        .always(function (xhr, status) {
+            console.log("fetch songs from poll request is finished!");
+        });
+});
+
+$("#dj_list").on("click", "#down-song-btn", function (event) {
+    event.preventDefault();
+    var entry_div = $(this).closest("#entry-song-queue-div");
+    var room_id = $("#room_id");
+
+    var index = parseInt(entry_div.find( "#position" ).val());
+
+    // alert(typeof index);
+    // alert( "Index: " + index );
+
+    $.ajax({
+        // The URL for the request
+        url: "/change-song-queue-order",
+        data: {
+            room_id: room_id.val(),
+            prev_position: index,
+            new_position: index + 1,
         },
         // Whether this is a POST or GET request
         type: "POST",

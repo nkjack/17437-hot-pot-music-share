@@ -265,12 +265,15 @@ def change_song_queue_order(request):
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
     all_queue_songs = song_queue.songs.all().order_by("rank")
 
+    print("new_pos - {}, prev_pos = {}, amount_songs".format(new_position, prev_position, all_queue_songs.count()))
+
     if new_position >= 1 and new_position <= all_queue_songs.count() \
             and prev_position >= 1 and prev_position <= all_queue_songs.count():
         # downvote
         if prev_position < new_position:
+            print("downvote")
             all_queue_songs = song_queue.songs.all().order_by("rank")
-            print("changing permutation")
+
             for song in all_queue_songs:
                 if song.rank < prev_position:
                     continue
@@ -282,19 +285,22 @@ def change_song_queue_order(request):
                     continue
                 song.save()
 
+
         # upvote
         elif prev_position > new_position:
+            print("upvote")
             all_queue_songs = song_queue.songs.all().order_by("-rank")
             for song in all_queue_songs:
                 if song.rank > prev_position:
                     continue
                 elif song.rank == prev_position:
                     song.rank = new_position
-                elif song.rank <= new_position:
+                elif song.rank >= new_position:
                     song.rank += 1
                 elif song.rank < new_position:
                     continue
                 song.save()
+
 
     context = {}
     context['songs'] = song_queue.songs.all().order_by('rank')
