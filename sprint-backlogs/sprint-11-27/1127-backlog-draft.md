@@ -5,10 +5,6 @@
 ## Sam Backlog
 -------------------------------------------------------------------------------
 
-### Refactoring [3 hours]
-- Clean up JS files
-- Restructure dir/files
-
 ### Cloud deployment [4 hours]
 - Heroku
 - Redis add-on
@@ -84,6 +80,14 @@
 ### Maps
 - Add optional 'Business Name' field to Rooms; and possibly connect it with using google places api (depends on time).
 - Add real locations to Rooms (work with Rui on Settings) - *important*
+
+-------------------------------------------------------------------------------
+## FINISHED
+-------------------------------------------------------------------------------
+
+### Refactoring [3 hours]
+- Clean up JS files
+- Restructure dir/files
 
 -------------------------------------------------------------------------------
 ## Additional Features (Nice-to-have)

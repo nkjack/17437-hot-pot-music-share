@@ -1,4 +1,4 @@
-
+# Class-specific section #
 
 
 # Java section #
@@ -37,6 +37,3 @@ nosetests.xml
 # JetBrains project folder
 .idea
 *.sqlite3
-
-# Heroku deployment
-staticfiles/

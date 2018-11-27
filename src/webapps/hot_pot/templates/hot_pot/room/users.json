@@ -1,0 +1,8 @@
+{
+  "users":[
+    {% for user in users %}
+    "{{ user.username }}"
+    {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  ]
+}

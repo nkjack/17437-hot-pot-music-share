@@ -4,7 +4,7 @@
 
 function get_pool_songs_from_room() {
     var room_id = $("#room_id").attr('value');
-    console.log(room_id);
+    // console.log(room_id);
     $.ajax({
         // The URL for the request
         url: "/get-pool-songs-from-room",
@@ -31,27 +31,28 @@ function get_pool_songs_from_room() {
         })
         // Code to run regardless of success or failure;
         .always(function (xhr, status) {
-            console.log("The request is complete!");
+            // console.log("The request is complete!");
             // console.alert( "The request is complete!" );
         });
 }
 
 function updateChangesPoolSongs(data) {
-    console.log(data);
+    // console.log(data);
     $("#poll_list").empty();
     for (var i = 0; i < data.songs.length; i++) {
         var v_id = data.songs[i]['id'];
         var v_name = data.songs[i]['name'];
+        var v_thumbs_up = data.songs[i]['thumbs_up'];
+        var is_voted = data.songs[i]['is_voted'];
 
-        const isHost = $('#is_host').val();
-        console.log('inside sync_playlists.js...' + isHost);
+        const isHost = $('#is_dj').val();
+        // console.log('inside sync_playlists.js...' + isHost);
 
-        if (isHost === 'True') {
-            $('#poll_list').append(getEntryListForPoolQueueForHost(v_id, v_name));
-        }
-        else {
-            $('#poll_list').append(getEntryListForPoolQueueForListener(v_id, v_name));
-        }
+        $('#poll_list').append(getEntryListForPoolQueue(v_id,
+            v_name,
+            v_thumbs_up,
+            is_voted,
+            isHost));
     }
 }
 
@@ -77,39 +78,38 @@ function get_queue_songs_from_room() {
             updateChangesQueueSongs(json)
         })
         .fail(function (xhr, status, errorThrown) {
-            console.log("Sorry, there was a problem!");
-            console.log("Error: " + errorThrown);
-            console.log("Status: " + status);
+            // console.log("Sorry, there was a problem!");
+            // console.log("Error: " + errorThrown);
+            // console.log("Status: " + status);
             console.dir(xhr);
         })
         // Code to run regardless of success or failure;
         .always(function (xhr, status) {
-            console.log("The request is complete!");
+            // console.log("The request is complete!");
             // console.alert( "The request is complete!" );
         });
 }
 
 function updateChangesQueueSongs(data) {
-    console.log(data);
+    // console.log(data);
     $("#dj_list").empty();
-    for (var i = 0; i < data.songs.length; i++) {
-        var v_id = data.songs[i]['id'];
-        var v_name = data.songs[i]['name'];
+    if (data.songs.length > 0) {
+        for (var i = 0; i < data.songs.length; i++) {
+            var v_id = data.songs[i]['id'];
+            var v_name = data.songs[i]['name'];
+            var v_rank = data.songs[i]['rank'];
 
-        $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name));
+            const isHost = $('#is_dj').val();
+            console.log('inside sync_playlists.js...' + isHost);
 
+            $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost, i + 1, v_rank));
+        }
+    } else {
+        // TODO: Better style for this message?
+        $('#dj_list').append('<h6>No songs in the queue! Playing top Billboard songs.</h6>');
     }
 }
 
-// function updateChangesSearchResults(data) {
-//     $("#search-results").empty();
-//     for (var i = 0; i < data.songs.length; i++) {
-//         var v_id = data.songs[i]['id'];
-//         var v_name = data.songs[i]['name'];
-//
-//         $('#search-results').append(getEntryListForSearchResult(v_id,v_name));
-//     }
-// }
 
 window.setInterval(get_pool_songs_from_room, 5000);
 window.setInterval(get_queue_songs_from_room, 5000);
