@@ -127,3 +127,6 @@ class MarkerForm(forms.ModelForm):
     class Meta:
         model = Marker
         fields = ('lat', 'lng')
+
+
+

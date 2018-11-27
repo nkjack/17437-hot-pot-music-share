@@ -1,5 +1,6 @@
 {
   "id" : "{{song.song_id}}",
   "name" : "{{song.song_name}}",
-  "thumbs_up" : "{{song.thumbs_up}}"
+  "thumbs_up" : "{{song.thumbs_up}}",
+  "rank" : "{{song.rank}}"
 }

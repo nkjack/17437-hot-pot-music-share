@@ -82,7 +82,8 @@ $("#dj_list").on("click", "#up-song-btn", function (event) {
     var entry_div = $(this).closest("#entry-song-queue-div");
     var room_id = $("#room_id");
 
-    var index = parseInt(entry_div.find( "#position" ).val());
+    // var index = parseInt(entry_div.find( "#position" ).val());
+    var index = parseInt(entry_div.find( "#song_rank" ).val());
     // alert( "Index: " + index );
 
     $.ajax({
@@ -117,7 +118,7 @@ $("#dj_list").on("click", "#down-song-btn", function (event) {
     var entry_div = $(this).closest("#entry-song-queue-div");
     var room_id = $("#room_id");
 
-    var index = parseInt(entry_div.find( "#position" ).val());
+    var index = parseInt(entry_div.find( "#song_rank" ).val());
 
     // alert(typeof index);
     // alert( "Index: " + index );

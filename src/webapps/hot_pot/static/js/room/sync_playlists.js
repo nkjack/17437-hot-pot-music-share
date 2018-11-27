@@ -97,11 +97,12 @@ function updateChangesQueueSongs(data) {
         for (var i = 0; i < data.songs.length; i++) {
             var v_id = data.songs[i]['id'];
             var v_name = data.songs[i]['name'];
+            var v_rank = data.songs[i]['rank'];
 
             const isHost = $('#is_host').val();
             console.log('inside sync_playlists.js...' + isHost);
 
-            $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost, i + 1));
+            $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost, i + 1, v_rank));
         }
     } else {
         // TODO: Better style for this message?

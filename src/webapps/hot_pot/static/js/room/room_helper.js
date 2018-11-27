@@ -42,7 +42,7 @@ function getEntryListForSearchResult(vId, vName) {
         '</div>';
 }
 
-function getEntryListForGlobalSongQueue(vId, vName, isHost, index) {
+function getEntryListForGlobalSongQueue(vId, vName, isHost, index, rank) {
     // Show up/down depending on host and index in list
     let isHostHtml = '';
     let upRankHtml = '';
@@ -72,6 +72,7 @@ function getEntryListForGlobalSongQueue(vId, vName, isHost, index) {
         '    <div class="d-flex justify-content-between align-items-center w-100">' +
         '         <strong class="text-gray-dark">' + vName + '</strong>' +
         '      </div>' +
+        '<input type="hidden" id="song_rank" value="'+ rank +'"/>'+
         isHostHtml +
         upRankHtml +
         downRankHtml +
