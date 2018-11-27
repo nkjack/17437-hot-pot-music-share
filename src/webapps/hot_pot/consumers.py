@@ -124,21 +124,30 @@ class PlayerConsumer(WebsocketConsumer):
             # Get the room to associate the song with and get the queue/pool
             room = Room.objects.get(name=self.room_name)
 
-            # Create new song and save
-            # FIXME: Creating replicate songs... Exact same song_id and song_name... But in DB have diff pk's... OK?
-            new_song = Song.objects.create(song_id=text_data_json['song_id'],
-                                           song_name=text_data_json['song_name'],
-                                           song_room=room)
-            new_song.save()
+            # Don't create the song if it already exists in room
+            if not Song.objects.filter(song_id__exact=text_data_json['song_id'],
+                                       song_room=room):
+                new_song = Song.objects.create(song_id=text_data_json['song_id'],
+                                               song_name=text_data_json['song_name'],
+                                               song_room=room)
+                new_song.save()
+
+            # Whether we created the new song or already existed, get the song
+            song = Song.objects.get(song_id=text_data_json['song_id'], song_room=room)
 
             song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
             song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
 
             # IMPORTANT: Only add the song if it doesn't already exist - otherwise multiple values for same key
-            if playlist is 'queue' and not song_queue.songs.filter(song_id=new_song.song_id).exists():
-                song_queue.songs.add(new_song)
-            elif playlist is 'pool' and not song_pool.songs.filter(song_id=new_song.song_id).exists():
-                song_pool.songs.add(new_song)
+            if playlist is 'queue' and not song_queue.songs.filter(song_id=song.song_id).exists():
+                song_queue.songs.add(song)
+
+                # Make sure song goes to bottom of the queue
+                song.rank = song_queue.songs.all().count()
+                song.save()
+
+            elif playlist is 'pool' and not song_pool.songs.filter(song_id=song.song_id).exists():
+                song_pool.songs.add(song)
 
     # Receive chat message from room group
     def chat_message(self, event):
