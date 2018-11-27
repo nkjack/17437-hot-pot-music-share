@@ -70,8 +70,8 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     console.log('PlayerReady called...');
 
-    // Always start playing the video
-    player.playVideo();
+    // Set global timestamp of last time this user received a 'sync with me' request
+    lastTimeSyncdUp = window.performance.now();
 
     // Listeners AND DJs ask to sync-up to Host when their player is ready (when they first join the room)
     syncToHost();
@@ -84,7 +84,7 @@ function onHostPlayerStateChange(event) {
     switch (playerStatus) {
         case YT.PlayerState.UNSTARTED:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.UNSTARTED");
-            break;
+            return;
         case YT.PlayerState.PLAYING:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.PLAYING");
 
@@ -117,7 +117,7 @@ function onHostPlayerStateChange(event) {
 
     // Do NOT send 'sync with me' request if I just recently sync'd to someone else (avoid thrashing)
     const currTime = window.performance.now();
-    if ((currTime - lastTimeSyncdUp) > 1000) {
+    if ((currTime - lastTimeSyncdUp) > 2000) { // Hot fix - downside is that changes must be 2sec apart
         console.log("Telling everyone to sync with me.");
         // Host syncs up Listeners whenever Host's player state changes
         syncEveryone();

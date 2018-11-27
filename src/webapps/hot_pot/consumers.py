@@ -166,7 +166,7 @@ class PlayerConsumer(WebsocketConsumer):
 
     # Receive sync request message
     def sync_request_message(self, event):
-        print('[consumers.py] sync_request_message handler called, event = ' + str(event))
+        print('[consumers.py][%s] sync_request_message handler called, event = %s' % (self.user, str(event)))
 
         # Only DJ(s) send out sync requests (requests sent to multiple DJs - but OK in practice)
         if self.is_dj and event['from_username'] != self.user.username:  # Don't handle own request
@@ -184,7 +184,6 @@ class PlayerConsumer(WebsocketConsumer):
         # Ignore this if I'm a DJ and packet says to ignore as a DJ
         if self.is_dj and (event['djs_ignore'] == 'true'):
             return
-
 
         # Listen to any sync_result that wasn't from myself
         if event['from_username'] != self.user.username:
