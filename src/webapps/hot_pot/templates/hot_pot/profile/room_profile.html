@@ -62,7 +62,7 @@
 
 					</div>
 
-	          		<input  type="submit" class="btn btn-lg btn-block btn-outline-primary my-3" name = 'room_profile' value ="Submit">
+	          		<input  type="submit" class="btn btn-lg btn-block btn-primary my-3" name = 'room_profile' value ="Submit">
 	          	</form>
 
 	    </div>
@@ -99,7 +99,12 @@
 			</div>
 	    </div>
 	    <div id="location" class="tab-pane fade">
-	      
+		   	{#noam get locaiton#}
+		    <div>
+		        {#<button type="button" onclick="getLocation()">get location</button>#}
+		        <input type="checkbox" onclick='handleGeoLocationClick(this);' name="geo_location"
+		               value="location"> my location
+		    </div>
 
 	    </div>
 
