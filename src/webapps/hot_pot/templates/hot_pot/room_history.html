@@ -59,48 +59,7 @@
                 {% endfor %}
 
         </div>
-        <button type="button" class="btn btn-lg my-4" onclick="openForm()">Create a Room</button>
-        <div class="form-popup" id="create_room_div">
-        <form class="form-container" method="POST">{% csrf_token %}
-            <h1>Create A Room</h1>
-
-            <div class="form-group my-3 mx-3">
-                {% if form %}
-                    <div class='error'>
-                        {{ form.errors }}
-                        {{ form.non_field_errors }}
-                    </div>
-                    </div>
-                    <div>
-                        <p class="font-weight-bold mb-0 ">{{ form.name.label }}
-                            {{ form.name }}</p>
-
-                    </div>
-                    <div class="my-3">
-                        <p class="font-weight-bold mb-0 ">{{ form.description.label }}</p>
-                        <p class="mx-4">{{ form.description }}</p>
-
-                    </div>
-                    <div>
-                        <p class="font-weight-bold mb-0 ">Room Photo</p>
-
-                        {{ form.cover_pic }}
-
-                    </div>
-                {% endif %}
-            <!--             <input type="checkbox" name="private" value="private" checked>A Private Room? -->
-            <input type="submit" name="create_room" value="create" class="btn create">Create</button>
-            <button type="button" class="btn" onclick="closeForm()">Close</button>
-        </form>
+    
     </div>
-    <script>
-        function openForm() {
-            document.getElementById("create_room_div").style.display = "block";
-        }
-
-        function closeForm() {
-            document.getElementById("create_room_div").style.display = "none";
-        }
-    </script>
 
 {% endblock %}

@@ -1,7 +1,7 @@
 function getEntryListForPoolQueueForListener(v_id, v_name){
-    return '<div class="media pt-3" id="poll_song_div">' +
+    return '<div class="media pt-3 border-bottom border-secondary" id="poll_song_div">' +
                 '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
-                '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
+                '<div class="media-body pb-3 mb-0 small lh-125  rounded-right">' +
                 '    <div class="d-flex justify-content-between align-items-center w-100">' +
                 '      <strong class="text-gray-dark">' + v_name + '</strong>' +
                 '    </div>' +
@@ -13,9 +13,9 @@ function getEntryListForPoolQueueForListener(v_id, v_name){
 }
 
 function getEntryListForPoolQueueForHost(v_id, v_name){
-    return '<div class="media pt-3" id="poll_song_div">' +
+    return '<div class="media pt-3 border-bottom border-secondary" id="poll_song_div">' +
                 '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
-                '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
+                '<div class="media-body pb-3 mb-0 small lh-125  rounded-right">' +
                 '    <div class="d-flex justify-content-between align-items-center w-100">' +
                 '      <strong class="text-gray-dark">' + v_name + '</strong>' +
                 '    </div>' +
@@ -27,11 +27,11 @@ function getEntryListForPoolQueueForHost(v_id, v_name){
 }
 
 function getEntryListForSearchResult(v_id, v_name){
-    return '<div class="media pt-3" id="search-song-div">' +
+    return '<div class="media pt-3 border-bottom border-secondary" id="search-song-div">' +
     '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="200">' +
-    '    <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
+    '    <div class="media-body pb-3 mb-0 small lh-125 rounded-right">' +
     '       <div class="d-flex justify-content-between align-items-center w-100">' +
-    '       <strong class="text-gray-dark">' + v_name + '</strong>' +
+    '       <strong class="text-gray-dark">' + v_name + '</strong> <br/>' +
     // {#'        <span class = "d-block"> {{timespan}}</span>'+#}
     '       <button type="button" id="add-song-btn">Add song</button>' +
     '       <input type="hidden" id="song_id" value="' + v_id + '"/>' +
@@ -42,9 +42,9 @@ function getEntryListForSearchResult(v_id, v_name){
 }
 
 function getEntryListForGlobalSongQueue(v_id, v_name){
-    return '<div class="media pt-3" id="song_0">' +
+    return '<div class="media pt-3 border-bottom border-secondary" id="song_0">' +
     '<img src="https://img.youtube.com/vi/' + v_id + '/0.jpg" alt="" class="mr-2 rounded" width="100">' +
-    '<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">' +
+    '<div class="media-body pb-3 mb-0 small lh-125  rounded-right">' +
     '    <div class="d-flex justify-content-between align-items-center w-100">' +
     '         <strong class="text-gray-dark">' + v_name + '</strong>' +
     '      </div>' +

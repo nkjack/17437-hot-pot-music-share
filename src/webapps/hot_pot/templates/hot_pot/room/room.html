@@ -1,12 +1,13 @@
 {% extends 'hot_pot/base.html' %}
 
 {% block content %}
+{% load static %}
     <input type="hidden" id="room_id" value="{{ room_id }}"/>
     <input type="hidden" id="room_name" value="{{ room_name }}"/>
     <input type="hidden" id="is_host" value="{{ is_host }}"/>
     <input type="hidden" id="username" value="{{ username }}"/>
 
-    <div class="row">
+    <div class="row mx-3">
         <div class="col video_col">
             <!----------------------------------------- YOUTUBE PLAYER START ------------------------------------------>
             <h1 id="now-playing"></h1>
@@ -15,9 +16,9 @@
 
             <!-- Add a 'sync' now button -->
             {% if not is_host %}
-                <button type="button" class="btn btn-secondary text-light" onclick="syncToHost()">Sync To Host</button>
+                <button type="button" class="btn btn-secondary text-light sync" onclick="syncToHost()"><span> Sync To Host  &#8594;</span></button>
             {% else %}
-                <button type="button" class="btn btn-secondary text-light" onclick="nextVideo()">Next Video</button>
+                <button type="button" class="btn btn-secondary text-light sync" onclick="nextVideo()"><span> Next Video  &#8594;</span></button>
             {% endif %}
             <!----------------------------------------- YOUTUBE PLAYER END -------------------------------------------->
 
@@ -28,12 +29,12 @@
                 <div id="dj_list">
                     {% for song in song_queue %}
                         <!-- One track in the playlist -->
-                        <div class="media pt-3" id="song_queue_{{ song.song_id }}">
+                        <div class="media pt-3 border-bottom border-secondary" id="song_queue_{{ song.song_id }}">
                             <!-- The thumbnail of this video -->
                             <!-- Maybe also use API to get a thumbnail -->
                             <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"
                                  width="100">
-                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
+                            <div class="media-body pb-3 mb-0 small lh-125  rounded-right">
                                 <div class="d-flex justify-content-between align-items-center w-100">
                                     <strong class="text-gray-dark">{{ song.song_name }}</strong>
                                 </div>
@@ -47,8 +48,31 @@
         </div>
 
         <div class="col">
+            <div class=" p-3 bg-light text-dark rounded box-shadow" id="panel">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="search-query" placeholder="Search for...">
+                    <button id="search-button" class="btn-search" type="button" onclick = "showSearchResult()">Search</button>
+                    <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
+                </div>
+                            <!-- Direct URL/VideoId Input to song queue/pool -->
+                <div id="direct-input-panel" class="input-group">
+                    {% if is_host %}
+                        <!--Only Hosts can add to song queue-->
+    
+                        <input id="add-to-song-queue-input" type="text" class="form-control" placeholder="Video URL/ID" />
+                        <button class="btn-search" type="button" onclick="addToSongQueue()">Add to Queue</button><br/>
+                    {% endif %}
+                    <input id="add-to-song-pool-input" type="text" class="form-control ml-3" placeholder="Video URL/ID"/>
+                    <button class="btn-search" type="button" onclick="addToSongPool()">Add to Pool</button>
+                    <br>
+
+                    <!-- To be filled by JS on success -->
+                    <span id="direct-input-success"></span>
+                </div>
+
+            </div>
             <!----------------------------------------- SONG POOL START ----------------------------------------------->
-            <div class="mb-3 p-3 bg-dark text-light rounded box-shadow poll_list">
+            <div class="my-3 p-3 bg-light text-dark rounded box-shadow poll_list">
                 <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
 
                 <div id="poll_list">
@@ -72,105 +96,50 @@
             </div>
 
             <!----------------------------------------- SONG POOL END ------------------------------------------------->
-
-            <!----------------------------------------- PEOPLE LIST START --------------------------------------------->
-            <div class="my-3 p-3 bg-light text-dark rounded box-shadow" id="people">
-                <h6 class="border-bottom border-gray pb-2 mb-0">People in this room</h6>
-
-                <!-- One user -->
-                {% for u in users %}
-                    <div class="media text-muted pt-3" id="user_1">
-                        <!-- The profile img -->
-                        <!--  <img src="SOME URL" alt="" class="mr-2 rounded" width="25"> -->
-                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <strong class="text-gray-dark">{{ u.username }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <!----------------------------------------- PEOPLE LIST END ----------------------------------------------->
-
         </div>
-        <div class="col">
-            <!----------------------------------------- VIDEO SEARCH/INPUT START -------------------------------------->
-
-            <!-- Direct URL/VideoId Input to song queue/pool -->
-            <div class=" p-3 bg-light text-dark rounded box-shadow" id="direct-input-panel">
-                {% if is_host %}
-                    <!--Only Hosts can add to song queue-->
-                    Video URL/ID:
-                    <input id="add-to-song-queue-input" type="text" size="15"/>
-                    <button onclick="addToSongQueue()">Add to Queue</button><br>
-                {% endif %}
-                <!-- Both Hosts and Listeners can add to song pool -->
-                Video URL/ID:
-                <input id="add-to-song-pool-input" type="text" size="15"/>
-                <button onclick="addToSongPool()">Add to Pool</button>
-                <br>
+    </div>
+            <!------------------------------------- END OF ROW -------------------------------------------------------->
+    <button class = "map" ><img src="{% static 'img/geo_color.png' %}"onclick = "openMap()" width = "50" height = "50"></button>
+    <button class = "chat"><img src="{% static 'img/chat.png' %}" onclick = "openChat()" width = "50" height = "50"></button>
+    <!-- <img src="{% static 'img/close.png' %}" class = "vote" onclick = "Vote()" width = "40" height = "40"> -->
 
 
-                <!-- To be filled by JS on success -->
-                <span id="direct-input-success"></span>
+    <div class = "people-chat" id="people-chat">
+        <img src="{% static 'img/close.png' %}"class = "close"onclick = "closeChat()" width = "25" height = "25">
+        <!----------------------------------------- PEOPLE LIST START --------------------------------------------->
+        <div id="people">
+
+            <h5 class="border-bottom border-gray pb-2 mb-0">People</h5>
+            <div class = "user-in-room">
             </div>
-            <hr>
-
-            <!-- This is the search panel -->
-            <div class=" p-3 bg-light text-dark rounded box-shadow search" id="panel">
-                <div class="input-group mb-0">
-                    <input type="text" class="form-control" id="search-query" placeholder="Search for...">
-                    <button id="search-button" class="btn-search" type="button" onclick = "showSearchResult()">Search</button>
-                    <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
-                </div>
-                <!-- A list of results -->
-                <div id="search-results" class = "form-popup">
-                
-                    <!-- One track -->
-                    <div class="media pt-3" id="song_0">
-
-                        <!-- The thumbnail of this video -->
-                        <!-- Maybe also use API to get a thumbnail -->
-                        <img src="https://img.youtube.com/vi/{{ video_id }}/1.jpg" alt="" class="mr-2 rounded"
-                             width="15">
-                        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <strong class="text-gray-dark">{{ name_of_video }}</strong>
-                                <span class="d-block">{{ author }}</span>
-                                <span class="d-block"> {{ timespan }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!----------------------------------------- VIDEO SEARCH/INPUT END ---------------------------------------->
-
-            <!----------------------------------------- CHAT ROOM START ----------------------------------------------->
-            <div class="my-3 p-3 bg-light text-dark rounded box-shadow chat-room">
-                Chat room: <br>
-                <textarea id="chat-log" cols="24" rows="5"></textarea><br/>
-                <input id="chat-message-input" type="text" size="10"/>
-
-                <input id="chat-message-submit" type="button" value="Send"/>
-            </div>
-            <!----------------------------------------- CHAT ROOM END ------------------------------------------------->
         </div>
+         <!----------------------------------------- CHAT ROOM START ----------------------------------------------->
+         <div id = "chat">
+            <h5 class="border-bottom border-gray pb-2 mb-0">Chat Room</h5>
+            <textarea id="chat-log" cols="26" rows="5"></textarea><br/>
+            
+            <div class="input-group">
+                <input id="chat-message-input" type="text" class="form-control"/>
 
+                <input id="chat-message-submit" class = "btn-search" type="button" value="Send"/>
+            </div>
+        </div>
+        <!----------------------------------------- CHAT ROOM END ------------------------------------------------->
+        <!----------------------------------------- PEOPLE LIST END ----------------------------------------------->
     </div>
 
 
-    <div class="form-popup" id="popupForm">
-        <form class="form-container" id="addFriendForm">
-            <h1>Add Your Friend to This Room</h1>
-            <div id="friendList">
-                <input type="checkbox" name="name3" checked="checked">Friend_01
-            </div>
-            <input class="btn" type="submit" name="addFriend">Add</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-        </form>
+            <!-- A list of results -->
+    <div class = "search-result" id="search">
+        <img src="{% static 'img/close.png' %}"class = "close"onclick = "closeSearchResult()" width = "25" height = "25">
+        <h6 class="border-bottom border-dark pb-2 mb-0">Search Result</h6>
+
+        <div id = "search-results">
+
+        </div>
     </div>
+
+
 {% endblock %}
 
 
@@ -188,28 +157,23 @@
 
     <!-- Leftover in-line JS script block for UI related things -->
     <script>
-        /*
-            $(document).ready(function () {
-                $("#addFriendForm").submit(function () {
-                    var names = $('#friendList input:checked').map(function () {
-                        return this.name;
-                    }).get();
+        function  openMap(){
 
-                    alert(names);
-                    return false;
-                });
-            });
-            */
-
-        function openForm() {
-
-            document.getElementById("popupForm").style.display = "block";
         }
 
-        function closeForm() {
-            document.getElementById("popupForm").style.display = "none";
+        function openChat(){
+            document.getElementById("people-chat").style.display = "block";
+        }
+        function closeChat(){
+            document.getElementById("people-chat").style.display = "none";
+        }
+        function showSearchResult() {
+            document.getElementById("search").style.display = "block";
         }
 
+        function closeSearchResult() {
+            document.getElementById("search").style.display = "none";
+        }
         function toggleNav() {
             console.log("toggle");
             $("#wrapper").toggleClass("toggled");
