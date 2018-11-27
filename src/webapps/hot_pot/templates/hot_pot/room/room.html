@@ -13,41 +13,7 @@
 	    <h5 class=" info"> Room: {{ room_name }}</h5>
 	    <h5 class=" info">Owner: {{ room_owner }} </h5>
 	</div>
-    <!-- can also include online people count or the song name which is currently playing -->
-    <div class="row">
-    	<div class="col">
-        <!-- START DEBUG: JUST SCRATCH WORK TO ADD DJS TO THIS ROOM -->
-        {% if is_owner %}
 
-            <!-- Add DJ form -->
-            <form id="form-add-dj">
-                <label>
-                    <select id="select-add-dj">
-                        <!-- To be filled in by JS -->
-                        <!-- <option value="volvo">Volvo</option> -->
-                    </select>
-                </label>
-
-                <button type="button" onclick="addUsernameAsDj()">Add DJ</button>
-            </form>
-
-            <!-- Remove DJ form -->
-            <form id="form-remove-dj">
-                <label>
-                    <select id="select-remove-dj">
-                        <!-- To be filled in by JS -->
-                        <!-- <option value="volvo">Volvo</option> -->
-                    </select>
-                </label>
-
-                <button type="button" onclick="removeUsernameAsDj()">Remove DJ</button>
-            </form>
-
-        {% endif %}
-        <!-- END DEBUG: JUST SCRATCH WORK TO ADD DJS TO THIS ROOM -->
-
-	    </div>
-	</div>
     <div class="row mx-3">
         <div class="col">
              <!-- YOUTUBE PLAYER START -->

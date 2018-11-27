@@ -28,6 +28,10 @@ a:hover, a:visited, a:link, a:active{
   border: .075em solid #696969;
 }
 
+.container{
+  background-color: white;
+  margin: 20px;
+}
 .btn{
   z-index: 1;
   width:100%;

@@ -143,7 +143,7 @@ def get_user_img(request, username):
 @login_required
 def edit_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
-    context = {'room': room, 'username': request.user.username}
+    context = {'room': room, 'username': request.user.username, "room_id" : room_id}
     if request.method == 'GET':
         roomForm = RoomForm(instance = room)
         context['roomForm'] = roomForm

@@ -2,58 +2,175 @@
 
 {% block content %}
 {% load static %}
-<div class="card-deck mb-3">
-	<div class="card mb-4 my-3 box-shadow">
-        <div class="card-header ">
-            <h4 class="my-1 font-weight-normal">Room {{room.name}}</h4>
-        </div>
-        <div class="card-body">
-          	<form enctype = "multipart/form-data"  method = "POST">{% csrf_token %}
 
-          		<div class = "form-group my-3 mx-3">
+<!-- should change later -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <!-- should change later -->
 
-			    	<div class = 'error' >
-			    		{{roomForm.errors}}
-			    		{{roomForm.non_field_errors}}
-			    	</div>
+  <input type="hidden" id="room_id" value="{{ room_id }}"/>
+  <div class = "container">
+	  <ul class="nav nav-tabs">
+	    <li class="active"><a data-toggle="tab" href="#profile">General</a></li>
+	    <li><a data-toggle="tab" href="#dj">DJ</a></li>
+	    <li><a data-toggle="tab" href="#location">Location</a></li>
+	  </ul>
 
-			    	<div class = "my-3">
-						<p class = "font-weight-bold mb-0 ">{{roomForm.name.label}}</p>
-				    	<p class = "mx-4">{{roomForm.name}}</p>
+	  <div class="tab-content">
+	    <div id="profile" class="tab-pane fade in active">
+	            <form enctype = "multipart/form-data"  method = "POST">{% csrf_token %}
+
+	          		<div class = "form-group my-3 mx-3">
+
+				    	<div class = 'error' >
+				    		{{roomForm.errors}}
+				    		{{roomForm.non_field_errors}}
+				    	</div>
+
+				    	<div class = "my-3">
+							<p class = "font-weight-bold mb-0 ">{{roomForm.name.label}}</p>
+					    	<p class = "mx-4">{{roomForm.name}}</p>
+							
+						</div>
+
+						<div class = "my-3">
+							<p class = "font-weight-bold mb-0 ">
+								{{roomForm.isMarked.label}}
+								{{roomForm.isMarked}}
+								<button id="change-location" onclick = "change_location()"><img src="{% static '/img/geo.png' %}" width = "30"></button>
+							</p>
+
+							
+						</div>
+
+						<div class = "my-3">
+							<p class = "font-weight-bold mb-0 ">{{roomForm.description.label}}</p>
+					    	<p class = "mx-4">{{roomForm.description}}</p>
+							
+						</div>
+						<div class = "my-3">
+							<p class = "font-weight-bold mb-0 ">Room Photo</p>
+							{% if roomForm.cover_pic.value %}
+					      <!-- <p class = "font-weight-bold mb-0 ">Profile Image</p> -->
+						      	
+						      <img  class ="mx-4" src = '{% url "room_img" room.pk %}' alt = "" width = "80" height = "80">
+						    {% endif%}
+					    	{{roomForm.cover_pic}}
 						
+						</div>
+
 					</div>
 
-					<div class = "my-3">
-						<p class = "font-weight-bold mb-0 ">
-							{{roomForm.isMarked.label}}
-							{{roomForm.isMarked}}
-							<button id="change-location" onclick = "change_location()"><img src="{% static '/img/geo.png' %}" width = "30"></button>
-						</p>
+	          		<input  type="submit" class="btn btn-lg btn-block btn-outline-primary my-3" name = 'room_profile' value ="Submit">
+	          	</form>
 
-						
-					</div>
+	    </div>
+	    <div id="dj" class="tab-pane fade">
 
-					<div class = "my-3">
-						<p class = "font-weight-bold mb-0 ">{{roomForm.description.label}}</p>
-				    	<p class = "mx-4">{{roomForm.description}}</p>
-						
-					</div>
-					<div class = "my-3">
-						<p class = "font-weight-bold mb-0 ">Room Photo</p>
-						{% if roomForm.cover_pic.value %}
-				      <!-- <p class = "font-weight-bold mb-0 ">Profile Image</p> -->
-					      	
-					      <img  class ="mx-4" src = '{% url "room_img" room.pk %}' alt = "" width = "80" height = "80">
-					    {% endif%}
-				    	{{roomForm.cover_pic}}
-					
-					</div>
+			<div class="row">
+			    	<div class="col">
 
-				</div>
+			            <!-- Add DJ form -->
+			            <form id="form-add-dj">
+			                <label>
+			                    <select id="select-add-dj">
+			                        <!-- To be filled in by JS -->
+			                        <!-- <option value="volvo">Volvo</option> -->
+			                    </select>
+			                </label>
 
-          		<input  type="submit" class="btn btn-lg btn-block btn-outline-primary my-3" name = 'room_profile' value ="Submit">
-          	</form>
-        </div>
-    </div>
-</div>
+			                <button type="button" onclick="addUsernameAsDj()">Add DJ</button>
+			            </form>
+
+			            <!-- Remove DJ form -->
+			            <form id="form-remove-dj">
+			                <label>
+			                    <select id="select-remove-dj">
+			                        <!-- To be filled in by JS -->
+			                        <!-- <option value="volvo">Volvo</option> -->
+			                    </select>
+			                </label>
+
+			                <button type="button" onclick="removeUsernameAsDj()">Remove DJ</button>
+		            </form>
+
+			    </div>
+			</div>
+	    </div>
+	    <div id="location" class="tab-pane fade">
+	      
+
+	    </div>
+
+	  </div>
+	</div>
+	</div>
+
 {% endblock %}
+{% block script %}
+    <!-- Include all necessary js files from static folder (Important this is at the end so that elements load) -->
+    {% load static %}
+    <script type="text/javascript">
+    	$(document).ready(function () {  // Runs when the document is ready
+	    // Fill adding/removing DJ select dropdown lists
+	     function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    
+	    fillSelectAddDj();
+	    fillSelectRemoveDj();
+	});
+    	let lat = 0;
+        let lng = 0;
+        let geo_location_is_check = false;
+        function handleGeoLocationClick(cb) {
+          //alert("Clicked, new value = " + cb.checked);
+            if (cb.checked){
+                getLocation();
+            }
+            else{
+                geo_location_is_check = false;
+                alert("geo_is_checked " + geo_location_is_check);
+            }
+        }
+
+        function getLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+          } else {
+            alert("Geolocation is not supported by this browser.");
+          }
+        }
+
+        
+    </script>
+    <script src="{% static "js/room/djs.js" %}"></script>
+    {% endblock %}

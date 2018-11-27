@@ -1,5 +1,6 @@
 // Fill in dropdown select for adding DJs form
 function fillSelectAddDj() {
+
     // Get non DJ users
     $.ajax({
         // The URL for the request
@@ -66,6 +67,8 @@ function fillSelectRemoveDj() {
 
 // Add the specified username as a DJ
 function addUsernameAsDj() {
+
+
     var room_id = $("#room_id");
 
     // TODO: Either pass username as function parameter or get username from text input with jQuery

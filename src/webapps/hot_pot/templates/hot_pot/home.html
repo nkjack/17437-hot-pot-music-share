@@ -74,9 +74,7 @@
         </form>
     </div>
     <script>
-        let lat = 0;
-        let lng = 0;
-        let geo_location_is_check = false;
+
 
         function openForm() {
             document.getElementById("create_room_div").style.display = "block";
@@ -85,52 +83,6 @@
         function closeForm() {
             document.getElementById("create_room_div").style.display = "none";
         }
-
-        function handleGeoLocationClick(cb) {
-          //alert("Clicked, new value = " + cb.checked);
-            if (cb.checked){
-                getLocation();
-            }
-            else{
-                geo_location_is_check = false;
-                alert("geo_is_checked " + geo_location_is_check);
-            }
-        }
-
-        function getLocation() {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          } else {
-            alert("Geolocation is not supported by this browser.");
-          }
-        }
-
-        function showPosition(position) {
-          lat = position.coords.latitude;
-          lng = position.coords.longitude;
-          geo_location_is_check = true;
-          alert("lat " + lat + ", lng " + lng + " geo_is_checked " + geo_location_is_check);
-        }
-
-        /*
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
-        }
-        */
     </script>
+
 {% endblock %}
