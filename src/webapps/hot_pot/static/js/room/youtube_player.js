@@ -41,7 +41,7 @@ function onYouTubeIframeAPIReady() {
         const randomIndex = getRandom(0, billboardPlaylistTrackCount);
 
         player = new YT.Player('player', {
-            height: '350',
+            // height: '350',
             // width: '480',
             playerVars: {
                 'start': 0,
@@ -54,7 +54,7 @@ function onYouTubeIframeAPIReady() {
 
     } else {
         player = new YT.Player('player', {
-            height: '350',
+            // height: '350',
             // width: '480',
             videoId: videoId,
             playerVars: {
@@ -63,6 +63,8 @@ function onYouTubeIframeAPIReady() {
             events: events
         });
     }
+    // make youtube player flexible
+    $("#player").addClass("video_col");
 
 }
 
