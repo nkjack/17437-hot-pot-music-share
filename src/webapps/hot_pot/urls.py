@@ -56,6 +56,8 @@ urlpatterns = \
         # Add/Remove DJs
         path('add-dj-to-room', room_views.add_dj_to_room),
         path('remove-dj-from-room', room_views.remove_dj_from_room),
+        path('get-all-non-djs-in-room', room_views.get_all_non_djs_in_room),
+        path('get-djs-in-room', room_views.get_djs_in_room),
 
         ########
         # Maps #

@@ -1,3 +1,5 @@
+# YouTube API metadata needed for search
+import os
 from mimetypes import guess_type
 
 from django.contrib.auth.decorators import login_required
@@ -11,8 +13,6 @@ from googleapiclient.discovery import build
 from hot_pot.models import Room, RoomHistory, Playlist, Song
 from hot_pot.views.room_helper import get_all_songs_from_playlist, user_is_dj
 
-# YouTube API metadata needed for search
-import os
 DEVELOPER_KEY = os.environ.get("YOUTUBE_API_KEY")
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
@@ -24,6 +24,7 @@ MAX_SEARCH_RESULTS = 10
 def room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     room_name = room.name
+    is_owner = room.owner == request.user
     is_dj = user_is_dj(request.user, room)
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
@@ -39,6 +40,7 @@ def room(request, room_id):
                'room_name': room_name,
                'room_owner':room.owner.username,
                'title': 'Room ' + room_name,
+               'is_owner': is_owner,
                'is_dj': is_dj,
                'song_pool': song_pool.songs.all().order_by('id'),
                'song_queue': song_queue.songs.all().order_by('id'),
@@ -347,3 +349,27 @@ def remove_dj_from_room(request):
     print('>>>> remove_dj_from_room for user = %s, room = %s... successful', (user, room_id))
     return HttpResponse('')
 
+
+# Get all the users are DJs for the specified room
+def get_djs_in_room(request):
+    room_id = request.POST['room_id']
+
+    # Return all the DJs for this room
+    room_djs = Room.objects.get(id=room_id).djs.all()
+
+    context = {'users': room_djs}
+    return render(request, 'hot_pot/room/users.json', context, content_type='application/json')
+
+
+# Get all the users that are not a DJ for the specified room
+def get_all_non_djs_in_room(request):
+    room_id = request.POST['room_id']
+
+    all_users = User.objects.all()
+    room_djs = Room.objects.get(id=room_id).djs.all()
+
+    # Return {All Users} - {DJs of this room}
+    non_djs_in_room = all_users.difference(room_djs)
+
+    context = {'users': non_djs_in_room}
+    return render(request, 'hot_pot/room/users.json', context, content_type='application/json')
