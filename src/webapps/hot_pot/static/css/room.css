@@ -228,7 +228,7 @@ a:hover, a:visited, a:link, a:active{
 
 .map{
   border-radius: 10%;
-  position:absolute;
+  position:fixed;
   bottom:30%;
   right: 0;
   background: white;
