@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from hot_pot.forms import RoomForm, ProfileForm
 from hot_pot.models import Room, RoomHistory, Song, Playlist, Marker
+from mimetypes import guess_type
 
 
 @login_required

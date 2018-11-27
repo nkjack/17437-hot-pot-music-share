@@ -171,7 +171,7 @@ a:hover, a:visited, a:link, a:active{
   background-color: white;
   border-radius: 25px;
   display: none;
-  position:absolute;
+  position:fixed;
   bottom:20%;
   right: 0;
   border: 3px solid #f1f1f1;
@@ -186,7 +186,7 @@ a:hover, a:visited, a:link, a:active{
 }
 
 .people-chat{
-  position:absolute;
+  position:fixed;
   bottom:30%;
   right: 0;
   display: none;
@@ -219,7 +219,7 @@ a:hover, a:visited, a:link, a:active{
 
 .chat{
   border-radius: 10%;
-  position:absolute;
+  position:fixed;
   bottom:20%;
   right: 0;
   background: white;
