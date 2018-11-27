@@ -109,10 +109,11 @@ class Song(models.Model):
     song_id = models.CharField(max_length=100)
     song_name = models.CharField(max_length=100)
 
-    # votes_score = models.IntegerField(default=0)
+    song_room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    thumbs_up = models.IntegerField(blank=True, default=0)
 
+    rank = models.IntegerField(blank=True, default=0)
     # belongs_to_playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
-    # thumbs_up = models.IntegerField(blank = True, default = 0)
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     def __str__(self):
@@ -124,21 +125,20 @@ class Playlist(models.Model):
     # is_in_pool = models.BooleanField()  # Boolean if song is in suggestions or in actual pool of a room
 
     songs = models.ManyToManyField(Song, related_name='pl_songs')
-    pl_type = models.CharField(max_length=20, default="", blank=True)
 
     # Options: 'pool', 'queue'
+    pl_type = models.CharField(max_length=20, default="", blank=True)
 
     def __str__(self):
         return self.belongs_to_room.name + '\'s song ' + self.pl_type
 
 
-class Vote(models.Model):
+class UserVotes(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # room = models.ForeignKey(Room, on_delete=models.CASCADE) # Sam commented this out
 
-    vote = models.CharField(max_length=2)  # could be '-1', '0', or '+1'
-
+    # vote = models.CharField(max_length=2)  # could be '-1', '0', or '+1'
     def __str__(self):
         return self.user.username
 

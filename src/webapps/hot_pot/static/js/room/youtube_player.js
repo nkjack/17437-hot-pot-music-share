@@ -305,6 +305,8 @@ function nextVideo() {
 
         player.stopVideo();
 
+        player.stopVideo();
+
         const randomIndex = getRandom(0, 200);
 
         player.loadPlaylist({
