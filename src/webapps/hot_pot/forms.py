@@ -106,7 +106,8 @@ class RoomForm(forms.ModelForm):
                                                                'rows': "3",
                                                                'class': 'form-control '}),
                 'cover_pic': forms.FileInput(),
-                'isMarked':forms.CheckboxInput()
+                'isMarked':forms.CheckboxInput(attrs = { "class": "checkmark",
+                                                        })
 
         }
         labels = {

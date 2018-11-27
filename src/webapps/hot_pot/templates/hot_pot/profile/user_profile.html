@@ -2,8 +2,8 @@
 
 {% block content %}
 {% load static %}
-	<div class="card mb-4 my-3 box-shadow">
-        <div class="card-header ">
+	<div class="card mx-4 my-3 box-shadow">
+        <div class="card-header bg-secondary text-light ">
             <h4 class="my-1 font-weight-normal">{{username}}</h4>
         </div>
         <div class="card-body">
@@ -48,32 +48,31 @@
     </div>
 
         <div class="my-3 p-3 rounded box-shadow">
-        <h6 class="border-bottom border-gray pb-2 mb-0">My Rooms</h6>
+        <h4 class="border-bottom border-gray pb-2 mb-0"><strong>My Rooms</strong></h4>
 <!--         <button class = "btn-secondary float-right" id = "editMyOwn" onclick = "editMyOwn()">Edit</button> -->
         
         <!-- rows of rooms -->
         <div class="row-card">
               
-                <!-- One single room -->
-                {% for room in owned %}
-                  <a href="{% url 'room' room.pk %}" class="col-sm-4">
+              <!-- One single room -->
+              {% for room in owned %}
+                <a href="{% url 'room' room.id %}" class="col-sm-3">
 
-                    <div class="card bg-light rounded">
-                   {% if room.cover_pic %}
-                      <img class="mr-4" src="{% url 'room_img' room.pk %}" width="90" alt = "">
 
-                    {% endif %}
-                      <div class="card-body">
-                        <h5 class="card-title">{{ room.name }}</h5>
-                        <p class="card-text">{{room.description }}</p>
-                        <p class="card-text"><small class="text-muted">DJ: {{room.owner.username}}</small></p>
-                      </div>
+                  <div class="card bg-light rounded">
+                 {% if room.cover_pic %}
+                    <img  src="{% url 'room_img' room.id %}" class = "card-img-top" width =  alt = "">
+                  {% endif %}
+                        <div class="card-body">
+                            <h4 class="card-title">{{ room.name }}</h4>
+                        </div>
                     </div>
+
                 </a>
-                  <a href="{% url 'edit_room' room.pk %}" >
-                    <img src="{% static 'hot_pot_music_share/img/edit.png' %}" width = "25">
+                 <a href="{% url 'edit_room' room.id %}" >
+                    <img src="{% static 'img/edit.png' %}" width = "25">
                   </a>
-                {% endfor %}
+            {% endfor %}
               
 
             </div>

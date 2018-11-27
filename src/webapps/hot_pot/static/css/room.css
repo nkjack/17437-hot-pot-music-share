@@ -15,7 +15,10 @@ a:hover, a:visited, a:link, a:active{
   text-decoration: none;
   color: inherit;
 }
-
+.checkmark{
+    width : 30px,
+    height: 30px,
+}
 .home_container {
   height: 100%;
   width:100%;
@@ -45,13 +48,14 @@ a:hover, a:visited, a:link, a:active{
   display: flex;
   flex-wrap: wrap;
   margin-top: 20px;
+  text-align: center;
 }
 
 .row-card > div[class*='col-'] {
   display: flex;
 }
 .intro{
-      align-items: center;
+  align-items: center;
 }
 
 
@@ -97,9 +101,6 @@ a:hover, a:visited, a:link, a:active{
 /* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
-}
-.checkbox{
-    display: none;
 }
 
 .sync span {
