@@ -22,7 +22,6 @@ def add_marker(request):
 
     form.save()
     all_markers = Marker.objects.all()
-    # print(all_markers)
     context['all_markers'] = all_markers
     return JsonResponse(data={})
 
@@ -30,5 +29,4 @@ def add_marker(request):
 def get_markers(request):
     all_markers = Marker.objects.all()
     context = {'markers': all_markers}
-
     return render(request, 'hot_pot/maps/markers.json', context, content_type='application/json')
