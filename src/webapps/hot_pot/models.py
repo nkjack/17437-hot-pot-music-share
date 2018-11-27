@@ -33,8 +33,8 @@ class Room(models.Model):
     name = models.CharField(max_length=42)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', blank=True)
     create_date = models.DateTimeField(auto_now=True)
-    cover_pic = models.ImageField(upload_to='room-photo', blank=True,
-                                  default='room-photo/logo.png',)
+    cover_pic = models.ImageField(upload_to='room-photos', blank=True,
+                                  default='room-photos/user_1.png',)
     description = models.TextField(max_length=420, blank=True,)
 
     isMarked = models.BooleanField(default=True, blank=True)
