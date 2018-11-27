@@ -11,8 +11,10 @@ from googleapiclient.discovery import build
 from hot_pot.models import Room, RoomHistory, Playlist, Song
 from hot_pot.views.room_helper import get_all_songs_from_playlist
 
+
 # YouTube API metadata needed for search
-DEVELOPER_KEY = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'
+import os
+DEVELOPER_KEY = os.environ.get("YOUTUBE_API_KEY")
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 MAX_SEARCH_RESULTS = 10
