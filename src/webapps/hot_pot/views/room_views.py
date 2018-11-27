@@ -93,8 +93,6 @@ def search_song(request):
 @login_required
 @transaction.atomic
 def add_song_to_room_playlist_ajax(request):
-    context = {}
-
     room_id = request.POST['room_id']
     searched_song_id = request.POST['song_id']
     searched_song_name = request.POST['song_name']
@@ -118,8 +116,6 @@ def add_song_to_room_playlist_ajax(request):
 
     json = get_all_songs_from_playlist(room_id, request.user.id, "pool")
     return JsonResponse(data=json)
-    # context['songs'] = song_pool.songs.all().order_by('id')
-    # return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
 # Add a single song
@@ -160,12 +156,7 @@ def add_song_from_pool_to_queue(request):
 @login_required
 @transaction.atomic
 def get_pool_songs_from_room(request):
-    # context = {}
     room_id = request.GET['room_id']
-    # room = Room.objects.get(id=room_id)
-    # song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
-    # context['songs'] = song_pool.songs.all().order_by('id')
-    # return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
     json = get_all_songs_from_playlist(room_id, request.user.id, "pool")
     return JsonResponse(data=json)
 
@@ -184,8 +175,6 @@ def get_queue_songs_from_room(request):
 # Return name of top song and remove from song queu
 @transaction.atomic
 def get_top_of_song_queue(request, room_id):
-    # TODO: What to do if no more songs in song_queue
-
     # Get song queue for this room
     room = Room.objects.get(id=room_id)
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
@@ -244,7 +233,6 @@ def delete_from_song_queue_post(request):
 def add_user_to_room(username, room_name):
     room = Room.objects.get(name=room_name)
     user = User.objects.get(username=username)
-
     room.users.add(user)
 
 
@@ -252,7 +240,6 @@ def add_user_to_room(username, room_name):
 def remove_user_from_room(username, room_name):
     room = Room.objects.get(name=room_name)
     user = User.objects.get(username=username)
-
     room.users.remove(user)
 
 
@@ -260,7 +247,6 @@ def remove_user_from_room(username, room_name):
 def get_users_in_room(request, room_name):
     room = Room.objects.get(name=room_name)
     context = {'users': room.users.all()}
-
     return render(request, 'hot_pot/room/users.json', context, content_type='application/json')
 
 
@@ -283,7 +269,6 @@ def delete_from_song_queue(request, room_id, song_id):
         print('Deleted song with song_id: ' + song_id)
 
         # TODO: Optional error logging if song doesn't exist anymore (possible if concurrent deletes)
-
     return HttpResponse('')
 
 
@@ -319,7 +304,6 @@ def change_song_queue_order(request):
                     continue
                 song.save()
 
-
         # upvote
         elif prev_position > new_position:
             print("upvote")
@@ -339,6 +323,7 @@ def change_song_queue_order(request):
     context['songs'] = song_queue.songs.all().order_by('rank')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
+
 # Add user to room's list of DJs
 def add_dj_to_room(request):
     username = request.POST['username']
@@ -351,6 +336,7 @@ def add_dj_to_room(request):
 
     print('>>>> add_dj_to_room for user = %s, room = %s... successful', (user, room_id))
     return HttpResponse('')
+
 
 # Remove user from room's list of DJs
 def remove_dj_from_room(request):
