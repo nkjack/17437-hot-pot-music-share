@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import  get_object_or_404
+from django.shortcuts import get_object_or_404
 
 from hot_pot.models import Room, Song, UserVotes
-from hot_pot.views.room_helper import sql_get_all_songs_from_playlist
+from hot_pot.views.room_helper import get_all_songs_from_playlist
 
 @login_required
 @transaction.atomic
@@ -28,7 +28,7 @@ def vote_up(request):
         user_vote.save()
         song.save()
         # return JsonResponse(data={'status': 'true', 'message': 'voted up'})
-        json = sql_get_all_songs_from_playlist(room_id, request.user.id, "pool")
+        json = (room_id, request.user.id, "pool")
         return JsonResponse(data=json)
     else:
         return JsonResponse(status=404, data={'status': 'false', 'message': 'fail to vote up'})
@@ -50,7 +50,7 @@ def vote_down(request):
         rows.delete()
         song.thumbs_up -= 1
         song.save()
-        json = sql_get_all_songs_from_playlist(room_id, request.user.id, "pool")
+        json = get_all_songs_from_playlist(room_id, request.user.id, "pool")
         # return JsonResponse(data={'status': 'true', 'message': 'deleted vote'})
         return JsonResponse(data=json)
     else:

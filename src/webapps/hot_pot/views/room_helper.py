@@ -1,6 +1,6 @@
 
 from django.db import connection
-
+from hot_pot.models import *
 
 def sql_get_all_songs_from_playlist(room_id, user_id, pl_type):
     # sql for songs with user
@@ -29,5 +29,31 @@ def sql_get_all_songs_from_playlist(room_id, user_id, pl_type):
         song['is_voted'] = s[3]
 
         data['songs'].append(song)
+
+    return data
+
+def get_all_songs_from_playlist(room_id, user_id, pl_type):
+    room = Room.objects.get(id=room_id)
+    song_pool = Playlist.objects.get(belongs_to_room=room, pl_type=pl_type)
+
+    songs = song_pool.songs.all().order_by('-thumbs_up')
+    data = {}
+    data['songs'] = []
+
+    for song in songs:
+        user = User.get(id=user_id)
+        rows = UserVotes.objects.filter(user=user, song=song)
+
+        song_to_json = {}
+        song_to_json['id'] = song.song_id
+        song_to_json['name'] = song.song_name
+        song_to_json['thumbs_up'] = song.thumbs_up
+
+        if rows.count() > 0:
+            song_to_json['is_voted'] = 'True'
+        else:
+            song_to_json['is_voted'] = 'False'
+
+        data['songs'].append(song_to_json)
 
     return data

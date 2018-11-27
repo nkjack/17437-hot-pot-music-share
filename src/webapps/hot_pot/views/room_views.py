@@ -9,7 +9,7 @@ from django.utils.timezone import localtime, now
 from googleapiclient.discovery import build
 
 from hot_pot.models import Room, RoomHistory, Playlist, Song
-from hot_pot.views.room_helper import sql_get_all_songs_from_playlist
+from hot_pot.views.room_helper import get_all_songs_from_playlist
 
 # YouTube API metadata needed for search
 DEVELOPER_KEY = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'
@@ -115,7 +115,7 @@ def add_song_to_room_playlist_ajax(request):
                                    pl_type="pool"):
         song_pool.songs.add(song)
 
-    json = sql_get_all_songs_from_playlist(room_id, request.user.id, "pool")
+    json = get_all_songs_from_playlist(room_id, request.user.id, "pool")
     return JsonResponse(data=json)
     # context['songs'] = song_pool.songs.all().order_by('id')
     # return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
@@ -165,7 +165,7 @@ def get_pool_songs_from_room(request):
     # song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     # context['songs'] = song_pool.songs.all().order_by('id')
     # return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
-    json = sql_get_all_songs_from_playlist(room_id, request.user.id, "pool")
+    json = get_all_songs_from_playlist(room_id, request.user.id, "pool")
     return JsonResponse(data=json)
 
 
