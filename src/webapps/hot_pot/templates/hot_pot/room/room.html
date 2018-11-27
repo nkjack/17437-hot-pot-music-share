@@ -7,10 +7,10 @@
     <input type="hidden" id="is_dj" value="{{ is_dj }}"/>
     <input type="hidden" id="username" value="{{ username }}"/>
 
-    <div class = "room-info">
-    	<img class = "info" src = "{% url 'room_img' room_id %}" width = "25"> 
-    	<div class = "info">Room: {{room_name}}</div>
-    	<div class = "info">Owner: {{room_owner}} </div>
+    <div class = "mb-3 ml-4  mr-5 p-3 rounded box-shadow info-panel">
+    	<img class = "info" src = "{% url 'room_img' room_id %}" width = "50"> 
+    	<h5  class = " info"> Room: {{room_name}}</h5 >
+    	<h5 class = " info">Owner: {{room_owner}} </h5>
    <!-- can also include online people count or the song name which is currently playing -->
 
     </div>
@@ -22,7 +22,7 @@
             <br>
 
             <!-- Add a 'sync' now button -->
-            {% if not is_host %}
+            {% if not is_dj %}
                 <button type="button" class="btn btn-secondary text-light sync" onclick="syncToHost()"><span> Sync To Host  &#8594;</span></button>
             {% else %}
                 <button type="button" class="btn btn-secondary text-light sync" onclick="nextVideo()"><span> Next Video  &#8594;</span></button>
@@ -55,7 +55,7 @@
         </div>
 
         <div class="col">
-            <div class=" p-3 bg-light text-dark rounded box-shadow" id="panel">
+            <div class="m-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" id="search-query" placeholder="Search for...">
                     <button id="search-button" class="btn-search" type="button" onclick = "showSearchResult()">Search</button>
@@ -79,7 +79,7 @@
 
             </div>
             <!-- SONG POOL START -->
-            <div class="my-3 p-3 bg-light text-dark rounded box-shadow poll_list">
+            <div class="m-3 p-3 bg-light text-dark rounded box-shadow poll_list">
                 <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
 
                 <div id="poll_list">

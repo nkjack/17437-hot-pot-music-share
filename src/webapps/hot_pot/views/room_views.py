@@ -37,6 +37,7 @@ def room(request, room_id):
     context = {'username': request.user.username,
                'room_id': room_id,
                'room_name': room_name,
+               'room_owner':room.owner.username,
                'title': 'Room ' + room_name,
                'is_dj': is_dj,
                'song_pool': song_pool.songs.all().order_by('id'),

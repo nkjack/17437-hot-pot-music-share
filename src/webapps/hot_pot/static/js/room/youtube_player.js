@@ -41,8 +41,8 @@ function onYouTubeIframeAPIReady() {
         const randomIndex = getRandom(0, billboardPlaylistTrackCount);
 
         player = new YT.Player('player', {
-            height: '293',
-            width: '480',
+            height: '350',
+            // width: '480',
             playerVars: {
                 'start': 0,
                 'listType': 'playlist',
@@ -54,8 +54,8 @@ function onYouTubeIframeAPIReady() {
 
     } else {
         player = new YT.Player('player', {
-            height: '293',
-            width: '480',
+            height: '350',
+            // width: '480',
             videoId: videoId,
             playerVars: {
                 'start': 0,

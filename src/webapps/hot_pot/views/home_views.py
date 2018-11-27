@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from hot_pot.forms import RoomForm, ProfileForm
-from hot_pot.models import Room, RoomHistory, Song, Playlist, Marker
-
+from hot_pot.models import Room, RoomHistory, Song, Playlist, Marker, Profile
+from mimetypes import guess_type
 
 @login_required
 def home(request, username):

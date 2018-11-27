@@ -149,9 +149,8 @@ a:hover, a:visited, a:link, a:active{
   width: 30%;
 }
 .poll_list{
-  max-height: 1000px;
   overflow-y: scroll;
-  height:69%;
+  height:500px;
 }
 .video_col{
   height:100%;
@@ -160,7 +159,7 @@ a:hover, a:visited, a:link, a:active{
 .dj_list{
   margin-top: 2%;
   overflow-y: scroll;
-  max-height: 240px;
+  height: 240px;
 }
 
 .search-result{
@@ -171,7 +170,7 @@ a:hover, a:visited, a:link, a:active{
   background-color: white;
   border-radius: 25px;
   display: none;
-  position:absolute;
+  position:fixed;
   bottom:20%;
   right: 0;
   border: 3px solid #f1f1f1;
@@ -186,7 +185,7 @@ a:hover, a:visited, a:link, a:active{
 }
 
 .people-chat{
-  position:absolute;
+  position:fixed;
   bottom:30%;
   right: 0;
   display: none;
@@ -205,7 +204,7 @@ a:hover, a:visited, a:link, a:active{
 }
 .people-chat #chat{
   display: inline-block;
-  width: 55%;
+  width: 45%;
   margin: auto;
   float:right;
 }
@@ -221,33 +220,25 @@ a:hover, a:visited, a:link, a:active{
   border-radius: 10%;
   position:absolute;
   bottom:20%;
-  right: 0;
+  right: -3%;
   background: white;
   box-shadow: 0px 5px 20px #dfdfdf;
 }
 
 .map{
   border-radius: 10%;
-  position:fixed;
+  position:absolute;
   bottom:30%;
-  right: 0;
+  right: -3%;
   background: white;
   box-shadow: 0px 5px 20px #dfdfdf;
 }
 
-.room-info{
-  font-weight: bold;
-  font-size: large;
-  border: .075em solid #696969;
-  color: black;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-top:10px;
-  opacity: 0.8;
+.info-panel{
+  background-color: #dfdfdf;
+  color: white;
 }
-
-.room-info .info{
+.info-panel .info{
+  margin-left: 20px;
   display: inline-block;
 }
