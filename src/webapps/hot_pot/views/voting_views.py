@@ -28,7 +28,7 @@ def vote_up(request):
         user_vote.save()
         song.save()
         # return JsonResponse(data={'status': 'true', 'message': 'voted up'})
-        json = (room_id, request.user.id, "pool")
+        json = get_all_songs_from_playlist(room_id, request.user.id, "pool")
         return JsonResponse(data=json)
     else:
         return JsonResponse(status=404, data={'status': 'false', 'message': 'fail to vote up'})
