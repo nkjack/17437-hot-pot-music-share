@@ -7,7 +7,7 @@
     <input type="hidden" id="is_dj" value="{{ is_dj }}"/>
     <input type="hidden" id="username" value="{{ username }}"/>
 
-    <div class = "mb-3 ml-4  mr-5 p-3 bg-dark text-light rounded box-shadow">
+    <div class = "mb-3 ml-4  mr-5 p-3 rounded box-shadow info-panel">
     	<img class = "info" src = "{% url 'room_img' room_id %}" width = "50"> 
     	<h5  class = " info"> Room: {{room_name}}</h5 >
     	<h5 class = " info">Owner: {{room_owner}} </h5>
@@ -22,7 +22,7 @@
             <br>
 
             <!-- Add a 'sync' now button -->
-            {% if not is_host %}
+            {% if not is_dj %}
                 <button type="button" class="btn btn-secondary text-light sync" onclick="syncToHost()"><span> Sync To Host  &#8594;</span></button>
             {% else %}
                 <button type="button" class="btn btn-secondary text-light sync" onclick="nextVideo()"><span> Next Video  &#8594;</span></button>

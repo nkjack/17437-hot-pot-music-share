@@ -204,7 +204,7 @@ a:hover, a:visited, a:link, a:active{
 }
 .people-chat #chat{
   display: inline-block;
-  width: 55%;
+  width: 45%;
   margin: auto;
   float:right;
 }
@@ -234,7 +234,11 @@ a:hover, a:visited, a:link, a:active{
   box-shadow: 0px 5px 20px #dfdfdf;
 }
 
-.info{
+.info-panel{
+  background-color: #dfdfdf;
+  color: white;
+}
+.info-panel .info{
   margin-left: 20px;
   display: inline-block;
 }
