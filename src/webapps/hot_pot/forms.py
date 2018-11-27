@@ -129,7 +129,7 @@ class RoomForm(forms.ModelForm):
         cleaned_data = super(RoomForm, self).clean()
 
         name = self.cleaned_data.get('name')
-        if Room.objects.filter(name__exact=name):
+        if Room.objects.filter(name__exact=name) and not self.instance.name == name:
             raise forms.ValidationError('Room name is already taken.')
 
         return cleaned_data

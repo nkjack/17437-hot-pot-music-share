@@ -120,12 +120,12 @@
             <div class=" p-3 bg-light text-dark rounded box-shadow search" id="panel">
                 <div class="input-group mb-0">
                     <input type="text" class="form-control" id="search-query" placeholder="Search for...">
-                    <button id="search-button" class="btn-search" type="button">Search</button>
+                    <button id="search-button" class="btn-search" type="button" onclick = "showSearchResult()">Search</button>
                     <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
                 </div>
                 <!-- A list of results -->
-                <div id="search-results">
-
+                <div id="search-results" class = "form-popup">
+                
                     <!-- One track -->
                     <div class="media pt-3" id="song_0">
 
