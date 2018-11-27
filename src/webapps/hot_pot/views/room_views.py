@@ -3,14 +3,13 @@ from mimetypes import guess_type
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.utils.timezone import localtime, now
 from googleapiclient.discovery import build
 
 from hot_pot.models import Room, RoomHistory, Playlist, Song
-from hot_pot.views.room_helper import get_all_songs_from_playlist
-
+from hot_pot.views.room_helper import get_all_songs_from_playlist, user_is_dj
 
 # YouTube API metadata needed for search
 import os
@@ -25,7 +24,7 @@ MAX_SEARCH_RESULTS = 10
 def room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     room_name = room.name
-    is_host = room.owner == request.user
+    is_dj = user_is_dj(request.user, room)
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
@@ -39,7 +38,7 @@ def room(request, room_id):
                'room_id': room_id,
                'room_name': room_name,
                'title': 'Room ' + room_name,
-               'is_host': is_host,
+               'is_dj': is_dj,
                'song_pool': song_pool.songs.all().order_by('id'),
                'song_queue': song_queue.songs.all().order_by('id'),
                }
@@ -339,3 +338,35 @@ def change_song_queue_order(request):
     context = {}
     context['songs'] = song_queue.songs.all().order_by('rank')
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
+
+# Add user to room's list of DJs
+def add_dj_to_room(request):
+    username = request.POST['username']
+    room_id = request.POST['room_id']
+
+    user = User.objects.get(username=username)
+    room = Room.objects.get(id=room_id)
+
+    room.djs.add(user)
+
+    print('>>>> add_dj_to_room for user = %s, room = %s... successful', (user, room_id))
+    return HttpResponse('')
+
+# Remove user from room's list of DJs
+def remove_dj_from_room(request):
+    username = request.POST['username']
+    room_id = request.POST['room_id']
+
+    user = User.objects.get(username=username)
+    room = Room.objects.get(id=room_id)
+
+    # Cannot remove owner of the room as a DJ
+    if user == room.owner:
+        print('>>>> remove_dj_from_room for user = %s, room = %s... cannot remove owner as DJ', (user, room_id))
+        return HttpResponseBadRequest
+
+    room.djs.remove(user)
+
+    print('>>>> remove_dj_from_room for user = %s, room = %s... successful', (user, room_id))
+    return HttpResponse('')
+

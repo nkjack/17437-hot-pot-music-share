@@ -45,7 +45,7 @@ function updateChangesPoolSongs(data) {
         var v_thumbs_up = data.songs[i]['thumbs_up'];
         var is_voted = data.songs[i]['is_voted'];
 
-        const isHost = $('#is_host').val();
+        const isHost = $('#is_dj').val();
         // console.log('inside sync_playlists.js...' + isHost);
 
         $('#poll_list').append(getEntryListForPoolQueue(v_id,
@@ -99,7 +99,7 @@ function updateChangesQueueSongs(data) {
             var v_name = data.songs[i]['name'];
             var v_rank = data.songs[i]['rank'];
 
-            const isHost = $('#is_host').val();
+            const isHost = $('#is_dj').val();
             console.log('inside sync_playlists.js...' + isHost);
 
             $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost, i + 1, v_rank));

@@ -1,8 +1,12 @@
 /****************************************** YOUTUBE PLAYER ****************************************************/
-var isHost = $('input#is_host').val() === "True";
+isHost = $('input#is_dj').val() === "True";
 
-ytApiKey = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'; // Youtube API Key
-billboardPlaylistId = 'PL55713C70BA91BD6E'; // Top 200 Billboard songs (to play as fallback)
+// Youtube API Key
+ytApiKey = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'; // TODO: Make hidden;
+
+// Top 50 This Week & Top 100 Songs 2019 (Best New Music Hits Playlist) (to play as fallback)
+billboardPlaylistId = 'PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG';
+billboardPlaylistTrackCount = 150;
 
 // 2. This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
@@ -22,7 +26,8 @@ function onYouTubeIframeAPIReady() {
     var events;
     if (isHost) {
         events = {
-            'onStateChange': onHostPlayerStateChange
+            'onStateChange': onHostPlayerStateChange,
+            'onReady': onPlayerReady
         }
     } else {
         events = {
@@ -33,7 +38,7 @@ function onYouTubeIframeAPIReady() {
 
     if (videoId == null) {
         console.log('No songs in the queue, playing Billboard playlist...');
-        const randomIndex = getRandom(0, 200);
+        const randomIndex = getRandom(0, billboardPlaylistTrackCount);
 
         player = new YT.Player('player', {
             height: '293',
@@ -47,7 +52,6 @@ function onYouTubeIframeAPIReady() {
             events: events
         });
 
-        playRandomTrack();
     } else {
         player = new YT.Player('player', {
             height: '293',
@@ -64,14 +68,23 @@ function onYouTubeIframeAPIReady() {
 
 // 4. The API will call this function when the video player is ready.
 function onPlayerReady(event) {
-    // Listeners ask to sync-up to Host when their player is ready (when they first join the room)
+    console.log('PlayerReady called...');
+
+    // Always start playing the video
+    player.playVideo();
+
+    // Listeners AND DJs ask to sync-up to Host when their player is ready (when they first join the room)
     syncToHost();
 }
 
+// What the Host will do when player state changes (e.g. broadcast syncEveryone)
 function onHostPlayerStateChange(event) {
     const playerStatus = event.data;
 
     switch (playerStatus) {
+        case YT.PlayerState.UNSTARTED:
+            console.log("onHostPlayerStateChange, case: YT.PlayerState.UNSTARTED");
+            break;
         case YT.PlayerState.PLAYING:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.PLAYING");
 
@@ -85,23 +98,33 @@ function onHostPlayerStateChange(event) {
             break;
         case YT.PlayerState.BUFFERING:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.BUFFERING");
+
             break;
         case YT.PlayerState.CUED:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.CUED");
+
             break;
         case YT.PlayerState.ENDED:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.ENDED");
-            // TODO: Start playing next song in the queue
-            // Delete currently playing song from queue and play next one
+            // Start playing next song in the queue
             nextVideo();
             break;
+        default:
+            console.log("onHostPlayerStateChange, case: default");
+
+            return;
     }
 
-    // Host syncs up Listeners whenever Host's player state changes
-    syncListeners();
-    return;
+    // Do NOT send 'sync with me' request if I just recently sync'd to someone else (avoid thrashing)
+    const currTime = window.performance.now();
+    if ((currTime - lastTimeSyncdUp) > 1000) {
+        console.log("Telling everyone to sync with me.");
+        // Host syncs up Listeners whenever Host's player state changes
+        syncEveryone();
+    }
 }
 
+// What the Listener will do when player state changes (Currently, nothing)
 function onListenerPlayerStateChange(event) {
     const playerStatus = event.data;
 
@@ -117,7 +140,25 @@ function onListenerPlayerStateChange(event) {
     }
 }
 
-// Host will call this function so Listeners will sync
+// Host will call this function so all users will sync
+function syncEveryone() {
+    var currPosition = player.getCurrentTime();
+
+    socket.send(JSON.stringify({
+        'sync_result_message': '',
+        'video_id': String(player.getVideoData()['video_id']),
+        'position': currPosition,
+        'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
+        'request_from': '',
+        'from_username': $('input#username').val(),
+        'djs_ignore': 'false',
+        'broadcast': 'true',
+    }));
+
+    console.log('Host sent back sync_result to everyone');
+}
+
+// Host will call this function so only listeners (non-DJs) will sync
 function syncListeners() {
     var currPosition = player.getCurrentTime();
 
@@ -126,17 +167,42 @@ function syncListeners() {
         'video_id': String(player.getVideoData()['video_id']),
         'position': currPosition,
         'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
+        'request_from': '',
+        'from_username': $('input#username').val(),
+        'djs_ignore': 'true',
+        'broadcast': 'true',
     }));
 
-    console.log('Host sent back sync_result');
+    console.log('Host sent back sync_result to listeners');
 }
 
-// Listener will call this function to ask Host for video information
+// Host will call this function so only the single requester will sync
+function syncSingleRequester(username) {
+    var currPosition = player.getCurrentTime();
+
+    socket.send(JSON.stringify({
+        'sync_result_message': '',
+        'video_id': String(player.getVideoData()['video_id']),
+        'position': currPosition,
+        'is_playing': String(player.getPlayerState() === YT.PlayerState.PLAYING),
+        'request_from': username,
+        'from_username': $('input#username').val(),
+        'djs_ignore': 'false',
+        'broadcast': 'false',
+    }))
+    ;
+
+    console.log('Host sent back sync_result to single requester');
+}
+
+
+// Listener OR DJ (when they join a room) will call this function to ask Host for video information
 function syncToHost() {
     // Send message via socket
     socket.send(JSON.stringify({
         'sync_request_message': '',
-        'username': $('input#username').val(),
+        'from_username': $('input#username').val(),
+        'from_dj': $('input#is_dj').val(),
     }));
 
     sentSyncRequestTime = window.performance.now();
@@ -189,16 +255,8 @@ function changeVideoSubmit() {
     changeVideoById(videoId);
 }
 
-/*
-                <button onclick="addToSongQueue()">Add to Song Queue</button><br>
-    { endif %}
 
-    <!-- Both Hosts and Listeners can add to Song Pool -->
-    Video ID or URL:
-    <input id="add-to-song-pool-input" type="text" size="10"/>
-    <button onclick="addToSongPool()">Add to Song Pool</button>
-*/
-
+// Directly add a song to the song queue from text input
 function addToSongQueue() {
     const input = document.getElementById('add-to-song-queue-input').value;
     const videoId = cleanVideoIdInput(input);
@@ -226,11 +284,12 @@ function addToSongQueue() {
     get_queue_songs_from_room();
 }
 
+// Directly add a song to the song pool from text input
 function addToSongPool() {
     const input = document.getElementById('add-to-song-pool-input').value;
     const videoId = cleanVideoIdInput(input);
 
-      // Clear the input
+    // Clear the input
     document.getElementById('add-to-song-pool-input').value = '';
 
     // Get Song Title
@@ -305,9 +364,7 @@ function nextVideo() {
 
         player.stopVideo();
 
-        player.stopVideo();
-
-        const randomIndex = getRandom(0, 200);
+        const randomIndex = getRandom(0, billboardPlaylistTrackCount);
 
         player.loadPlaylist({
             listType: 'playlist',
@@ -383,7 +440,7 @@ var getRandom = function (min, max) {
 
 // Helper function to play random video in the playlist
 function playRandomTrack() {
-    const randomIndex = getRandom(0, 200);
+    const randomIndex = getRandom(0, billboardPlaylistTrackCount);
     console.log('playRandomTrack at randomIndex:' + randomIndex);
     player.playVideoAt(randomIndex);
 };

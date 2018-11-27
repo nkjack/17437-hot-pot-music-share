@@ -51,6 +51,8 @@ class Room(models.Model):
 
     users = models.ManyToManyField(User, related_name='current_users') # Keep track of current users in the room
 
+    djs = models.ManyToManyField(User, related_name='djs') # Keep track of the DJs for this room
+
     # location = models.CharField(max_length=100)  # Some Google Maps API ID (e.g. coordinates)
     # place = models.CharField(max_length=100)  # Some Google Places API ID (e.g. for a business)
     # listeners = models.ManyToManyField(User)

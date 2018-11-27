@@ -42,4 +42,5 @@ $(document).ready(function () {  // Runs when the document is ready
 
     // Call this immediately (don't wait 5 seconds to get current list of users)
     updateCurrentUsersList();
+
 }); // End of $(document).ready
