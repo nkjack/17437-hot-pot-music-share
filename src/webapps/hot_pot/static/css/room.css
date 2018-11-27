@@ -219,8 +219,8 @@ a:hover, a:visited, a:link, a:active{
 .chat{
   border-radius: 10%;
   position:absolute;
-  bottom:20%;
-  right: -3%;
+  bottom:10%;
+  right: 0;
   background: white;
   box-shadow: 0px 5px 20px #dfdfdf;
 }
@@ -229,7 +229,7 @@ a:hover, a:visited, a:link, a:active{
   border-radius: 10%;
   position:absolute;
   bottom:30%;
-  right: -3%;
+  right: 0;
   background: white;
   box-shadow: 0px 5px 20px #dfdfdf;
 }
