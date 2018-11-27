@@ -9,12 +9,13 @@
     <input type="hidden" id="username" value="{{ username }}"/>
 
     <div class="mb-3 ml-4  mr-5 p-3 rounded box-shadow info-panel">
-    <img class="info" src="{% url 'room_img' room_id %}" width="50">
-    <h5 class=" info"> Room: {{ room_name }}</h5>
-    <h5 class=" info">Owner: {{ room_owner }} </h5>
+	    <img class="info" src="{% url 'room_img' room_id %}" width="50">
+	    <h5 class=" info"> Room: {{ room_name }}</h5>
+	    <h5 class=" info">Owner: {{ room_owner }} </h5>
+	</div>
     <!-- can also include online people count or the song name which is currently playing -->
     <div class="row">
-    <div class="col video_col">
+    	<div class="col">
         <!-- START DEBUG: JUST SCRATCH WORK TO ADD DJS TO THIS ROOM -->
         {% if is_owner %}
 
@@ -45,7 +46,8 @@
         {% endif %}
         <!-- END DEBUG: JUST SCRATCH WORK TO ADD DJS TO THIS ROOM -->
 
-    </div>
+	    </div>
+	</div>
     <div class="row mx-3">
         <div class="col">
              <!-- YOUTUBE PLAYER START -->
@@ -84,64 +86,59 @@
                 {% endfor %}
             </div>
         </div>
+	    <div class="col">
+		    <div class="m-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
+		        <div class="input-group mb-3">
+		            <input type="text" class="form-control" id="search-query" placeholder="Search for...">
+		            <button id="search-button" class="btn-search" type="button" onclick="showSearchResult()">Search</button>
+		            <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
+		        </div>
+		        <!-- Direct URL/VideoId Input to song queue/pool -->
+		        <div id="direct-input-panel" class="input-group">
+		            {% if is_host %}
+		                <!--Only Hosts can add to song queue-->
 
-    </div>
+		                <input id="add-to-song-queue-input" type="text" class="form-control mr-3" placeholder="Video URL/ID"/>
+		                <button class="btn-search" type="button" onclick="addToSongQueue()">Add to Queue</button><br/>
+		            {% endif %}
+		            <input id="add-to-song-pool-input" type="text" class="form-control" placeholder="Video URL/ID"/>
+		            <button class="btn-search" type="button" onclick="addToSongPool()">Add to Pool</button>
+		            <br>
 
-    <div class="col">
-    <div class="m-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" id="search-query" placeholder="Search for...">
-            <button id="search-button" class="btn-search" type="button" onclick="showSearchResult()">Search</button>
-            <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
-        </div>
-        <!-- Direct URL/VideoId Input to song queue/pool -->
-        <div id="direct-input-panel" class="input-group">
-            {% if is_host %}
-                <!--Only Hosts can add to song queue-->
+		            <!-- To be filled by JS on success -->
+		            <span id="direct-input-success"></span>
+		        </div>
 
-                <input id="add-to-song-queue-input" type="text" class="form-control mr-3" placeholder="Video URL/ID"/>
-                <button class="btn-search" type="button" onclick="addToSongQueue()">Add to Queue</button><br/>
-            {% endif %}
-            <input id="add-to-song-pool-input" type="text" class="form-control" placeholder="Video URL/ID"/>
-            <button class="btn-search" type="button" onclick="addToSongPool()">Add to Pool</button>
-            <br>
+		    </div>
+		    <!-- SONG POOL START -->
+		    <div class="m-3 p-3 bg-light text-dark rounded box-shadow poll_list">
+		        <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
 
-            <!-- To be filled by JS on success -->
-            <span id="direct-input-success"></span>
-        </div>
+		        <div id="poll_list">
+		            {#                    {% for song in song_pool %}#}
+		            {#                        <div class="media pt-3" id="poll_song_div">#}
+		            {#                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"#}
+		            {#                                 width="100">#}
+		            {#                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">#}
+		            {#                                <div class="d-flex justify-content-between align-items-center w-100">#}
+		            {#                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>#}
+		            {#                                </div>#}
+		            {#                                {% if is_dj %}#}
+		            {#                                    <button type="button" id="add-song-to-queue-btn">Add to Queue</button>#}
+		            {#                                {% endif %}#}
+		            {#                                <input type="hidden" id="song_id" value="{{ song.song_id }}"/>#}
+		            {#                                <input type="hidden" id="song_name" value="{{ song.song_name }}"/>#}
+		            {#                            </div>#}
+		            {#                        </div>#}
+		            {#                    {% endfor %}#}
+		        </div>
+		    </div>
+		</div>
+	</div>
+	<!-- End of row -->
 
-    </div>
-    <!-- SONG POOL START -->
-    <div class="m-3 p-3 bg-light text-dark rounded box-shadow poll_list">
-        <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
-
-        <div id="poll_list">
-            {#                    {% for song in song_pool %}#}
-            {#                        <div class="media pt-3" id="poll_song_div">#}
-            {#                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"#}
-            {#                                 width="100">#}
-            {#                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">#}
-            {#                                <div class="d-flex justify-content-between align-items-center w-100">#}
-            {#                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>#}
-            {#                                </div>#}
-            {#                                {% if is_dj %}#}
-            {#                                    <button type="button" id="add-song-to-queue-btn">Add to Queue</button>#}
-            {#                                {% endif %}#}
-            {#                                <input type="hidden" id="song_id" value="{{ song.song_id }}"/>#}
-            {#                                <input type="hidden" id="song_name" value="{{ song.song_name }}"/>#}
-            {#                            </div>#}
-            {#                        </div>#}
-            {#                    {% endfor %}#}
-        </div>
-    </div>
-
-    <!-- SONG POOL END ->
-</div>
-</div>
-    <!- END OF ROW -->
     <button class="map"><img src="{% static 'img/geo_color.png' %}" onclick="openMap()" width="50" height="50"></button>
     <button class="chat"><img src="{% static 'img/chat.png' %}" onclick="openChat()" width="50" height="50"></button>
-    <!-- <img src="{% static 'img/close.png' %}" class = "vote" onclick = "Vote()" width = "40" height = "40"> -->
 
 
     <div class="people-chat" id="people-chat">
