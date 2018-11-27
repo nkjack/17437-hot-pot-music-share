@@ -41,16 +41,6 @@ def room(request, room_id):
 
     return render(request, 'room/room.html', context)
 
-
-@login_required
-def get_img(request, room_id):
-    room = get_object_or_404(Room, id=room_id)
-    if not room.cover_pic:
-        raise Http404
-    content_type = guess_type(room.cover_pic.name)
-    return HttpResponse(room.cover_pic, content_type=content_type)
-
-
 def search_song(request):
     print("Entered search_song")
     context = {}

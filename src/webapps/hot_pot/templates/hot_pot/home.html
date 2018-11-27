@@ -14,7 +14,7 @@
 
                   <div class="card bg-light rounded">
                  {% if room.cover_pic %}
-                    <img  src="{% url 'room_img' room.id %}" class = "card-img-top" width =  alt = "">
+                    <img  src="{% url 'room_img' room.id %}" class = "card-img-top" alt = "">
                   {% endif %}
                         <div class="card-body">
                             <h4 class="card-title">{{ room.name }}</h4>

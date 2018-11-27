@@ -19,7 +19,6 @@ urlpatterns = [
 
     # Room
     re_path(r'^room/(?P<room_id>\w+)/$', room_views.room, name='room'),
-    re_path(r'^profile-photo/room/(?P<room_id>\w+)/$', room_views.get_img, name='img'),
     path('search-song', room_views.search_song, name='search-song'),
     path('add-song-to-room-playlist-ajax', room_views.add_song_to_room_playlist_ajax),
     path('add-song-from-pool-to-queue', room_views.add_song_from_pool_to_queue),

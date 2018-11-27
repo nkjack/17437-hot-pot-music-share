@@ -7,9 +7,16 @@
     <input type="hidden" id="is_host" value="{{ is_host }}"/>
     <input type="hidden" id="username" value="{{ username }}"/>
 
+    <div class = "room-info">
+    	<img class = "info" src = "{% url 'room_img' room_id %}" width = "25"> 
+    	<div class = "info">Room: {{room_name}}</div>
+    	<div class = "info">Owner: {{room_owner}} </div>
+   <!-- can also include online people count or the song name which is currently playing -->
+
+    </div>
     <div class="row mx-3">
         <div class="col video_col">
-            <!----------------------------------------- YOUTUBE PLAYER START ------------------------------------------>
+             <!-- YOUTUBE PLAYER START -->
             <h1 id="now-playing"></h1>
             <div id="player"></div>
             <br>
@@ -20,9 +27,9 @@
             {% else %}
                 <button type="button" class="btn btn-secondary text-light sync" onclick="nextVideo()"><span> Next Video  &#8594;</span></button>
             {% endif %}
-            <!----------------------------------------- YOUTUBE PLAYER END -------------------------------------------->
+             <!-- YOUTUBE PLAYER END -->
 
-            <!----------------------------------------- SONG QUEUE START ---------------------------------------------->
+            <!-- SONG QUEUE START -> -->
             <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
                 <h5 class="border-bottom border-dark pb-2 mb-0">Song Queue</h5>
 
@@ -44,7 +51,6 @@
                 </div>
             </div>
 
-            <!----------------------------------------- SONG QUEUE END ------------------------------------------------>
         </div>
 
         <div class="col">
@@ -71,7 +77,7 @@
                 </div>
 
             </div>
-            <!----------------------------------------- SONG POOL START ----------------------------------------------->
+            <!-- SONG POOL START -->
             <div class="my-3 p-3 bg-light text-dark rounded box-shadow poll_list">
                 <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
 
@@ -95,10 +101,10 @@
                 </div>
             </div>
 
-            <!----------------------------------------- SONG POOL END ------------------------------------------------->
+            <!-- SONG POOL END ->
         </div>
     </div>
-            <!------------------------------------- END OF ROW -------------------------------------------------------->
+            <!- END OF ROW -->
     <button class = "map" ><img src="{% static 'img/geo_color.png' %}"onclick = "openMap()" width = "50" height = "50"></button>
     <button class = "chat"><img src="{% static 'img/chat.png' %}" onclick = "openChat()" width = "50" height = "50"></button>
     <!-- <img src="{% static 'img/close.png' %}" class = "vote" onclick = "Vote()" width = "40" height = "40"> -->
@@ -106,14 +112,14 @@
 
     <div class = "people-chat" id="people-chat">
         <img src="{% static 'img/close.png' %}"class = "close"onclick = "closeChat()" width = "25" height = "25">
-        <!----------------------------------------- PEOPLE LIST START --------------------------------------------->
+        <!-- PEOPLE LIST START  -->
         <div id="people">
 
             <h5 class="border-bottom border-gray pb-2 mb-0">People</h5>
             <div class = "user-in-room">
             </div>
         </div>
-         <!----------------------------------------- CHAT ROOM START ----------------------------------------------->
+         <!-- CHAT ROOM START -->
          <div id = "chat">
             <h5 class="border-bottom border-gray pb-2 mb-0">Chat Room</h5>
             <textarea id="chat-log" cols="26" rows="5"></textarea><br/>
@@ -124,8 +130,6 @@
                 <input id="chat-message-submit" class = "btn-search" type="button" value="Send"/>
             </div>
         </div>
-        <!----------------------------------------- CHAT ROOM END ------------------------------------------------->
-        <!----------------------------------------- PEOPLE LIST END ----------------------------------------------->
     </div>
 
 
