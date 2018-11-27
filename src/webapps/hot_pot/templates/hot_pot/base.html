@@ -24,12 +24,8 @@
         <ul class="sidebar-nav">
             <li class="sidebar-brand">
                 <a class="figure" href="#">
-                    {% if img %}
-                        <img class="mr-4" src="{% url 'img' username %}" width="90" alt="">
-                    {% else %}
-                        <img class="mr-4" src="{% static 'img/user_1.png' %}" width="90"
-                             alt="myImage">
-                    {% endif %}
+                    <img class="mr-4" src='{% url "user_img" username %}' width="90" alt="">
+
                     <p class="username">{{ username }}</p>
                 </a>
             </li>
@@ -43,7 +39,7 @@
                 <a href="{% url 'map_of_rooms' %}">Map</a>
             </li>
             <li>
-                <a href="profile.html">Settings</a>
+                <a href="{% url 'user_profile' %}">Settings</a>
             </li>
             <li>
                 <a href="{% url 'logout' %}">Logout</a>

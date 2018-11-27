@@ -1,9 +1,20 @@
-{% extends 'hot_pot/base.html' %}
+{% extends 'hot_pot_music_share/base.html' %}
 
 {% block content %}
 
     <div id="map" height="460px" width="460px"></div>
+    <form>
+        <input type='button' value='Save' id="save-btn"/>
+    </form>
+    <li>
+        {% for marker in all_markers %}
+            <ul>{{ marker.room.name }}-{{ marker.lat }}-{{ marker.lng }}</ul>
+        {% endfor %}
+    </li>
+
+
 {#    <input type="hidden" id="room-url" data-url="{% url 'room' 0 %}"/>#}
+
 
     <script>
         // The boilerplate code below is copied from the Django 1.10 documentation.
@@ -171,6 +182,7 @@
 
                   var btn_to_room = document.createElement('button');
                   btn_to_room.addEventListener("click", function(){
+
                       {#var p_url = $("#add-comment-url").attr("data-url");#}
                       window.location = "/room/"+ room_id;
                   });

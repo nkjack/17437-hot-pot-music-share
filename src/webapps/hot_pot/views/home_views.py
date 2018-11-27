@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-
-from hot_pot.forms import RoomForm
+from hot_pot.forms import RoomForm, ProfileForm
 from hot_pot.models import Room, RoomHistory, Song, Playlist, Marker
 
 
@@ -76,19 +75,114 @@ def home(request, username):
         m.save()
         # 40.440624, -79.995888 pitt
 
-        return HttpResponseRedirect(reverse('room', args=[new_room.pk]))
+        return HttpResponseRedirect(reverse('room', args=[new_room.id]))
     else:
         return render(request, 'home.html', context)
 
 
 @login_required
 def room_history(request):
-    context = {'owned': '', 'visited': '', 'username': request.user.username}
+    context = {'owned': '', 'history': '', 'username': request.user.username}
+    owned = Room.objects.filter(owner=request.user)
+    history = RoomHistory.get_visited_rooms(request.user)
+    context['owned'] = owned
+    context['history'] = history
     if request.method == 'GET':
-        owned = Room.objects.filter(owner=request.user)
-        history = RoomHistory.get_visit_history(request.user)
 
-        context['owned'] = owned
-        context['visited'] = history
+        context['form'] = RoomForm(initial={'owner': request.user})
+
+    
+    elif (request.POST.get('create_room')):
+        form = RoomForm(request.POST, request.FILES, initial={'owner': request.user})
+        context['form'] = form
+
+        if form.is_valid():
+            print("Creating Room...")
+            new_room = Room.objects.create(owner=request.user,
+                                           name=form.cleaned_data['name'],
+                                           description=form.cleaned_data['description'],
+                                           cover_pic=form.cleaned_data['cover_pic']
+                                           )
+            new_room.save()
+
+            # create a room history
+            new_history = RoomHistory.objects.create(user=request.user,
+                                                     visited_room=new_room)
+            new_history.save()
+
+            # create marker for the room
+            import random
+            lat = random.uniform(0, 1) + 40
+            lng = random.uniform(0, 1) - 80
+            m = Marker.objects.create(lat=lat, lng=lng, room=new_room)
+            m.save()
+            # 40.440624, -79.995888 pitt
+            return HttpResponseRedirect(reverse('room', args=[new_room.id]))
 
     return render(request, 'room_history.html', context)
+
+
+@login_required
+def get_room_img(request, room_id):
+    room = get_object_or_404(Room, id = room_id)
+    if not room.cover_pic:
+        raise Http404
+    content_type = guess_type(room.cover_pic.name)
+    return HttpResponse(room.cover_pic, content_type=content_type)
+
+@login_required
+def get_user_img(request, username):
+    user_from_url = get_object_or_404(User, username = username)
+    profile = get_object_or_404(Profile, user = user_from_url)
+    if not profile.img:
+        raise Http404
+    content_type = guess_type (profile.img.name)
+    return HttpResponse(profile.img, content_type = content_type)
+
+
+@login_required
+def edit_room(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    context = {'room': room, 'username': request.user.username}
+    if request.method == 'GET':
+        roomForm = RoomForm(instance = room)
+        context['roomForm'] = roomForm
+        return render(request, 'hot_pot/profile/room_profile.html', context)
+
+    elif request.POST.get('room_profile'):
+        roomForm = RoomForm(request.POST, request.FILES, instance = room)
+
+        if roomForm.is_valid():
+            roomForm.save()
+            return HttpResponseRedirect(reverse('home',args=[request.user.username])) 
+        else:
+            context['roomForm'] = roomForm
+            return render(request, 'profile/room_profile.html', context)
+    else:
+        context['error'] = 'Invalid Post Request'
+        return render(request,'hot_pot/profile/room_profile.html',context)
+
+
+
+@login_required
+def edit_user(request):
+    context = { 'username': request.user.username}
+    if request.method == 'GET':
+        profileForm = ProfileForm(instance = request.user.profile)
+        owned = Room.objects.filter(owner=request.user)
+        context['profileForm'] = profileForm
+        context['owned'] = owned
+
+        return render(request, 'hot_pot/profile/user_profile.html', context)
+
+    elif request.POST.get("user_profile"):
+        profileForm = ProfileForm(request.POST, request.FILES, instance = request.user.profile)
+        if profileForm.is_valid():
+            profileForm.save()
+            return HttpResponseRedirect(reverse('home',args=[request.user.username])) 
+        else:
+            context['profileForm'] = profileForm
+            return render(request, 'profile/user_profile.html', context)
+    else:
+        context['error'] = 'Invalid Post Request'
+        return render(request,'hot_pot/profile/user_profile.html',context)

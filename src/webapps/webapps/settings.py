@@ -24,7 +24,7 @@ SECRET_KEY = 'f%1%rmvjtn4deft2fj^dg5x6gob9sr%71-(su9mvhav!3h*vbe'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'hot-pot-music-share.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', 'hot-pot-music-share.herokuapp', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -130,6 +130,7 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/home'
 
 # Email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'default')

@@ -1,3 +1,5 @@
+
+from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -7,7 +9,11 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    bio = models.TextField(max_length=420, blank = True,  default="")
+    age = models.IntegerField(default=0, validators = [MinValueValidator(0)])
+    img = models.ImageField(upload_to="profile-photos", blank=True, default = 'profile-photo/user_1.png')
+    follows = models.ManyToManyField(User, related_name='follow')
+    
     def __str__(self):
         return self.user.username
 
@@ -17,12 +23,11 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-
+    
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=42)
@@ -31,6 +36,7 @@ class Room(models.Model):
     cover_pic = models.ImageField(upload_to='room-photo', blank=True,
                                   default='room-photo/logo.png',)
     description = models.TextField(max_length=420, blank=True,)
+
     isMarked = models.BooleanField(default=True, blank=True)
 
     thumbs_up = models.IntegerField(default=0)
@@ -86,7 +92,7 @@ class RoomHistory(models.Model):
     def __str__(self):
         return self.user.username
 
-
+      
 class Song(models.Model):
     song_id = models.CharField(max_length=100)
     song_name = models.CharField(max_length=100)

@@ -9,15 +9,15 @@
         <div class="row-card">
 
             {% for room in popular %}
-                <a href="{% url 'room' room.id %}" class="col-sm-4">
+                <a href="{% url 'room' room.id %}" class="col-sm-2">
 
 
                   <div class="card bg-light rounded">
                  {% if room.cover_pic %}
-                    <img class="mr-4" src="{% url 'img' room.pk %}" width="90" alt = "">
+                    <img  src="{% url 'room_img' room.id %}" class = "card-img-top" alt = "">
                   {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ room.name }}</h5>
+                            <h4 class="card-title">{{ room.name }}</h4>
                             <p class="card-text">{{ room.description }}</p>
                             <p class="card-text">
                                 <small class="text-muted">DJ: {{ room.owner.username }}</small>
