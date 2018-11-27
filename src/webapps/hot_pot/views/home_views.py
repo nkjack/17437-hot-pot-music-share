@@ -35,6 +35,11 @@ def home(request, username):
                                        cover_pic=form.cleaned_data['cover_pic']
                                        )
         new_room.save()
+
+        # Add self as a DJ
+        new_room.djs.add(request.user)
+
+        # Initialize and save history
         new_history = RoomHistory.objects.create(user=request.user,
                                                  visited_room=new_room)
         new_history.save()

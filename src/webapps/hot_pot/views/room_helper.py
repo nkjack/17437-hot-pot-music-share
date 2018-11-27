@@ -60,3 +60,8 @@ def get_all_songs_from_playlist(room_id, user_id, pl_type):
 #     return data
 #
 
+# Helper function to check if a user is a DJ for the specified room
+def user_is_dj(user, room):
+    result = user in room.djs.all()
+    print(">>>>> user_is_dj(user = %s, room = %s) called and returning %s", (user, room, result))
+    return result

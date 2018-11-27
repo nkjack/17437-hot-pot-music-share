@@ -4,7 +4,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 from hot_pot.models import Room, Song, Playlist
-from hot_pot.views.room_views import add_user_to_room, remove_user_from_room, get_users_in_room
+from hot_pot.views.room_helper import user_is_dj
+from hot_pot.views.room_views import add_user_to_room, remove_user_from_room
 
 
 class PlayerConsumer(WebsocketConsumer):
@@ -19,9 +20,9 @@ class PlayerConsumer(WebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'room_%s' % self.room_name
         self.user = self.scope['user']
-        self.is_host = Room.objects.get(name=self.room_name).owner == self.user
+        self.is_dj = user_is_dj(self.user, Room.objects.get(name=self.room_name))
 
-        print('[consumers.py] Connected user: {}, is_host = {}'.format(self.user, self.is_host))
+        print('[consumers.py] Connected user: {}, is_dj = {}'.format(self.user, self.is_dj))
 
         # Call views function to add user to the room
         add_user_to_room(self.user.username, self.room_name)
@@ -32,7 +33,7 @@ class PlayerConsumer(WebsocketConsumer):
             self.channel_name,
         )
 
-        # Join channel group for this single user (TODO: Probably delete later)
+        # Join channel group for this single user
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name + '-' + str(self.user.username),
             self.channel_name,
@@ -88,37 +89,47 @@ class PlayerConsumer(WebsocketConsumer):
             )
         elif 'sync_request_message' in text_data_json:
 
-            username = text_data_json['username']
-
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
                     'type': 'sync_request_message',
                     'sync_request': '',
-                    'from_username': username,
+                    'from_username': text_data_json['from_username'],
+                    'from_dj': text_data_json['from_dj'],
                 }
             )
         elif 'sync_result_message' in text_data_json:
+            # Send sync result to everyone or just the single requester
+            if text_data_json['broadcast'].lower() == 'true':
+                channel_group_name = self.room_group_name
+            else:
+                channel_group_name = self.room_group_name + '-' + text_data_json['request_from']
 
             async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
+                channel_group_name,
                 {
                     'type': 'sync_result_message',
                     'video_id': text_data_json['video_id'],
                     'position': text_data_json['position'],
                     'is_playing': text_data_json['is_playing'],
+                    'request_from': text_data_json['request_from'],
+                    'from_username': text_data_json['from_username'],
+                    'djs_ignore': text_data_json['djs_ignore'],
                 }
             )
 
         elif 'add_to_song_queue_message' in text_data_json or 'add_to_song_pool_message' in text_data_json:
             playlist = 'queue' if 'add_to_song_queue_message' in text_data_json else 'pool'
-            # Create new song
-            # FIXME: Creating replicate songs... Exact same song_id and song_name... But in DB have diff pk's... OK?
-            new_song = Song.objects.create(song_id=text_data_json['song_id'], song_name=text_data_json['song_name'])
-            new_song.save()
 
-            # Add to room's song queue, if it doesn't exist
+            # Get the room to associate the song with and get the queue/pool
             room = Room.objects.get(name=self.room_name)
+
+            # Create new song and save
+            # FIXME: Creating replicate songs... Exact same song_id and song_name... But in DB have diff pk's... OK?
+            new_song = Song.objects.create(song_id=text_data_json['song_id'],
+                                           song_name=text_data_json['song_name'],
+                                           song_room=room)
+            new_song.save()
 
             song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
             song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
@@ -157,26 +168,30 @@ class PlayerConsumer(WebsocketConsumer):
     def sync_request_message(self, event):
         print('[consumers.py] sync_request_message handler called, event = ' + str(event))
 
-        # FIXME: Currently only the *owner* is handling sync requests
-        if self.is_host:
-            username = event['from_username']
-
+        # Only DJ(s) send out sync requests (requests sent to multiple DJs - but OK in practice)
+        if self.is_dj and event['from_username'] != self.user.username:  # Don't handle own request
             # Send message to WebSocket
             self.send(text_data=json.dumps({
                 'sync_request': '',
-                'from_username': username,
+                'from_username': event['from_username'],
+                'from_dj': event['from_dj'],
             }))
 
     # Receive sync request message
     def sync_result_message(self, event):
-        print('[consumers.py] sync_result_message handler called, event = ' + str(event))
+        print('[consumers.py][%s] sync_result_message handler called, event = %s' % (self.user, str(event)))
 
-        # FIXME: Currently only the *owner* is handling sync requests
-        # Note: Host just sent out sync_result, so no point in handling this as the host
-        if not self.is_host:
+        # Ignore this if I'm a DJ and packet says to ignore as a DJ
+        if self.is_dj and (event['djs_ignore'] == 'true'):
+            return
+
+
+        # Listen to any sync_result that wasn't from myself
+        if event['from_username'] != self.user.username:
             self.send(text_data=json.dumps({
                 'sync_result': '',
                 'video_id': event['video_id'],
                 'position': event['position'],
                 'is_playing': event['is_playing'],
+                'request_from': event['request_from'],
             }))

@@ -25,11 +25,17 @@ socket.onmessage = function (e) {
         // This is a sync request from a Listener, Host should sync Listeners now
         console.log('Received sync_request = ' + data + 'from username: ' + data['from_username']);
 
-        syncListeners();
+        if (data['from_dj'] === 'True') {
+            syncSingleRequester(data['from_username']);
+        } else {
+            syncListeners();
+        }
+
 
     } else if ('sync_result' in data) {
         // This is a sync result from Host, Listeners should sync-up
         console.log('Received sync_result...');
+
 
         // Play the correct video
         if (String(player.getVideoData()['video_id']) !== data['video_id']) {
@@ -51,11 +57,14 @@ socket.onmessage = function (e) {
         if (data['is_playing'] === 'true' && player.getPlayerState() != YT.PlayerState.PLAYING) {
             console.log("\tHost is playing and I am not, so I will play...");
             player.playVideo();
+
         } else if (data['is_playing'] === 'false' && player.getPlayerState() != YT.PlayerState.PAUSED) {
             console.log("\tHost is not playing and I am, so I will pause...");
             player.pauseVideo();
         }
 
+        // Set global timestamp of last time this user received a 'sync with me' request
+        lastTimeSyncdUp = window.performance.now();
     }
 
 };
