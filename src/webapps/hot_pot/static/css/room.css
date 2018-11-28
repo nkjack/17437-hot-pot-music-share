@@ -165,6 +165,7 @@ a:hover, a:visited, a:link, a:active{
   height: 240px;
 }
 
+/*
 .search-result{
   overflow-y: scroll;
   max-width: 600px;
@@ -179,6 +180,7 @@ a:hover, a:visited, a:link, a:active{
   border: 3px solid #f1f1f1;
   z-index: 99;
 }
+*/
 
 .search-result .close{
   float: right;
@@ -187,11 +189,11 @@ a:hover, a:visited, a:link, a:active{
   opacity: 1;
 }
 
+/*
 .people-chat{
   position:fixed;
   bottom:30%;
   right: 0;
-  display: none;
   background: white;
   height: 40%;
   width: 40%;
@@ -199,34 +201,37 @@ a:hover, a:visited, a:link, a:active{
   border-radius: 5%;
   box-shadow: 0px 5px 20px #dfdfdf;
 }
+*/
 
-.people-chat #people{
-  display: inline-block;
-  width: 35%;
-  margin: auto;
-}
-.people-chat #chat{
-  display: inline-block;
-  width: 45%;
-  margin: auto;
-  float:right;
-}
-.people-chat #chat-log{
-  overflow-y: scroll;
-}
-.people-chat .user-in-room{
-  overflow-y: scroll;
-  min-height: 180px;
-}
+/*.people-chat #people{*/
+  /*display: inline-block;*/
+  /*width: 35%;*/
+  /*margin: auto;*/
+/*}*/
 
-.chat{
-  border-radius: 10%;
-  position:absolute;
-  bottom:10%;
-  right: 0;
-  background: white;
-  box-shadow: 0px 5px 20px #dfdfdf;
-}
+/*.people-chat #chat{*/
+  /*display: inline-block;*/
+  /*width: 45%;*/
+  /*margin: auto;*/
+  /*float:right;*/
+/*}*/
+
+/*.people-chat #chat-log{*/
+  /*overflow-y: scroll;*/
+/*}*/
+/*.people-chat .user-in-room{*/
+  /*overflow-y: scroll;*/
+  /*min-height: 180px;*/
+/*}*/
+
+/*.chat{*/
+  /*border-radius: 10%;*/
+  /*position:absolute;*/
+  /*bottom:10%;*/
+  /*right: 0;*/
+  /*background: white;*/
+  /*box-shadow: 0px 5px 20px #dfdfdf;*/
+/*}*/
 
 .map{
   border-radius: 10%;
