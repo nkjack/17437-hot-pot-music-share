@@ -25,7 +25,6 @@ a:hover, a:visited, a:link, a:active{
   padding-left: 50px;
   padding-left:50px;
   padding-top: 35px;
-  border: .075em solid #696969;
 }
 
 .container{
@@ -67,15 +66,15 @@ a:hover, a:visited, a:link, a:active{
 /* The popup form - hidden by default */
 .form-popup {
   display: none;
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  right: 15px;
-  border: 3px solid #f1f1f1;
+  right: 0;
   z-index: 9;
 }
 
 /* Add styles to the form container */
 .form-container {
+  height: 500px;
   max-width: 800px;
   padding: 20px;
   background-color: white;
@@ -97,7 +96,7 @@ a:hover, a:visited, a:link, a:active{
 }
 
 /* Add a red background color to the cancel button */
-.form-container .create {
+.form-container .create-room {
   background-color: black;
   color:white;
 }
@@ -249,4 +248,24 @@ a:hover, a:visited, a:link, a:active{
 
 .inline{
   display: inline-block;
+}
+
+.header{
+  position: absolute;
+  top:0;
+  height:37%;
+  max-width: 2000px;
+}
+
+.create{
+  position: absolute;
+  top: 25%;
+  right: 5%;
+  width: 40%;
+  z-index: 99;
+}
+
+.popular{
+  position: absolute;
+  top: 38%;
 }

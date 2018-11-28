@@ -3,17 +3,15 @@
 {% block content %}
 {% load static %}
     <!--       <canvas id="canvas"></canvas>     -->
-    <div class = "row">
 
             
-        <img  src="{% static 'img/header.png' %}" class = "header" alt = "">
+    <img  src="{% static 'img/header.png' %}" class = "header" alt = "">
              
-    <div class = "col-6 float-right">
-        <button type="button" class="btn btn-lg create" onclick="openForm()">Create a Room</button>
-    </div>
+    <button type="button" class="btn btn-lg create" onclick="openForm()">Create a Room</button>
 
-    <div class="my-3 p-3 rounded box-shadow">
-        <h6 class="border-bottom border-gray pb-2 mb-0">Popular Now</h6>
+
+    <div class="my-3 p-3 rounded box-shadow popular">
+        <h4 class="border-bottom border-gray pb-2 mb-0">Popular Now</h4>
         <div class="row-card">
 
             {% for room in popular %}
@@ -42,6 +40,7 @@
         {{ form.errors }}
         {{ form.non_field_errors }}
     </div>
+
     <div class="form-popup" id="create_room_div">
         <form class="form-container" method="POST">{% csrf_token %}
             <h1>Create A Room</h1>
@@ -72,7 +71,7 @@
 
                 {% endif %}
 
-            <input type="submit" name="create_room" value="Create" class="btn create"></button>
+            <input type="submit" name="create_room" value="Create" class="btn create-room"></button>
             <button type="button" class="btn" onclick="closeForm()">Close</button>
         </form>
     </div>
