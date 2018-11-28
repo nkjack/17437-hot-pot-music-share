@@ -20,7 +20,7 @@ MAX_SEARCH_RESULTS = 10
 
 @login_required
 @transaction.atomic
-def room(request, room_id):
+def render_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     room_name = room.name
     is_owner = room.owner == request.user
@@ -33,7 +33,6 @@ def room(request, room_id):
     if not RoomHistory.visited_before(request.user, room, localtime(now())):
         history = RoomHistory.objects.create(user=request.user, visited_room=room)
         history.save()
-    listeners = RoomHistory.get_current_listeners(room)
 
     context = {'username': request.user.username,
                'room_id': room_id,
@@ -219,8 +218,7 @@ def delete_from_song_queue_post(request):
         rank_itr += 1
         song.save()
 
-    context = {}
-    context['songs'] = song_queue.songs.all().order_by('rank')
+    context = {'songs': song_queue.songs.all().order_by('rank')}
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 
@@ -314,8 +312,7 @@ def change_song_queue_order(request):
                     continue
                 song.save()
 
-    context = {}
-    context['songs'] = song_queue.songs.all().order_by('rank')
+    context = {'songs': song_queue.songs.all().order_by('rank')}
     return render(request, 'hot_pot/room/songs.json', context, content_type='application/json')
 
 

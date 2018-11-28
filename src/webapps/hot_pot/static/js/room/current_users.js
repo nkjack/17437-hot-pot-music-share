@@ -1,6 +1,6 @@
 // Helper function to return a string array containing usernames of all users in the room
 function getCurrentUsersInRoom() {
-    var current_users;
+    let current_users;
 
     // Get all users in the room (AJAX)
     console.log('AJAX making call get-users-from-room...');
@@ -28,10 +28,10 @@ function getCurrentUsersInRoom() {
 
 // Update the room's current user list
 function updateCurrentUsersList() {
-    var current_users = getCurrentUsersInRoom();
+    const current_users = getCurrentUsersInRoom();
 
     // Get all DJs for this room
-    var djs;
+    let djs;
     $.ajax({
         async: false,
         // The URL for the request

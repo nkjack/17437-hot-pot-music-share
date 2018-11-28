@@ -18,11 +18,6 @@ a:hover, a:visited, a:link, a:active {
     color: inherit;
 }
 
-.checkmark {
-    width: 30px;
-    height: 30px;
-}
-
 .home_container {
     height: 100%;
     width: 100%;
@@ -51,10 +46,6 @@ a:hover, a:visited, a:link, a:active {
     background-color: white;
 }
 
-.notActive {
-    filter: grayscale(100%);
-}
-
 .row {
     width: 95%;
 }
@@ -73,14 +64,6 @@ a:hover, a:visited, a:link, a:active {
 .row-card .card-top-img {
     min-width: 35px;
     min-height: 35px;
-}
-
-.intro {
-    align-items: center;
-}
-
-.intro {
-    align-items: center;
 }
 
 /* The popup form - hidden by default */
@@ -254,10 +237,6 @@ a:hover, a:visited, a:link, a:active {
     overflow: auto;
     word-wrap: break-word;
     box-sizing: border-box;
-}
-
-.chat-msg {
-    font-weight: normal;
 }
 
 .dropdown-menu {

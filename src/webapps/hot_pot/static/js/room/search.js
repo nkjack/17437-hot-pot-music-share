@@ -8,9 +8,9 @@ document.querySelector('#search-query').onkeyup = function (e) {
 };
 
 $("#panel").on("click", "#search-button", function (event) {
-    var panel = $(this).closest("#panel");
-    var query = panel.find("#search-query");
-    var p_url = panel.find("#add-comment-url").attr("data-url");
+    const panel = $(this).closest("#panel");
+    const query = panel.find("#search-query");
+    const p_url = panel.find("#add-comment-url").attr("data-url");
 
     $.ajax({
         // The URL for the request
@@ -26,9 +26,9 @@ $("#panel").on("click", "#search-button", function (event) {
         .done(function (data) {
             console.log(data);
             $("#search-results").empty();
-            for (var i = 0; i < data.songs.length; i++) {
-                var v_id = data.songs[i]['id'];
-                var v_name = data.songs[i]['name'];
+            for (let i = 0; i < data.songs.length; i++) {
+                const v_id = data.songs[i]['id'];
+                const v_name = data.songs[i]['name'];
 
                 $('#search-results').append(getEntryListForSearchResult(v_id, v_name));
             }
@@ -49,10 +49,10 @@ $("#panel").on("click", "#search-button", function (event) {
  */
 $("#search-results").on("click", "#add-song-btn", function (event) {
     event.preventDefault();
-    var search_form = $(this).closest("#search-song-div");
-    var room_id = $("#room_id");
-    var song_id = search_form.find("#song_id");
-    var song_name = search_form.find("#song_name");
+    const search_form = $(this).closest("#search-song-div");
+    const room_id = $("#room_id");
+    const song_id = search_form.find("#song_id");
+    const song_name = search_form.find("#song_name");
 
     $.ajax({
         // The URL for the request

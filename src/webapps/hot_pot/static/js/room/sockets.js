@@ -1,30 +1,30 @@
 /****************************************** SOCKET SETUP ******************************************************/
-var roomId = $('input#room_id').val();
+const roomId = $('input#room_id').val();
 
-var wsStart = (window.location.protocol === "https:") ? "wss://" : "ws://";
-var wsUrl = wsStart + window.location.host +
+const wsStart = (window.location.protocol === "https:") ? "wss://" : "ws://";
+const wsUrl = wsStart + window.location.host +
     '/ws/room/' + roomId + '/';
 console.log('Creating WebSocket on URL: ' + wsUrl);
-var socket = new ReconnectingWebSocket(wsUrl);
+const socket = new ReconnectingWebSocket(wsUrl);
 
 
-var sentSyncRequestTime;  // TODO: Possible synchronize playback with RTT/2 (but didn't work well in practice)
+let sentSyncRequestTime;  // TODO: Possible synchronize playback with RTT/2 (but didn't work well in practice)
 
 // On socket message received
 socket.onmessage = function (e) {
 
-    var data = JSON.parse(e.data);
+    const data = JSON.parse(e.data);
 
     if ('chat_text' in data) {
         // This is a chat message, add to chat box
-        var chat_text = data['chat_text'];
-        var username = data['username'];
+        const chat_text = data['chat_text'];
+        const username = data['username'];
 
         // Append chat message
         $('#chat-log').append(`<span class="chat-msg"><strong>${username}: </strong>${chat_text}<br></span>`);
 
         // Scroll the window to the bottom every time new message is received
-        var objDiv = document.getElementById("chat-log");
+        const objDiv = document.getElementById("chat-log");
         objDiv.scrollTop = objDiv.scrollHeight;
 
         // Pulsate chat tab if chat tab isn't focused

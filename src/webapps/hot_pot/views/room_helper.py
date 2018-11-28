@@ -7,17 +7,13 @@ def get_all_songs_from_playlist(room_id, user_id, pl_type):
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type=pl_type)
 
     songs = song_pool.songs.all().order_by('-thumbs_up')
-    data = {}
-    data['songs'] = []
+    data = {'songs': []}
 
     for song in songs:
         user = User.objects.get(id=user_id)
         rows = UserVotes.objects.filter(user=user, song=song)
 
-        song_to_json = {}
-        song_to_json['id'] = song.song_id
-        song_to_json['name'] = song.song_name
-        song_to_json['thumbs_up'] = song.thumbs_up
+        song_to_json = {'id': song.song_id, 'name': song.song_name, 'thumbs_up': song.thumbs_up}
 
         if rows.count() > 0:
             song_to_json['is_voted'] = 'True'

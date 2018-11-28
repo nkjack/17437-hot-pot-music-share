@@ -109,22 +109,22 @@ def confirm_email(request, username, token):
         return HttpResponse('Invalid Link')
 
 
-def forgetPassword(request):
+def forget_password(request):
     context = {'usernameForm' : ""}
     if request.method == 'GET':
-        usernameForm = UsernameForm()
-        context['usernameForm'] = usernameForm
+        username_form = UsernameForm()
+        context['usernameForm'] = username_form
         return render(request, 'user_auth/reset_password.html',context)
     else:
         if 'resetPassword' in request.POST or request.POST['resetPassword']:
-            usernameForm = UsernameForm(request.POST)
-            context['usernameForm'] = usernameForm
+            username_form = UsernameForm(request.POST)
+            context['usernameForm'] = username_form
 
-            if usernameForm.is_valid():
+            if username_form.is_valid():
                 username = request.POST['username']
                 user = get_object_or_404(User, username = username)
 
-                _sendPasswordEmail(request, user)
+                send_password_email(request, user)
 
                 context["email"] = "Forget Your Password? Dont worry, check your mailbox and follow the instructions."
                 return render(request,'user_auth/email_confirmation.html',context)
@@ -134,29 +134,29 @@ def forgetPassword(request):
 
         else:
             context['error'] = "Please press Reset button to change your password"
-            return render(requestt, 'user_auth/reset_password.html',context)  
+            return render(request, 'user_auth/reset_password.html',context)
 
 
 
 
 
 @transaction.atomic
-def resetPassword(request, username, token):
+def reset_password(request, username, token):
     
     user = get_object_or_404(User, username = username)
     if default_token_generator.check_token(user,token):
 
         context = {'password':''}
         if request.method == "GET":
-            passwordForm = PasswordForm()
-            context['password'] = passwordForm
+            password_form = PasswordForm()
+            context['password'] = password_form
             return render(request, 'user_auth/reset_password.html',context)
         else:
             if request.POST.get('resetPassword'):
-                passwordForm = PasswordForm(request.POST)
-                context['password'] = passwordForm
+                password_form = PasswordForm(request.POST)
+                context['password'] = password_form
 
-                if passwordForm.is_valid():
+                if password_form.is_valid():
                     password = request.POST['password1']
 
                     user.set_password(password)
@@ -169,13 +169,13 @@ def resetPassword(request, username, token):
 
             else:
                 context['error'] = "Please press Reset button to change your password"
-                return render(requestt, 'user_auth/reset_password.html',context)      
+                return render(request, 'user_auth/reset_password.html',context)
         
     else:
         return HttpResponse('Invalid Link')
 
 
-def _sendPasswordEmail(request, user):
+def send_password_email(request, user):
 
     token = default_token_generator.make_token(user)
     email_body = """

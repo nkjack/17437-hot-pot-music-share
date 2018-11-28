@@ -54,6 +54,7 @@ class PlayerConsumer(WebsocketConsumer):
         )
 
     # Receive message from WebSocket
+    # noinspection PyMethodOverriding
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
 

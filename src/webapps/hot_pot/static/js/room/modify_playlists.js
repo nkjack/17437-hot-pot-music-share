@@ -3,10 +3,10 @@
  */
 $("#poll_list").on("click", "#add-song-to-queue-btn", function (event) {
     event.preventDefault();
-    var search_form = $(this).closest("#poll_song_div");
-    var room_id = $("#room_id");
-    var song_id = search_form.find("#song_id");
-    var song_name = search_form.find("#song_name");
+    const search_form = $(this).closest("#poll_song_div");
+    const room_id = $("#room_id");
+    const song_id = search_form.find("#song_id");
+    const song_name = search_form.find("#song_name");
 
     $.ajax({
         // The URL for the request
@@ -41,10 +41,10 @@ $("#poll_list").on("click", "#add-song-to-queue-btn", function (event) {
 
 $("#dj_list").on("click", "#dlt-song-btn", function (event) {
     event.preventDefault();
-    var entry_div = $(this).closest("#entry-song-queue-div");
-    var room_id = $("#room_id");
-    var song_id = entry_div.find("#song_id");
-    var song_name = entry_div.find("#song_name");
+    const entry_div = $(this).closest("#entry-song-queue-div");
+    const room_id = $("#room_id");
+    const song_id = entry_div.find("#song_id");
+    const song_name = entry_div.find("#song_name");
 
     console.log(room_id);
     $.ajax({
@@ -79,11 +79,11 @@ $("#dj_list").on("click", "#dlt-song-btn", function (event) {
  */
 $("#dj_list").on("click", "#up-song-btn", function (event) {
     event.preventDefault();
-    var entry_div = $(this).closest("#entry-song-queue-div");
-    var room_id = $("#room_id");
+    const entry_div = $(this).closest("#entry-song-queue-div");
+    const room_id = $("#room_id");
 
     // var index = parseInt(entry_div.find( "#position" ).val());
-    var index = parseInt(entry_div.find( "#song_rank" ).val());
+    const index = parseInt(entry_div.find("#song_rank").val());
     // alert( "Index: " + index );
 
     $.ajax({
@@ -115,10 +115,10 @@ $("#dj_list").on("click", "#up-song-btn", function (event) {
 
 $("#dj_list").on("click", "#down-song-btn", function (event) {
     event.preventDefault();
-    var entry_div = $(this).closest("#entry-song-queue-div");
-    var room_id = $("#room_id");
+    const entry_div = $(this).closest("#entry-song-queue-div");
+    const room_id = $("#room_id");
 
-    var index = parseInt(entry_div.find( "#song_rank" ).val());
+    const index = parseInt(entry_div.find("#song_rank").val());
 
     // alert(typeof index);
     // alert( "Index: " + index );

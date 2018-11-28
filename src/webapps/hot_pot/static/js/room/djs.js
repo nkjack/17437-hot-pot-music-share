@@ -69,11 +69,11 @@ function fillSelectRemoveDj() {
 // Add the specified username as a DJ
 function addUsernameAsDj(username) {
 
-    var room_id = $("#room_id");
+    const room_id = $("#room_id");
 
     // TODO: Either pass username as function parameter or get username from text input with jQuery
     if (username === undefined) {
-        var username = $("#select-add-dj").val();
+        username = $("#select-add-dj").val();
     }
 
     console.log('addUserNameAsDj selected: ' + username);
@@ -103,10 +103,10 @@ function addUsernameAsDj(username) {
 
 // Remove the specified username as a DJ
 function removeUsernameAsDj() {
-    var room_id = $("#room_id");
+    const room_id = $("#room_id");
 
     // TODO: Either pass username as function parameter or get username from text input with jQuery
-    var username = $("#select-remove-dj").val();
+    const username = $("#select-remove-dj").val();
 
     $.ajax({
         // The URL for the request

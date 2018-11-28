@@ -1,11 +1,11 @@
 $("#poll_list").on("click", "#vote-song-btn", function (event) {
     event.preventDefault();
-    var pool_form = $(this).closest("#poll_song_div");
-    var room_id = $("#room_id");
-    var song_id = pool_form.find("#song_id");
+    const pool_form = $(this).closest("#poll_song_div");
+    const room_id = $("#room_id");
+    const song_id = pool_form.find("#song_id");
 
-    var url = "/vote-up";
-    var is_downvote = pool_form.find("#vote-song-btn");
+    let url = "/vote-up";
+    const is_downvote = pool_form.find("#vote-song-btn");
     console.log(is_downvote.val());
 
     if (is_downvote.attr("value") == "Downvote"){

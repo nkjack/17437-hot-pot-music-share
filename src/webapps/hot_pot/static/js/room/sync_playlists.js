@@ -3,7 +3,7 @@
 
 
 function get_pool_songs_from_room() {
-    var room_id = $("#room_id").attr('value');
+    const room_id = $("#room_id").attr('value');
     // console.log(room_id);
     $.ajax({
         // The URL for the request
@@ -39,11 +39,11 @@ function get_pool_songs_from_room() {
 function updateChangesPoolSongs(data) {
     // console.log(data);
     $("#poll_list").empty();
-    for (var i = 0; i < data.songs.length; i++) {
-        var v_id = data.songs[i]['id'];
-        var v_name = data.songs[i]['name'];
-        var v_thumbs_up = data.songs[i]['thumbs_up'];
-        var is_voted = data.songs[i]['is_voted'];
+    for (let i = 0; i < data.songs.length; i++) {
+        const v_id = data.songs[i]['id'];
+        const v_name = data.songs[i]['name'];
+        const v_thumbs_up = data.songs[i]['thumbs_up'];
+        const is_voted = data.songs[i]['is_voted'];
 
         const isHost = $('#is_dj').val();
         // console.log('inside sync_playlists.js...' + isHost);
@@ -57,7 +57,7 @@ function updateChangesPoolSongs(data) {
 }
 
 function get_queue_songs_from_room() {
-    var room_id = $("#room_id").attr('value');
+    const room_id = $("#room_id").attr('value');
 
     $.ajax({
         // The URL for the request
@@ -94,10 +94,10 @@ function updateChangesQueueSongs(data) {
     // console.log(data);
     $("#dj_list").empty();
     if (data.songs.length > 0) {
-        for (var i = 0; i < data.songs.length; i++) {
-            var v_id = data.songs[i]['id'];
-            var v_name = data.songs[i]['name'];
-            var v_rank = data.songs[i]['rank'];
+        for (let i = 0; i < data.songs.length; i++) {
+            const v_id = data.songs[i]['id'];
+            const v_name = data.songs[i]['name'];
+            const v_rank = data.songs[i]['rank'];
 
             const isHost = $('#is_dj').val();
             console.log('inside sync_playlists.js...' + isHost);

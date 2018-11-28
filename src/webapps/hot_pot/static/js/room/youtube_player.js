@@ -9,20 +9,20 @@ billboardPlaylistId = 'PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG';
 billboardPlaylistTrackCount = 150;
 
 // This code loads the IFrame Player API code asynchronously.
-var tag = document.createElement('script');
+const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
+const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // This function creates an <iframe> (and YouTube player)  after the API code downloads.
-var player;
+let player;
 
 function onYouTubeIframeAPIReady() {
     const videoId = getTopOfSongQueue();
     console.log("onYouTubeIframeAPIReady - videoId = " + videoId);
 
     // Different listeners depending on host or listener
-    var events;
+    let events;
     if (isHost) {
         events = {
             'onStateChange': onHostPlayerStateChange,
@@ -158,7 +158,7 @@ function onListenerPlayerStateChange(event) {
 
 // Host will call this function so all users will sync
 function syncEveryone() {
-    var currPosition = player.getCurrentTime();
+    const currPosition = player.getCurrentTime();
 
     socket.send(JSON.stringify({
         'sync_result_message': '',
@@ -176,7 +176,7 @@ function syncEveryone() {
 
 // Host will call this function so only listeners (non-DJs) will sync
 function syncListeners() {
-    var currPosition = player.getCurrentTime();
+    const currPosition = player.getCurrentTime();
 
     socket.send(JSON.stringify({
         'sync_result_message': '',
@@ -194,7 +194,7 @@ function syncListeners() {
 
 // Host will call this function so only the single requester will sync
 function syncSingleRequester(username) {
-    var currPosition = player.getCurrentTime();
+    const currPosition = player.getCurrentTime();
 
     socket.send(JSON.stringify({
         'sync_result_message': '',
@@ -242,7 +242,7 @@ function getNetworkOffset(startTime) {
 // Helper function to clean up video input from URL/ID to just ID
 function cleanVideoIdInput(input) {
     console.log('cleanVideoIdInput input: ' + input);
-    var videoId = input;
+    let videoId = input;
     console.log('cleanVideoIdInput videoId: ' + videoId);
 
     // It's okay if they input a URL
@@ -323,7 +323,7 @@ function addToSongPool() {
 
 // Helper function to get youtube song title from ID
 function getVideoTitleFromId(videoId) {
-    var videoTitle;
+    let videoTitle;
     $.ajax({
         async: false, // Wait for GET request to finish to return song title
         type: 'GET',
@@ -414,7 +414,7 @@ function deleteFromSongQueue(videoId) {
 
 // Make GET call to 'get-top-of-song-queue'
 function getTopOfSongQueue() {
-    var videoId;
+    let videoId;
     $.ajax({
         async: false, // Wait for GET request to finish
         url: '/get-top-of-song-queue/' + $('input#room_id').val(),
@@ -445,11 +445,11 @@ function getTopOfSongQueue() {
 // Get random integer in range
 var getRandom = function (min, max) {
     return Math.floor(Math.random() * (max - min) + min);
-};
+}
 
 // Helper function to play random video in the playlist
 function playRandomTrack() {
     const randomIndex = getRandom(0, billboardPlaylistTrackCount);
     console.log('playRandomTrack at randomIndex:' + randomIndex);
     player.playVideoAt(randomIndex);
-};
+}

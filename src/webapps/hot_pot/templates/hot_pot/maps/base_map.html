@@ -1,52 +1,54 @@
 <!DOCTYPE html >
-  <head>
-            {% load static %}
-      <script src = "{% static 'hot_pot/js/jquery-3.3.1.min.js' %}"></script>
+<html>
+<head>
+    {% load static %}
+    <script src="{% static 'hot_pot/js/jquery-3.3.1.min.js' %}"></script>
 
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>From Info Windows to a Database: Saving User-Added Form Data</title>
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 80%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 80%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
     </style>
-  </head>
-  <body>
-    <div id="map" height="460px" width="460px"></div>
-    <form>
-        <input type='button' value='Save' id="save-btn"/>
-    </form>
-    <li>
-        {% for marker in all_markers %}
-            <ul>{{ marker.room_name }}-{{ marker.lat }}-{{ marker.lng }}</ul>
-        {% endfor %}
-    </li>
+</head>
+<body>
+<div id="map" height="460px" width="460px"></div>
+<form>
+    <input type='button' value='Save' id="save-btn"/>
+</form>
+<li>
+    {% for marker in all_markers %}
+        <ul>{{ marker.room_name }}-{{ marker.lat }}-{{ marker.lng }}</ul>
+    {% endfor %}
+</li>
 
 
-    <script>
-        // The boilerplate code below is copied from the Django 1.10 documentation.
-        // It establishes the necessary HTTP header fields and cookies to use
-        // Django CSRF protection with jQuery Ajax requests.
+<script>
+    // The boilerplate code below is copied from the Django 1.10 documentation.
+    // It establishes the necessary HTTP header fields and cookies to use
+    // Django CSRF protection with jQuery Ajax requests.
 
-        $( document ).ready(function(){  // Runs when the document is ready
+    $(document).ready(function () {  // Runs when the document is ready
 
-          // using jQuery
-          // https://docs.djangoproject.com/en/1.10/ref/csrf/
-          function getCookie(name) {
-            var cookieValue = null;
+        // using jQuery
+        // https://docs.djangoproject.com/en/1.10/ref/csrf/
+        function getCookie(name) {
+            let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = jQuery.trim(cookies[i]);
                     // Does this cookie string begin with the name we want?
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -55,155 +57,155 @@
                 }
             }
             return cookieValue;
-          }
+        }
 
-          var csrftoken = getCookie('csrftoken');
+        const csrftoken = getCookie('csrftoken');
 
-          function csrfSafeMethod(method) {
+        function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-          }
+        }
 
-          $.ajaxSetup({
-              beforeSend: function(xhr, settings) {
-                  if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                      xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                  }
-              }
-          });
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
 
-        }); // End of $(document).ready
+    }); // End of $(document).ready
 
-        $("#save-btn").on("click", function(event){
-            console.log("asdasdasdasdasd");
-          event.preventDefault();
-          if (!marker){
-              alert("no marker");
-              return;
-          }
+    $("#save-btn").on("click", function (event) {
+        console.log("asdasdasdasdasd");
+        event.preventDefault();
+        if (!marker) {
+            alert("no marker");
+            return;
+        }
 
-          var room_name = "dummy";
-          var latlng = marker.getPosition();
-          var lng = latlng.lng();
-          var lat = latlng.lat();
+        const room_name = "dummy";
+        const latlng = marker.getPosition();
+        const lng = latlng.lng();
+        const lat = latlng.lat();
 
-          $.ajax({
-                  // The URL for the request
-                  url: "/add-marker",
-                  data: {"room_name": room_name, "lng": lng, "lat": lat},
-                  // Whether this is a POST or GET request
-                  type: "POST",
-                  // The type of data we expect back
-                  dataType : "json",
-              })
-              .done(function( data ) {
-                 alert("finish!")
-              })
-              .fail(function( xhr, status, errorThrown ) {
-                console.log( "Error: " + errorThrown );
-                console.log( "Status: " + status );
-                console.dir( xhr );
-              })
+        $.ajax({
+            // The URL for the request
+            url: "/add-marker",
+            data: {"room_name": room_name, "lng": lng, "lat": lat},
+            // Whether this is a POST or GET request
+            type: "POST",
+            // The type of data we expect back
+            dataType: "json",
+        })
+            .done(function (data) {
+                alert("finish!")
+            })
+            .fail(function (xhr, status, errorThrown) {
+                console.log("Error: " + errorThrown);
+                console.log("Status: " + status);
+                console.dir(xhr);
+            })
             // Code to run regardless of success or failure;
-          .always(function( xhr, status ) {
-            console.log( "fetch comments request is finished!" );
+            .always(function (xhr, status) {
+                console.log("fetch comments request is finished!");
             });
-          /*
-          $.post("/add-marker", {"room_name": room_name, "lng": lng, "lat": lat})
-              .done(function(data) {
-                  alert("saved!");
-          });
-          */
-      });
+        /*
+        $.post("/add-marker", {"room_name": room_name, "lng": lng, "lat": lat})
+            .done(function(data) {
+                alert("saved!");
+        });
+        */
+    });
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
         infoWindow.open(map);
-      }
+    }
 
-      var map;
-      var marker;
+    var map;
+    var marker;
 
-      function initMap() {
-        var CMU = {lat: 40.442680, lng: -79.94210};
+    function initMap() {
+        const CMU = {lat: 40.442680, lng: -79.94210};
         map = new google.maps.Map(document.getElementById('map'), {
-          center: CMU,
-          zoom: 13
+            center: CMU,
+            zoom: 13
         });
 
-        var infoWindow = new google.maps.InfoWindow;
+        const infoWindow = new google.maps.InfoWindow;
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
 
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found.');
+                infoWindow.open(map);
+                map.setCenter(pos);
+            }, function () {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
         } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
         }
 
-          $.get('get-markers', function(data) {
-              for(var i = 0; i < data.markers.length; i++) {
-                  // Add course by course number
-                  var id = data.markers[i]['id'];
-                  var room_name = data.markers[i]['room_name'];
-                  var address = data.markers[i]['address'];
-                  var lat = data.markers[i]['lat'];
-                  var lng = data.markers[i]['lng'];
-                  var point = new google.maps.LatLng(
-                      parseFloat(lat),
-                      parseFloat(lng));
+        $.get('get-markers', function (data) {
+            for (let i = 0; i < data.markers.length; i++) {
+                // Add course by course number
+                const id = data.markers[i]['id'];
+                const room_name = data.markers[i]['room_name'];
+                const address = data.markers[i]['address'];
+                const lat = data.markers[i]['lat'];
+                const lng = data.markers[i]['lng'];
+                const point = new google.maps.LatLng(
+                    parseFloat(lat),
+                    parseFloat(lng));
 
-                  var infowincontent = document.createElement('div');
-                  var strong = document.createElement('strong');
-                  strong.textContent = room_name;
-                  infowincontent.appendChild(strong);
-                  infowincontent.appendChild(document.createElement('br'));
+                const infowincontent = document.createElement('div');
+                const strong = document.createElement('strong');
+                strong.textContent = room_name;
+                infowincontent.appendChild(strong);
+                infowincontent.appendChild(document.createElement('br'));
 
-                  var text = document.createElement('text');
-                  text.textContent = address;
-                  infowincontent.appendChild(text);
-                  var marker1 = new google.maps.Marker({
+                const text = document.createElement('text');
+                text.textContent = address;
+                infowincontent.appendChild(text);
+                const marker1 = new google.maps.Marker({
                     map: map,
                     position: point
-                  });
+                });
 
-                  marker1.addListener('click', function() {
+                marker1.addListener('click', function () {
                     infoWindow.setContent(infowincontent);
                     infoWindow.open(map, marker1);
-                  });
-              }
-          });
+                });
+            }
+        });
 
-        google.maps.event.addListener(map, 'click', function(event) {
+        google.maps.event.addListener(map, 'click', function (event) {
             if (!marker || !marker.setPosition) {
                 marker = new google.maps.Marker({
-                  position: event.latLng,
-                  map: map,
+                    position: event.latLng,
+                    map: map,
                 });
             } else {
                 marker.setPosition(event.latLng);
             }
         });
-      }
+    }
 
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y&callback=initMap">
-    </script>
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y&callback=initMap">
+</script>
 
-  </body>
+</body>
 </html>

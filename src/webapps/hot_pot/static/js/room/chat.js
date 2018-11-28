@@ -8,8 +8,8 @@ document.querySelector('#chat-message-input').onkeyup = function (e) {
 };
 
 document.querySelector('#chat-message-submit').onclick = function (e) {
-    var messageInputDom = document.querySelector('#chat-message-input');
-    var message = messageInputDom.value;
+    const messageInputDom = document.querySelector('#chat-message-input');
+    const message = messageInputDom.value;
     console.log('sending...');
     socket.send(JSON.stringify({
         'chat_message': message,

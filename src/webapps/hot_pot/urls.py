@@ -18,8 +18,8 @@ urlpatterns = \
             auth_views.confirm_email, name='confirm'),
 
         re_path(r'^reset-password/username=(?P<username>[0-9A-Za-z_]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        auth_views.resetPassword, name = 'resetPassword'),
-        path('forget-password',auth_views.forgetPassword, name = 'forgetPassword'),
+                auth_views.reset_password, name ='resetPassword'),
+        path('forget-password', auth_views.forget_password, name ='forgetPassword'),
 
         path('logout', auth_views.custom_logout, name='logout'),
 
@@ -34,7 +34,7 @@ urlpatterns = \
         ########
 
         # Init
-        re_path(r'^room/(?P<room_id>[^/]+)/$', room_views.room, name='room'),
+        re_path(r'^room/(?P<room_id>[^/]+)/$', room_views.render_room, name='room'),
         
         # Search for songs
         path('search-song', room_views.search_song, name='search-song'),

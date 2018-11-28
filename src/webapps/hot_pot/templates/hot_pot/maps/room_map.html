@@ -26,11 +26,11 @@
           // using jQuery
           // https://docs.djangoproject.com/en/1.10/ref/csrf/
           function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
+              let cookieValue = null;
+              if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = jQuery.trim(cookies[i]);
                     // Does this cookie string begin with the name we want?
                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -41,9 +41,9 @@
             return cookieValue;
           }
 
-          var csrftoken = getCookie('csrftoken');
+            const csrftoken = getCookie('csrftoken');
 
-          function csrfSafeMethod(method) {
+            function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
           }
@@ -66,12 +66,12 @@
               return;
           }
 
-          var room_name = "dummy";
-          var latlng = marker.getPosition();
-          var lng = latlng.lng();
-          var lat = latlng.lat();
+            const room_name = "dummy";
+            const latlng = marker.getPosition();
+            const lng = latlng.lng();
+            const lat = latlng.lat();
 
-          $.ajax({
+            $.ajax({
                   // The URL for the request
                   url: "/add-marker",
                   data: {"room_name": room_name, "lng": lng, "lat": lat},
@@ -113,22 +113,22 @@
 
 
       function initMap() {
-        var CMU = {lat: 40.442680, lng: -79.94210};
-        map = new google.maps.Map(document.getElementById('map'), {
+          const CMU = {lat: 40.442680, lng: -79.94210};
+          map = new google.maps.Map(document.getElementById('map'), {
           center: CMU,
           zoom: 13
         });
 
-        var infoWindow = new google.maps.InfoWindow;
-        // Try HTML5 geolocation.
+          const infoWindow = new google.maps.InfoWindow;
+          // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+              const pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+              };
 
-            infoWindow.setPosition(pos);
+              infoWindow.setPosition(pos);
             infoWindow.setContent('Location found.');
             infoWindow.open(map);
             map.setCenter(pos);
@@ -143,44 +143,44 @@
           $.get('get-markers', function(data) {
               console.log(data);
 
-              var markers = [];
-              for(var i = 0; i < data.markers.length; i++) {
+              const markers = [];
+              for(let i = 0; i < data.markers.length; i++) {
                   markers.push(data.markers[i])
               }
               Array.prototype.forEach.call(markers, function(markerElem){
                   console.log(markerElem);
-                  var id = markerElem['marker_id'];
-                  var room_name = markerElem['room_name'];
-                  var room_id= markerElem['room_id'];
-                  var room_description =  markerElem['room_description'];
-                  var lat = markerElem['lat'];
-                  var lng = markerElem['lng'];
-                  var point = new google.maps.LatLng(
+                  const id = markerElem['marker_id'];
+                  const room_name = markerElem['room_name'];
+                  const room_id = markerElem['room_id'];
+                  const room_description = markerElem['room_description'];
+                  const lat = markerElem['lat'];
+                  const lng = markerElem['lng'];
+                  const point = new google.maps.LatLng(
                       parseFloat(lat),
                       parseFloat(lng));
 
-                  var infowincontent = document.createElement('div');
-                  var strong1 = document.createElement('strong');
+                  const infowincontent = document.createElement('div');
+                  const strong1 = document.createElement('strong');
                   strong1.textContent = "Room name:";
                   infowincontent.appendChild(strong1);
                   infowincontent.appendChild(document.createElement('br'));
 
-                  var header_room_name = document.createElement('h5');
+                  const header_room_name = document.createElement('h5');
                   header_room_name.textContent = room_name;
                   infowincontent.appendChild(header_room_name);
                   {#infowincontent.appendChild(document.createElement('br'));#}
 
-                  var strong2 = document.createElement('strong');
+                  const strong2 = document.createElement('strong');
                   strong2.textContent = "Room description: ";
                   infowincontent.appendChild(strong2);
                   infowincontent.appendChild(document.createElement('br'));
 
-                  var header_room_description = document.createElement('p');
+                  const header_room_description = document.createElement('p');
                   header_room_description.textContent = room_description;
                   infowincontent.appendChild(header_room_description);
 
 
-                  var btn_to_room = document.createElement('button');
+                  const btn_to_room = document.createElement('button');
                   btn_to_room.addEventListener("click", function(){
 
                       {#var p_url = $("#add-comment-url").attr("data-url");#}
@@ -189,9 +189,9 @@
                   btn_to_room.textContent = "Go to room";
                   infowincontent.appendChild(btn_to_room);
 
-                  var marker1 = new google.maps.Marker({
-                    map: map,
-                    position: point
+                  const marker1 = new google.maps.Marker({
+                      map: map,
+                      position: point
                   });
 
                   marker1.id = "marker-"+id;
