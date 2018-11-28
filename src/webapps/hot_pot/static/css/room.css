@@ -29,7 +29,7 @@ a:hover, a:visited, a:link, a:active{
 }
 
 .container{
-  background-color: white;
+  
   margin: 20px;
 }
 .btn{
@@ -239,10 +239,14 @@ a:hover, a:visited, a:link, a:active{
 }
 
 .info-panel{
-  background-color: #dfdfdf;
+  background-color: #BFBFBF;
   color: white;
 }
 .info-panel .info{
   margin-left: 20px;
+  display: inline-block;
+}
+
+.inline{
   display: inline-block;
 }

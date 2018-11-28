@@ -23,10 +23,11 @@
 
             <!-- Add a 'sync' now button -->
             {% if not is_dj %}
-                <button type="button" class="btn btn-secondary text-light sync" onclick="syncToHost()"><span> Sync To Host  &#8594;</span></button>
+                <button type="button" class="btn btn-secondary text-light sync inline" onclick="syncToHost()"><span> Sync To Host  &#8594;</span></button>
             {% else %}
-                <button type="button" class="btn btn-secondary text-light sync" onclick="nextVideo()"><span> Next Video  &#8594;</span></button>
+                <button type="button" class="btn btn-secondary text-light sync inline" onclick="nextVideo()"><span> Next Video  &#8594;</span></button>
             {% endif %}
+            <img src="{% static 'img/close.png' %}" class="inline" onclick="closeChat()" width="25" height="25">
              <!-- YOUTUBE PLAYER END -->
 
             <!-- SONG QUEUE START -> -->

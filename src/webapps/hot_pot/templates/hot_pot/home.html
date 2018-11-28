@@ -1,8 +1,16 @@
 {% extends 'hot_pot/base.html' %}
 
 {% block content %}
+{% load static %}
     <!--       <canvas id="canvas"></canvas>     -->
-    <button type="button" class="btn btn-lg" onclick="openForm()">Create a Room</button>
+    <div class = "row">
+
+            
+        <img  src="{% static 'img/header.png' %}" class = "header" alt = "">
+             
+    <div class = "col-6 float-right">
+        <button type="button" class="btn btn-lg create" onclick="openForm()">Create a Room</button>
+    </div>
 
     <div class="my-3 p-3 rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0">Popular Now</h6>
@@ -12,7 +20,7 @@
                 <a href="{% url 'room' room.id %}" class="col-sm-2">
 
 
-                  <div class="card bg-light rounded">
+                  <div class="card bg-light rounded mx-2 my-3">
                  {% if room.cover_pic %}
                     <img  src="{% url 'room_img' room.id %}" class = "card-img-top" alt = "">
                   {% endif %}
@@ -63,7 +71,7 @@
                     
 
                 {% endif %}
-            <!--             <input type="checkbox" name="private" value="private" checked>A Private Room? -->
+
             <input type="submit" name="create_room" value="Create" class="btn create"></button>
             <button type="button" class="btn" onclick="closeForm()">Close</button>
         </form>

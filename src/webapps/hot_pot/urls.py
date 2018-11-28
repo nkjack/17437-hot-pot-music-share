@@ -53,6 +53,10 @@ urlpatterns = \
         path('vote-up', voting_views.vote_up),
         path('vote-down', voting_views.vote_down),
 
+        # Room Thumb up
+        path('thumb-up', voting_views.thumb_up),
+        path('thumb-down', voting_views.thumb_down),
+
         # Add/Remove DJs
         path('add-dj-to-room', room_views.add_dj_to_room),
         path('remove-dj-from-room', room_views.remove_dj_from_room),

@@ -48,3 +48,13 @@ def vote_down(request):
         return JsonResponse(data=json)
     else:
         return JsonResponse(status=404, data={'status': 'false', 'message': 'fail to delete vote'})
+
+@login_required
+@transaction.atomic
+def thumb_up(request):
+    return HTTPResponse("")
+
+@login_required
+@transaction.atomic
+def thumb_down(request):
+    return HTTPResponse("")

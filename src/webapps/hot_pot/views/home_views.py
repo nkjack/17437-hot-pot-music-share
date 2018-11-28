@@ -16,7 +16,7 @@ def home(request, username):
     if (request.method == "GET"):
         context['form'] = RoomForm(initial={'owner': request.user})
 
-        popular_rooms = Room.objects.all().order_by('thumbs_up')[:6]
+        popular_rooms = Room.objects.all().order_by('thumbs_up')[:18]
         context["popular"] = popular_rooms
 
         print(popular_rooms)
