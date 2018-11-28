@@ -17,7 +17,7 @@
                 </div>
             </nav>
             <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
-                <!-- SONG POOL TAB CONTENT -->
+                <!-- GENERAL -->
                 <div class="tab-pane fade show active" id="nav-pool" role="tabpanel" aria-labelledby="nav-pool-tab">
                     
                     <form enctype = "multipart/form-data"  method = "POST">{% csrf_token %}
@@ -55,7 +55,7 @@
                         <input  type="submit" class="btn btn-lg btn-block btn-primary my-3" name = 'room_profile' value ="Submit">
                     </form>
                 </div>
-                <!-- SONG SEARCH TAB CONTENT -->
+                <!-- DJ SETTING -->
                 <div class="tab-pane fade" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
                     
                     <form id="form-add-dj">
@@ -66,7 +66,7 @@
                             </select>
                         </label>
 
-                        <button type="button" onclick="addUsernameAsDj()">Add DJ</button>
+                        <button type="button" class = "btn-search" onclick="addUsernameAsDj()">Add DJ</button>
                     </form>
 
                     <!-- Remove DJ form -->
@@ -81,12 +81,12 @@
                         <button type="button" onclick="removeUsernameAsDj()">Remove DJ</button>
                     </form>
                 </div>
-                <!-- CHAT TAB CONTENT -->
+                <!-- LOCATION -->
                 <div class="tab-pane fade" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab">
                     <div id="location">
                     {#noam get locaiton#}
                     <div>
-                        {#<button type="button" onclick="getLocation()">get location</button>#}
+                        {#<button type="button" class = "btn" onclick="getLocation()">get location</button>#}
                         <input type="checkbox" onclick='handleGeoLocationClick(this);' name="geo_location"
                                value="location"> my location
                     </div>
@@ -97,7 +97,7 @@
 
                 </div>
             </div>
-        </div>
+        </disv>
     
 
 {% endblock %}
