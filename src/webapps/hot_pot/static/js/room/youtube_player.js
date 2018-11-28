@@ -90,9 +90,10 @@ function onHostPlayerStateChange(event) {
         case YT.PlayerState.PLAYING:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.PLAYING");
 
-            // Highlight currently playing song
-            //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-            //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+            // Broadcast name of currently playing song
+            const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+            const currVideoTitle = getVideoTitleFromId(currVideoId);
+            $('#now-playing-text').text(currVideoTitle);
 
             break;
         case YT.PlayerState.PAUSED:
@@ -134,9 +135,10 @@ function onListenerPlayerStateChange(event) {
         case YT.PlayerState.PLAYING:
             console.log("onListenerPlayerStateChange, case: YT.PlayerState.PLAYING");
 
-            // Highlight currently playing song
-            //const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
-            //$(`#song_queue_${currVideoId}`).css('background-color', 'yellow');
+            // Broadcast name of currently playing song
+            const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
+            const currVideoTitle = getVideoTitleFromId(currVideoId);
+            $('#now-playing-text').text(currVideoTitle);
 
             break;
     }
