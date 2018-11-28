@@ -255,3 +255,7 @@ a:hover, a:visited, a:link, a:active {
 .chat-msg {
     font-weight: normal;
 }
+
+.dropdown-menu{
+  width:100%;
+}

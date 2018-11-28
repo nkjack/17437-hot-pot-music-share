@@ -23,7 +23,8 @@ function fillSelectAddDj() {
 
             for (let i = 0; i < data.users.length; i++) {
                 let username = data.users[i];
-                select.append(`<option value="${username}">${username}</option>`);
+
+                select.append( `<div class="dropdown-item" value="${username}">${username}</div>`);
             }
         })
         .fail(function (xhr, status, errorThrown) {
@@ -55,7 +56,7 @@ function fillSelectRemoveDj() {
 
             for (let i = 0; i < data.users.length; i++) {
                 let username = data.users[i];
-                select.append(`<option value="${username}">${username}</option>`);
+                select.append(`<div class="dropdown-item" value="${username}">${username}</div>`);
             }
         })
         .fail(function (xhr, status, errorThrown) {
