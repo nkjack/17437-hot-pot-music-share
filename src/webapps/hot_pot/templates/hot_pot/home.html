@@ -1,12 +1,12 @@
 {% extends 'hot_pot/base.html' %}
 
 {% block content %}
-{% load static %}
+    {% load static %}
     <!--       <canvas id="canvas"></canvas>     -->
 
-            
-    <img  src="{% static 'img/header.png' %}" class = "header" alt = "">
-             
+
+    <img src="{% static 'img/header.png' %}" class="header" alt="">
+
     <button type="button" class="btn btn-lg create" onclick="openForm()">Create a Room</button>
 
 
@@ -18,15 +18,19 @@
                 <a href="{% url 'room' room.id %}" class="col-sm-3">
 
 
-                  <div class="card bg-light rounded mx-2 my-3">
-                 {% if room.cover_pic %}
-                    <img  src="{% url 'room_img' room.id %}" class = "card-img-top" alt = "">
-                  {% endif %}
+                    <div class="card bg-light rounded mx-2 my-3">
+                        {% if room.cover_pic %}
+                            <img src="{% url 'room_img' room.id %}" class="card-img-top" alt="">
+                        {% endif %}
                         <div class="card-body">
                             <h4 class="card-title">{{ room.name }}</h4>
                             <p class="card-text">{{ room.description }}</p>
                             <p class="card-text">
-                                <small class="text-muted">DJ: {{ room.owner.username }}</small>
+                                <small class="text-muted">Owner: {{ room.owner.username }}</small>
+                            {% if room.is_hotpot_mode %}
+                                <br>
+                                <small class="text-info">HotPot Mode</small>
+                            {% endif %}
                             </p>
                         </div>
                     </div>
@@ -64,10 +68,18 @@
                     <div>
                         <p class="font-weight-bold mb-0 ">Room Photo
 
-                        {{ form.cover_pic }}</p>
+                            {{ form.cover_pic }}</p>
 
                     </div>
-                    
+                    <div>
+                        <p class="font-weight-bold mb-0 ">HotPot Mode
+                            {{ form.is_hotpot_mode }}
+                            <span class="small"> (All users become DJs.)</span>
+                        </p>
+
+                    </div>
+
+
 
                 {% endif %}
 

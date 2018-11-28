@@ -66,13 +66,14 @@ function fillSelectRemoveDj() {
 }
 
 // Add the specified username as a DJ
-function addUsernameAsDj() {
-
+function addUsernameAsDj(username) {
 
     var room_id = $("#room_id");
 
     // TODO: Either pass username as function parameter or get username from text input with jQuery
-    var username = $("#select-add-dj").val();
+    if (username === undefined) {
+        var username = $("#select-add-dj").val();
+    }
 
     console.log('addUserNameAsDj selected: ' + username);
 
@@ -127,4 +128,21 @@ function removeUsernameAsDj() {
             console.log("Status: " + status);
             console.dir(xhr);
         })
+}
+
+// Called on document/room ready - make this user a DJ if this room is in 'Friend Mode'
+function checkFriendMode() {
+    const is_dj = $("#is_dj").val();
+    const is_hotpot_mode = $("#is_hotpot_mode").val();
+    const username = $("#username").val();
+
+    console.log('is_dj: ' + is_dj);
+    console.log('is_hotpot_mode: ' + is_hotpot_mode);
+    console.log('username: ' + username);
+
+    if (is_hotpot_mode === "True" && is_dj === "False") {
+        console.log("checkFriendMode - Making this user a DJ and reloading page...");
+        addUsernameAsDj(username);
+        location.reload(); // Reload the page - user won't notice b/c page is loading, anyway.
+    }
 }

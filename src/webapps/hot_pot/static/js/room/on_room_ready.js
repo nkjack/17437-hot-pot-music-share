@@ -47,4 +47,13 @@ $(document).ready(function () {  // Runs when the document is ready
     fillSelectAddDj();
     fillSelectRemoveDj();
 
+    // If room is 'Friend Mode', make this user a DJ if they aren't already
+    checkFriendMode();
+
+    // Tooltip for 'Hotpot Mode'
+    if ($('#is_hotpot_mode').val() === "True") {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+
+
 }); // End of $(document).ready
