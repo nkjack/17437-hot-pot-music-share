@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f%1%rmvjtn4deft2fj^dg5x6gob9sr%71-(su9mvhav!3h*vbe'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'hot-pot-music-share.herokuapp', '127.0.0.1']
 
@@ -160,13 +160,3 @@ django_heroku.settings(locals())
 # https://github.com/heroku/heroku-buildpack-pgbouncer/issues/118\#issuecomment-440834985
 if 'OPTIONS' in DATABASES['default']:
     del DATABASES['default']['OPTIONS']['sslmode']
-
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_SSL_REDIRECT = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_PRELOAD = True
