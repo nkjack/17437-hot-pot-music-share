@@ -34,7 +34,7 @@ function getEntryListForSearchResult(vId, vName) {
         '       <div class="d-flex justify-content-between align-items-center w-100">' +
         '       <strong class="text-gray-dark">' + vName + '</strong>' +
         // {#'        <span class = "d-block"> {{timespan}}</span>'+#}
-        '       <button type="button" id="add-song-btn">Add song</button>' +
+        '       <button type="button" id="add-song-btn">Add to Pool</button>' +
         '       <input type="hidden" id="song_id" value="' + vId + '"/>' +
         '       <input type="hidden" id="song_name" value="' + vName + '"/>' +
         '     </div>' +
