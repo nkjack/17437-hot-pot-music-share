@@ -95,9 +95,16 @@ function onHostPlayerStateChange(event) {
             const currVideoTitle = getVideoTitleFromId(currVideoId);
             $('#now-playing-text').text(currVideoTitle);
 
+            // Toggle animation
+            $('#music-bars').removeClass('paused');
+
             break;
         case YT.PlayerState.PAUSED:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.PAUSED");
+
+            // Toggle animation
+            $('#music-bars').addClass('paused');
+
             break;
         case YT.PlayerState.BUFFERING:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.BUFFERING");
@@ -139,6 +146,15 @@ function onListenerPlayerStateChange(event) {
             const currVideoId = cleanVideoIdInput(String(player.getVideoUrl()));
             const currVideoTitle = getVideoTitleFromId(currVideoId);
             $('#now-playing-text').text(currVideoTitle);
+
+            // Toggle animation
+            $('#music-bars').removeClass('paused');
+
+            break;
+        case YT.PlayerState.PAUSED:
+
+            // Toggle animation
+            $('#music-bars').addClass('paused');
 
             break;
     }
