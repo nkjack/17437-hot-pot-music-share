@@ -10,13 +10,22 @@
     <input type="hidden" id="username" value="{{ username }}"/>
 
     <div class="mb-3 ml-4  mr-5 p-3 rounded box-shadow info-panel">
-        <img class="info" src="{% url 'room_img' room_id %}" width="50">
-        <h5 class=" info"> Room: {{ room_name }}</h5>
-        <h5 class=" info">Owner: {{ room_owner }} </h5>
-        {% if is_hotpot_mode %}
-            <p data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light float-right">HotPot
-                Mode</p>
-        {% endif %}
+        <div class = "row">
+            <div class = "col-7 float-left">
+                <h5> Now Playing: <i>Name of the Song </i></h5>
+            </div>
+            <div class = "col-5 float-right">
+            
+                <h5 class=" info"> Room: {{ room_name }}</h5>
+                <h5 class=" info">Owner: {{ room_owner }} </h5>
+                {% if is_hotpot_mode %}
+                    <p data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light info">HotPot
+                        Mode</p>
+                {% endif %}
+                <img class="info" src="{% url 'room_img' room_id %}" width="50">
+            </div>  
+
+        </div>
     </div>
 
     <div class="row mx-3">

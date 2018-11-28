@@ -214,6 +214,7 @@ a:hover, a:visited, a:link, a:active {
 }
 
 .info-panel .info {
+    text-align: right;
     margin-left: 20px;
     display: inline-block;
 }
