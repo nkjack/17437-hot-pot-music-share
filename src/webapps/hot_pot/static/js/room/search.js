@@ -1,4 +1,3 @@
-/* NOAM JS START **********************************************************************************************/
 
 // Allow enter key to search
 document.querySelector('#search-query').onkeyup = function (e) {
@@ -44,9 +43,7 @@ $("#panel").on("click", "#search-button", function (event) {
         });
 });
 
-/*****************************************************************************************8
- ADD SONG FROM SEARCH TO POOL
- */
+// ADD SONG FROM SEARCH TO POOL
 $("#search-results").on("click", "#add-song-btn", function (event) {
     event.preventDefault();
     const search_form = $(this).closest("#search-song-div");
@@ -79,12 +76,6 @@ $("#search-results").on("click", "#add-song-btn", function (event) {
         .always(function (xhr, status) {
             console.log("fetch songs from poll request is finished!");
         });
-    /*
-    $.post("/add-marker", {"room_name": room_name, "lng": lng, "lat": lat})
-        .done(function(data) {
-            alert("saved!");
-    });
-    */
 });
 
 
