@@ -10,22 +10,30 @@
     <input type="hidden" id="username" value="{{ username }}"/>
 
     <div class="mb-3 ml-4  mr-5 p-3 rounded box-shadow info-panel">
-        <div class="row">
-            <div class="col-7 float-left">
-                <h5> Now Playing:
-                    <i id="now-playing-text"><!-- Filled in by youtube_player.js --></i>
-                </h5>
-            </div>
-            <div class="col-5 float-right">
 
-                <h5 class=" info"> Room: {{ room_name }}</h5>
-                <h5 class=" info">Owner: {{ room_owner }} </h5>
+        <!-- To pause: document.getElementById("music").classList.toggle("paused"); -->
+        <div class="row justify-content-between">
+            <div class="col-5">
+                <div class="now playing" id="music">
+                  <span class="bar n1"></span>
+                  <span class="bar n2"></span>
+                  <span class="bar n3"></span>
+                  <span class="bar n4"></span>
+                  <span class="bar n5"></span>
+                </div>
+                <h5 class="info mt-2"> Now Playing:</h5>
+                <i id="now-playing-text" class = "info"><!-- Filled in by youtube_player.js --></i>
+            </div>
+            <div class="col-5">
+
+                <h6 class=" info"> Room: {{ room_name }}</h6>
+                <h6 class=" info">Owner: {{ room_owner }} </h6>
+                <img class="info" src="{% url 'room_img' room_id %}" width="50">
                 {% if is_hotpot_mode %}
                     <p data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light info">
                         <em>HotPot Mode</em>
                     </p>
                 {% endif %}
-                <img class="info" src="{% url 'room_img' room_id %}" width="50">
             </div>
 
         </div>
