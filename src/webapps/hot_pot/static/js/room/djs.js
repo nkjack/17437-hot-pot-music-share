@@ -35,7 +35,7 @@ function fillSelectAddDj() {
 
 // Fill in dropdown select for removing DJs form
 function fillSelectRemoveDj() {
-    // Get non DJ users
+    // Get all DJ users
     $.ajax({
         // The URL for the request
         url: "/get-djs-in-room",

@@ -14,7 +14,8 @@
         <h5 class=" info"> Room: {{ room_name }}</h5>
         <h5 class=" info">Owner: {{ room_owner }} </h5>
         {% if is_hotpot_mode %}
-            <p data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light float-right">HotPot Mode</p>
+            <p data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light float-right">HotPot
+                Mode</p>
         {% endif %}
     </div>
 
@@ -154,13 +155,21 @@
                             </div>
                         </div>
 
-                        <!-- PEOPLE LIST START  -->
-                        <h5 class="border-bottom border-gray pb-2 mb-0">People in this room</h5>
-                        <div id="people">
+                        <!-- DJ/LISTENER LIST START  -->
+                        <h5 class="border-bottom border-gray pb-2 mb-0">DJs in this room</h5>
+                        <div id="djs">
+                            <div class="dj-in-room">
+                                <!-- To be filled in by JS -->
+                            </div>
+                        </div>
+
+                        <h5 class="border-bottom border-gray pb-2 mb-0">Listeners in this room</h5>
+                        <div id="listeners">
                             <div class="user-in-room">
                                 <!-- To be filled in by JS -->
                             </div>
                         </div>
+
                     </div>
 
                 </div>
