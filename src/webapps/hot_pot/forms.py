@@ -95,36 +95,33 @@ class LoginForm(forms.Form):
 
 
 class RoomForm(forms.ModelForm):
-
     class Meta:
         model = Room
-        fields = ['name', 'cover_pic', 'description', 'isMarked']
+        fields = ['name', 'cover_pic', 'description', 'isMarked', 'is_hotpot_mode']
         widgets = {
-                'name' :forms.TextInput(attrs={'class': 'form-control mb-3', 'maxlength': '15'}),
-                'description': forms.Textarea(attrs={'help_text': 'maxlength is 420',
-                                                               'maxlength': '420',
-                                                               'rows': "3",
-                                                               'class': 'form-control '}),
-                'cover_pic': forms.FileInput(),
-                'isMarked':forms.CheckboxInput(attrs = { "class": "checkmark",
-                                                        })
+            'name': forms.TextInput(attrs={'class': 'form-control mb-3', 'maxlength': '15'}),
+            'description': forms.Textarea(attrs={'help_text': 'maxlength is 420',
+                                                 'maxlength': '420',
+                                                 'rows': "3",
+                                                 'class': 'form-control '}),
+            'cover_pic': forms.FileInput(),
+            'isMarked': forms.CheckboxInput(attrs={"class": "checkmark", }),
 
         }
         labels = {
-            'name':'Room Name',
-            'description':'Description',
-            'cover_pic' :'Room Cover',
-            'isMarked' :'Mark Location'
+            'name': 'Room Name',
+            'description': 'Description',
+            'cover_pic': 'Room Cover',
+            'isMarked': 'Mark Location',
         }
         error_messages = {
             'name': {
-                'max_length':"This room name is too long. Maximum is 15 characters",
+                'max_length': "This room name is too long. Maximum is 15 characters",
             },
             'description': {
-                'max_length':"This room description is too long. Maximum is 420 characters",
+                'max_length': "This room description is too long. Maximum is 420 characters",
             }
         }
- 
 
     def clean(self):
         cleaned_data = super(RoomForm, self).clean()
@@ -137,88 +134,86 @@ class RoomForm(forms.ModelForm):
 
 
 class MarkerForm(forms.ModelForm):
-  class Meta:
-      model = Marker
-      fields = ('lat', 'lng')
+    class Meta:
+        model = Marker
+        fields = ('lat', 'lng')
+
 
 class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['age', 'bio', 'img']
 
-  class Meta:
-    model = Profile
-    fields = ['age','bio','img']
+        widgets = {
+            'age': forms.NumberInput(attrs={'class': 'form-control mr-6'}),
+            'bio': forms.Textarea(attrs={'help_text': 'maxlength is 420',
+                                         'maxlength': '420',
+                                         'rows': "8",
+                                         'class': 'form-control '}),
+            'img': forms.FileInput()
 
-    widgets = {
-        'age' :forms.NumberInput(attrs = {'class' : 'form-control mr-6' }),
-        'bio': forms.Textarea(attrs={'help_text': 'maxlength is 420',
-                                                       'maxlength': '420',
-                                                       'rows': "8",
-                                                       'class': 'form-control '}),
-        'img': forms.FileInput()
+        }
+        labels = {
+            'age': 'Age',
+            'bio': 'Description',
+            'img': 'Profile Image',
+        }
 
-    }
-    labels = {
-          'age':'Age',
-          'bio':'Description',
-          'img' :'Profile Image',
-      }
 
 class PasswordForm(forms.Form):
-  password1 = forms.CharField(required = True, min_length =3 , max_length = 15,
-                label = 'Password',
-                validators = [RegexValidator(regex = '^[a-zA-Z0-9_]{3,15}$',
-                               message = 'Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.',
-                               code = 'invalid password form'),
-                       ],
-                widget = forms.PasswordInput(attrs ={
-                    'maxlength' :'15', 
-                     'class' : 'form-control',
-                     'placeholder': '123456'}),
-                help_text = 'Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
-  
+    password1 = forms.CharField(required=True, min_length=3, max_length=15,
+                                label='Password',
+                                validators=[RegexValidator(regex='^[a-zA-Z0-9_]{3,15}$',
+                                                           message='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.',
+                                                           code='invalid password form'),
+                                            ],
+                                widget=forms.PasswordInput(attrs={
+                                    'maxlength': '15',
+                                    'class': 'form-control',
+                                    'placeholder': '123456'}),
+                                help_text='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
 
-  password2 = forms.CharField(required = True, min_length =3 , max_length = 15,
-                label = 'Confirm Password',
-                validators = [RegexValidator(regex = '^[a-zA-Z0-9_]{3,15}$',
-                               message = 'Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
-                       ],
-                widget = forms.PasswordInput(attrs = {
-                     'maxlength' :'15', 
-                     'class' : 'form-control',
-                     'placeholder': '123456'})
-                )
+    password2 = forms.CharField(required=True, min_length=3, max_length=15,
+                                label='Confirm Password',
+                                validators=[RegexValidator(regex='^[a-zA-Z0-9_]{3,15}$',
+                                                           message='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
+                                            ],
+                                widget=forms.PasswordInput(attrs={
+                                    'maxlength': '15',
+                                    'class': 'form-control',
+                                    'placeholder': '123456'})
+                                )
 
-  def clean(self):
-    cleaned_data = super(PasswordForm, self).clean()
+    def clean(self):
+        cleaned_data = super(PasswordForm, self).clean()
 
-    password1 = cleaned_data.get('password1')
-    password2 = cleaned_data.get('password2')
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
 
-    if password1 and password2 and password1 != password2:
-      raise forms.ValidationError('Password did not match', code = 'pssword_no_match')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Password did not match', code='pssword_no_match')
 
+        return cleaned_data
 
-    return cleaned_data
 
 class UsernameForm(forms.Form):
+    username = forms.CharField(required=True, min_length=3, max_length=15,
+                               label='Username',
+                               validators=[RegexValidator('^[a-z0-9_]{3,15}$',
+                                                          code='invalid_username',
+                                                          message='Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
+                                           ],
+                               widget=forms.TextInput(attrs={
+                                   'maxlength': '15',
+                                   'class': 'form-control',
+                                   'placeholder': 'myUsername'}),
+                               help_text='Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
 
-  username = forms.CharField(required = True, min_length =3 , max_length = 15,
-              label = 'Username',
-              validators = [RegexValidator('^[a-z0-9_]{3,15}$',
-                            code = 'invalid_username',
-                             message = 'Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
-                     ],
-              widget = forms.TextInput(attrs = {
-                   'maxlength' :'15', 
-                   'class' : 'form-control',
-                   'placeholder': 'myUsername'}),
-              help_text = 'Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
+    def clean(self):
+        cleaned_data = super(UsernameForm, self).clean()
 
-  def clean(self):
-    cleaned_data = super(UsernameForm, self).clean()
+        username = self.cleaned_data.get('username')
+        if not User.objects.filter(username__exact=username):
+            raise forms.ValidationError('There is no such account!!')
 
-    
-    username= self.cleaned_data.get('username')
-    if not User.objects.filter(username__exact = username ):
-      raise forms.ValidationError('There is no such account!!')
-
-    return cleaned_data
+        return cleaned_data

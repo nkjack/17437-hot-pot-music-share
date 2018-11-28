@@ -6,12 +6,17 @@
     <input type="hidden" id="room_name" value="{{ room_name }}"/>
     <input type="hidden" id="is_owner" value="{{ is_owner }}"/>
     <input type="hidden" id="is_dj" value="{{ is_dj }}"/>
+    <input type="hidden" id="is_hotpot_mode" value="{{ is_hotpot_mode }}"/>
     <input type="hidden" id="username" value="{{ username }}"/>
 
     <div class="mb-3 ml-4  mr-5 p-3 rounded box-shadow info-panel">
         <img class="info" src="{% url 'room_img' room_id %}" width="50">
         <h5 class=" info"> Room: {{ room_name }}</h5>
         <h5 class=" info">Owner: {{ room_owner }} </h5>
+        {% if is_hotpot_mode %}
+            <p data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light float-right">HotPot
+                Mode</p>
+        {% endif %}
     </div>
 
     <div class="row mx-3">
@@ -138,7 +143,7 @@
                     <div class="people-chat">
 
                         <!-- CHAT ROOM START -->
-                            <h5 class="border-bottom border-gray pb-2 mb-0">Chat Room</h5>
+                        <h5 class="border-bottom border-gray pb-2 mb-0">Chat Room</h5>
                         <div id="chat">
                             <div id="chat-log">
                                 <!-- To be filled by sockets.js -->
@@ -150,13 +155,21 @@
                             </div>
                         </div>
 
-                        <!-- PEOPLE LIST START  -->
-                        <h5 class="border-bottom border-gray pb-2 my-3">People in this room</h5>
-                        <div id="people">
+                        <!-- DJ/LISTENER LIST START  -->
+                        <h5 class="border-bottom border-gray pb-2 mb-0">DJs in this room</h5>
+                        <div id="djs">
+                            <div class="dj-in-room">
+                                <!-- To be filled in by JS -->
+                            </div>
+                        </div>
+
+                        <h5 class="border-bottom border-gray pb-2 mb-0">Listeners in this room</h5>
+                        <div id="listeners">
                             <div class="user-in-room">
                                 <!-- To be filled in by JS -->
                             </div>
                         </div>
+
                     </div>
 
                 </div>

@@ -26,6 +26,7 @@ def room(request, room_id):
     room_name = room.name
     is_owner = room.owner == request.user
     is_dj = user_is_dj(request.user, room)
+    is_hotpot_mode = room.is_hotpot_mode
     song_pool = Playlist.objects.get(belongs_to_room=room, pl_type="pool")
     song_queue = Playlist.objects.get(belongs_to_room=room, pl_type="queue")
 
@@ -42,6 +43,7 @@ def room(request, room_id):
                'title': 'Room ' + room_name,
                'is_owner': is_owner,
                'is_dj': is_dj,
+               'is_hotpot_mode': is_hotpot_mode,
                'song_pool': song_pool.songs.all().order_by('id'),
                'song_queue': song_queue.songs.all().order_by('id'),
                }
