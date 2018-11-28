@@ -33,7 +33,7 @@ def home(request, username):
                                        name=form.cleaned_data['name'],
                                        description=form.cleaned_data['description'],
                                        cover_pic=form.cleaned_data['cover_pic'],
-                                       is_hotpot_modea=form.cleaned_data['is_hotpot_mode'],
+                                       is_hotpot_mode=form.cleaned_data['is_hotpot_mode'],
                                        )
         new_room.save()
 
