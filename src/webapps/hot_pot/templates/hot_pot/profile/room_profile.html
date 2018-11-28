@@ -156,6 +156,12 @@
 	    fillSelectRemoveDj();
 	});
 
+    /**
+     * ALL FUNCTION RELATED TO GEO LOCATION TAB
+     * /
+    /**
+     * IMPORTANT GLOBAL VARIABLES lat, lng, geo_location_is_check
+     */
     let lat = 0;
     let lng = 0;
     let geo_location_is_check = false;
@@ -188,19 +194,16 @@
         if (geo_location_is_check) {
             p_url = '/add-marker-to-room'
         }
-        var room_id = $("#room_id");
+        let room_id = $("#room_id");
 
         $.ajax({
-        // The URL for the request
         url: p_url,
         data: {
             lat: lat,
             lng: lng,
             room_id: room_id.val()
         },
-        // Whether this is a POST or GET request
         type: "POST",
-        // The type of data we expect back
         dataType: "json",
         })
         .done(function (data) {
