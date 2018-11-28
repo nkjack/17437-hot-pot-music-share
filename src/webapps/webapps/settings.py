@@ -159,4 +159,5 @@ django_heroku.settings(locals())
 #   But need to disable sslmode required so pgbouncer can work
 # https://github.com/heroku/heroku-buildpack-pgbouncer/issues/118\#issuecomment-440834985
 if 'OPTIONS' in DATABASES['default']:
+    # noinspection PyUnresolvedReferences
     del DATABASES['default']['OPTIONS']['sslmode']
