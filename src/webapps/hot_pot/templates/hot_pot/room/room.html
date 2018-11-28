@@ -9,26 +9,27 @@
     <input type="hidden" id="username" value="{{ username }}"/>
 
     <div class="mb-3 ml-4  mr-5 p-3 rounded box-shadow info-panel">
-	    <img class="info" src="{% url 'room_img' room_id %}" width="50">
-	    <h5 class=" info"> Room: {{ room_name }}</h5>
-	    <h5 class=" info">Owner: {{ room_owner }} </h5>
-	</div>
+        <img class="info" src="{% url 'room_img' room_id %}" width="50">
+        <h5 class=" info"> Room: {{ room_name }}</h5>
+        <h5 class=" info">Owner: {{ room_owner }} </h5>
+    </div>
 
     <div class="row mx-3">
         <div class="col">
-             <!-- YOUTUBE PLAYER START -->
+            <!-- YOUTUBE PLAYER START -->
             <h1 id="now-playing"></h1>
             <div id="player"></div>
             <br>
 
             <!-- Add a 'sync' now button -->
             {% if not is_dj %}
-                <button type="button" class="btn btn-secondary text-light sync inline" onclick="syncToHost()"><span> Sync To Host  &#8594;</span></button>
+                <button type="button" class="btn btn-secondary text-light sync inline" onclick="syncToHost()"><span> Sync To Host  &#8594;</span>
+                </button>
             {% else %}
-                <button type="button" class="btn btn-secondary text-light sync inline" onclick="nextVideo()"><span> Next Video  &#8594;</span></button>
+                <button type="button" class="btn btn-secondary text-light sync inline" onclick="nextVideo()"><span> Next Video  &#8594;</span>
+                </button>
             {% endif %}
-            <!-- <img src="{% static 'img/close.png' %}" class="inline" onclick="closeChat()" width="25" height="25"> -->
-             <!-- YOUTUBE PLAYER END -->
+            <!-- YOUTUBE PLAYER END -->
 
             <!-- SONG QUEUE START -> -->
             <div class="mb-3 p-3 bg-light text-dark  rounded box-shadow dj_list">
@@ -49,97 +50,128 @@
                                 </div>
                             </div>
                         </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
+        <div class="col">
+            <!-- TABS START -->
+            <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-pool-tab" data-toggle="tab" href="#nav-pool" role="tab"
+                       aria-controls="nav-pool" aria-selected="true">Song Pool</a>
+                    <a class="nav-item nav-link" id="nav-search-tab" data-toggle="tab" href="#nav-search" role="tab"
+                       aria-controls="nav-search" aria-selected="false">Song Search</a>
+                    <a class="nav-item nav-link" id="nav-chat-tab" data-toggle="tab" href="#nav-chat" role="tab"
+                       aria-controls="nav-chat" aria-selected="false">Chat</a>
+                </div>
+            </nav>
+            <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                <!-- SONG POOL TAB CONTENT -->
+                <div class="tab-pane fade show active" id="nav-pool" role="tabpanel" aria-labelledby="nav-pool-tab">
+                    <!-- SONG POOL START -->
+                    <div class="m-3 p-3 bg-light text-dark rounded box-shadow poll_list">
+                        <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
+
+                        <div id="poll_list">
+                            {#                    {% for song in song_pool %}#}
+                            {#                        <div class="media pt-3" id="poll_song_div">#}
+                            {#                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"#}
+                            {#                                 width="100">#}
+                            {#                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">#}
+                            {#                                <div class="d-flex justify-content-between align-items-center w-100">#}
+                            {#                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>#}
+                            {#                                </div>#}
+                            {#                                {% if is_dj %}#}
+                            {#                                    <button type="button" id="add-song-to-queue-btn">Add to Queue</button>#}
+                            {#                                {% endif %}#}
+                            {#                                <input type="hidden" id="song_id" value="{{ song.song_id }}"/>#}
+                            {#                                <input type="hidden" id="song_name" value="{{ song.song_name }}"/>#}
+                            {#                            </div>#}
+                            {#                        </div>#}
+                            {#                    {% endfor %}#}
+                        </div>
+                    </div>
+                </div>
+                <!-- SONG SEARCH TAB CONTENT -->
+                <div class="tab-pane fade" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
+                    <div class="m-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
+                        <!-- Direct URL/VideoId Input to song queue/pool -->
+                        {% if is_dj %}
+                            <div id="direct-input-panel" class="input-group">
+
+                                <!--Only Hosts can add to song queue-->
+                                <input id="add-to-song-queue-input" type="text" class="form-control mr-3"
+                                       placeholder="Video URL or ID"/>
+                                <button class="btn-search" type="button" onclick="addToSongQueue()">Add to Queue
+                                </button>
+                            </div>
+                        {% endif %}
+                        <div id="direct-input-panel" class="input-group">
+
+                            <input id="add-to-song-pool-input" type="text" class="form-control"
+                                   placeholder="Video URL or ID"/>
+                            <button class="btn-search" type="button" onclick="addToSongPool()">Add to Pool</button>
+                        </div>
+
+                        <!-- To be filled by JS on success -->
+                        <span id="direct-input-success"></span>
+
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="search-query" placeholder="Search for...">
+                            <button id="search-button" class="btn-search" type="button" onclick="showSearchResult()">
+                                Search
+                            </button>
+                            <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
+                        </div>
+                        <!-- A list of results -->
+                        <div class="search-result" id="search">
+                            <h6 class="border-bottom border-dark pb-2 mb-0">Search Results</h6>
+                            <div id="search-results">
+                                <!-- To be filled in by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- CHAT TAB CONTENT -->
+                <div class="tab-pane fade" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab">
+                    <div class="people-chat">
+
+                        <!-- CHAT ROOM START -->
+                            <h5 class="border-bottom border-gray pb-2 mb-0">Chat Room</h5>
+                        <div id="chat">
+                            <textarea id="chat-log" cols="26" rows="5"></textarea><br/>
+                            <div id="chat-log">
+                            </div>
+
+                            <div class="input-group">
+                                <input id="chat-message-input" type="text" class="form-control"/>
+
+                                <input id="chat-message-submit" class="btn-search" type="button" value="Send"/>
+                            </div>
+                        </div>
+
+                        <!-- PEOPLE LIST START  -->
+                        <h5 class="border-bottom border-gray pb-2 mb-0">People in this room</h5>
+                        <div id="people">
+                            <div class="user-in-room">
+                                <!-- To be filled in by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- TABS END -->
+
+
+        </div>
     </div>
-	    <div class="col">
-		    <div class="m-3 p-3 bg-light text-dark rounded box-shadow" id="panel">
-		        <div class="input-group mb-3">
-		            <input type="text" class="form-control" id="search-query" placeholder="Search for...">
-		            <button id="search-button" class="btn-search" type="button" onclick="showSearchResult()">Search</button>
-		            <input type="hidden" id="add-comment-url" data-url="{% url 'search-song' %}"/>
-		        </div>
-		        <!-- Direct URL/VideoId Input to song queue/pool -->
-		        <div id="direct-input-panel" class="input-group">
-		            {% if is_host %}
-		                <!--Only Hosts can add to song queue-->
-
-		                <input id="add-to-song-queue-input" type="text" class="form-control mr-3" placeholder="Video URL/ID"/>
-		                <button class="btn-search" type="button" onclick="addToSongQueue()">Add to Queue</button><br/>
-		            {% endif %}
-		            <input id="add-to-song-pool-input" type="text" class="form-control" placeholder="Video URL/ID"/>
-		            <button class="btn-search" type="button" onclick="addToSongPool()">Add to Pool</button>
-		            <br>
-
-		            <!-- To be filled by JS on success -->
-		            <span id="direct-input-success"></span>
-		        </div>
-
-		    </div>
-		    <!-- SONG POOL START -->
-		    <div class="m-3 p-3 bg-light text-dark rounded box-shadow poll_list">
-		        <h5 class="border-bottom border-white pb-2 mb-0">Song Pool</h5>
-
-		        <div id="poll_list">
-		            {#                    {% for song in song_pool %}#}
-		            {#                        <div class="media pt-3" id="poll_song_div">#}
-		            {#                            <img src="https://img.youtube.com/vi/{{ song.song_id }}/0.jpg" alt="" class="mr-2 rounded"#}
-		            {#                                 width="100">#}
-		            {#                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-secondary rounded-right">#}
-		            {#                                <div class="d-flex justify-content-between align-items-center w-100">#}
-		            {#                                    <strong class="text-gray-dark">{{ song.song_name }}</strong>#}
-		            {#                                </div>#}
-		            {#                                {% if is_dj %}#}
-		            {#                                    <button type="button" id="add-song-to-queue-btn">Add to Queue</button>#}
-		            {#                                {% endif %}#}
-		            {#                                <input type="hidden" id="song_id" value="{{ song.song_id }}"/>#}
-		            {#                                <input type="hidden" id="song_name" value="{{ song.song_name }}"/>#}
-		            {#                            </div>#}
-		            {#                        </div>#}
-		            {#                    {% endfor %}#}
-		        </div>
-		    </div>
-		</div>
-	</div>
-	<!-- End of row -->
+    <!-- End of row -->
 
     <!-- <button class="map"><img src="{% static 'img/geo_color.png' %}" onclick="openMap()" width="50" height="50"></button> -->
-    <button class="chat"><img src="{% static 'img/chat.png' %}" onclick="openChat()" width="80" height="80"></button>
-
-
-    <div class="people-chat" id="people-chat">
-        <img src="{% static 'img/close.png' %}" class="close" onclick="closeChat()" width="25" height="25">
-        <!-- PEOPLE LIST START  -->
-        <div id="people">
-
-            <h5 class="border-bottom border-gray pb-2 mb-0">People</h5>
-            <div class="user-in-room">
-            </div>
-        </div>
-        <!-- CHAT ROOM START -->
-        <div id="chat">
-            <h5 class="border-bottom border-gray pb-2 mb-0">Chat Room</h5>
-            <textarea id="chat-log" cols="26" rows="5"></textarea><br/>
-
-            <div class="input-group">
-                <input id="chat-message-input" type="text" class="form-control"/>
-
-                <input id="chat-message-submit" class="btn-search" type="button" value="Send"/>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- A list of results -->
-    <div class="search-result" id="search">
-        <img src="{% static 'img/close.png' %}" class="close" onclick="closeSearchResult()" width="25" height="25">
-        <h6 class="border-bottom border-dark pb-2 mb-0">Search Result</h6>
-
-        <div id="search-results">
-
-        </div>
-    </div>
 
 
 {% endblock %}
@@ -166,26 +198,6 @@
 
     <!-- Leftover in-line JS script block for UI related things -->
     <script>
-        function openMap() {
-
-        }
-
-        function openChat() {
-            document.getElementById("people-chat").style.display = "block";
-        }
-
-        function closeChat() {
-            document.getElementById("people-chat").style.display = "none";
-        }
-
-        function showSearchResult() {
-            document.getElementById("search").style.display = "block";
-        }
-
-        function closeSearchResult() {
-            document.getElementById("search").style.display = "none";
-        }
-
         function toggleNav() {
             console.log("toggle");
             $("#wrapper").toggleClass("toggled");
