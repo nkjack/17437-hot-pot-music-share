@@ -1,5 +1,12 @@
 /* NOAM JS START **********************************************************************************************/
 
+// Allow enter key to search
+document.querySelector('#search-query').onkeyup = function (e) {
+    if (e.keyCode === 13) {  // enter, return
+        document.querySelector('#search-button').click();
+    }
+};
+
 $("#panel").on("click", "#search-button", function (event) {
     var panel = $(this).closest("#panel");
     var query = panel.find("#search-query");

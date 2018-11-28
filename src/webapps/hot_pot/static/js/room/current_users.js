@@ -54,7 +54,7 @@ function updateCurrentUsersList() {
         });
 
     // Update HTML of user and DJ lists (empty both first
-    $('#people').empty();
+    $('#listeners').empty();
     $('#djs').empty();
 
     for (let username of current_users) {
