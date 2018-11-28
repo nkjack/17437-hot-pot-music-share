@@ -1,35 +1,39 @@
 html,
-
 body {
-  background: #EDEDED;
-  font-family: Arial, serif;
+    background: #EDEDED;
+    font-family: Arial, serif;
 
-  padding-left: 0px;
-  padding-right:0px;
-  font-weight: bold;
-  font-size: large;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-weight: bold;
+    font-size: large;
 }
-p{margin:15px 0px;}
 
-a:hover, a:visited, a:link, a:active{
-  text-decoration: none;
-  color: inherit;
+p {
+    margin: 15px 0px;
 }
-.checkmark{
-    width : 30px,
+
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+.checkmark {
+    width: 30px,
     height: 30px,
 }
+
 .home_container {
-  height: 100%;
-  width:100%;
-  padding-left: 50px;
-  padding-left:50px;
-  padding-top: 35px;
+    height: 100%;
+    width: 100%;
+    padding-left: 50px;
+    padding-left: 50px;
+    padding-top: 35px;
 }
 
-.container{
-  
-  margin: 20px;
+.container {
+
+    margin: 20px;
 }
 .btn{
   z-index: 1;
@@ -41,18 +45,20 @@ a:hover, a:visited, a:link, a:active{
   font-size: 35px;
   border: .075em solid #696969;
 }
-.notActive{
-      filter: grayscale(100%);
+
+.notActive {
+    filter: grayscale(100%);
 }
 
-.row{
-  width: 95%;
+.row {
+    width: 95%;
 }
+
 .row-card {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .row-card > div[class*='col-'] {
@@ -67,75 +73,77 @@ a:hover, a:visited, a:link, a:active{
   align-items: center;
 }
 
-
+.intro {
+    align-items: center;
+}
 
 /* The popup form - hidden by default */
 .form-popup {
-  display: none;
-  position: absolute;
-  bottom: 10%;
-  right: 20%;
-  z-index: 100;
-  height: 80%;
-  width: 60%;
+    display: none;
+    position: absolute;
+    bottom: 10%;
+    right: 20%;
+    z-index: 100;
+    height: 80%;
+    width: 60%;
 }
 
 /* Add styles to the form container */
 .form-container {
 
-  padding: 20px;
-  background-color: white;
-  border-radius: 25px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 25px;
 }
 
 /* Set a style for the submit/login button */
 .form-container .btn {
-  font-weight: bold;
-  font-size: large;
-  border: .075em solid #696969;
-  color: black;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-top:10px;
-  opacity: 0.8;
+    font-weight: bold;
+    font-size: large;
+    border: .075em solid #696969;
+    color: black;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    opacity: 0.8;
 }
 
 /* Add a red background color to the cancel button */
 .form-container .create-room {
-  background-color: black;
-  color:white;
+    background-color: black;
+    color: white;
 }
 
 /* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover {
-  opacity: 1;
+    opacity: 1;
 }
 
 .sync span {
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  transition: 0.5s;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
 }
 
 .sync span:after {
-  content: '\00bb';
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -20px;
-  transition: 0.5s;
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
 }
 
 .sync:hover span {
-  padding-right: 25px;
+    padding-right: 25px;
 }
 
 .sync:hover span:after {
-  opacity: 1;
-  right: 0;
+    opacity: 1;
+    right: 0;
 }
 
 .btn-search {
@@ -145,38 +153,43 @@ a:hover, a:visited, a:link, a:active{
     border-width: 1px;
     border-style: solid;
     border-color: #1c1c1c;
-  }
-.btn-search:active, .btn-search:hover {
-  background: #1c1c1c;
-  color: #fff;
 }
+
+.btn-search:active, .btn-search:hover {
+    background: #1c1c1c;
+    color: #fff;
+}
+
 #map {
     padding-top: 500px;
     height: 80%;
-  }
-
-.edit{
-  width: 30%;
-}
-.poll_list{
-  overflow-y: scroll;
-  height:500px;
-}
-.video_col{
-  width:100%;
 }
 
-.dj_list{
-  margin-top: 2%;
-  overflow-y: scroll;
-  height: 240px;
+.edit {
+    width: 30%;
+}
+
+.poll_list {
+    overflow-y: scroll;
+    height: 500px;
+}
+
+.video_col {
+    width: 100%;
+}
+
+.dj_list {
+    margin-top: 2%;
+    overflow-y: scroll;
+    height: 240px;
 }
 
 .search-result .close{
   float: right;
 }
-.search-result .close:hover{
-  opacity: 1;
+
+.search-result .close:hover {
+    opacity: 1;
 }
 
 .map{
@@ -192,31 +205,50 @@ a:hover, a:visited, a:link, a:active{
   background-color: #BDC3C7;
   color: white;
 }
-.info-panel .info{
-  margin-left: 20px;
-  display: inline-block;
+
+.info-panel .info {
+    margin-left: 20px;
+    display: inline-block;
 }
 
-.inline{
-  display: inline-block;
+.inline {
+    display: inline-block;
 }
 
-.header{
-  position: absolute;
-  top:0;
-  height:37%;
-  width: 100%;
+.header {
+    position: absolute;
+    top: 0;
+    height: 37%;
+    width: 100%;
 }
 
-.create{
-  position: absolute;
-  top: 25%;
-  right: 5%;
-  width: 40%;
-  z-index: 99;
+.create {
+    position: absolute;
+    top: 25%;
+    right: 5%;
+    width: 40%;
+    z-index: 99;
 }
 
-.popular{
-  position: absolute;
-  top: 38%;
+.popular {
+    position: absolute;
+    top: 38%;
+}
+
+#chat-log {
+    text-align: left;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    padding: 10px;
+    background: #fff;
+    height: 270px;
+    width: 100%;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+    word-wrap: break-word;
+    box-sizing: border-box;
+}
+
+.chat-msg {
+    font-weight: normal;
 }
