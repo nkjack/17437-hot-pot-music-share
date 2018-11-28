@@ -53,8 +53,6 @@ function updateCurrentUsersList() {
             console.dir(xhr);
         });
 
-    console.log('>>>>>>>>>>>>>', djs);
-
     // Update HTML of user and DJ lists (empty both first
     $('#people').empty();
     $('#djs').empty();

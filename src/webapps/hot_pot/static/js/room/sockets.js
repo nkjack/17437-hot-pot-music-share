@@ -1,9 +1,9 @@
 /****************************************** SOCKET SETUP ******************************************************/
-var roomName = $('input#room_name').val();
+var roomId = $('input#room_id').val();
 
 var wsStart = (window.location.protocol === "https:") ? "wss://" : "ws://";
 var wsUrl = wsStart + window.location.host +
-    '/ws/room/' + roomName + '/';
+    '/ws/room/' + roomId + '/';
 console.log('Creating WebSocket on URL: ' + wsUrl);
 var socket = new ReconnectingWebSocket(wsUrl);
 

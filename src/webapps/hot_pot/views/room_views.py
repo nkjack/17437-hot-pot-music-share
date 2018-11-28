@@ -225,15 +225,15 @@ def delete_from_song_queue_post(request):
 
 
 # Add user to room's current_users when they join (called by consumers.py - don't need a request parameter)
-def add_user_to_room(username, room_name):
-    room = Room.objects.get(name=room_name)
+def add_user_to_room(username, room_id):
+    room = Room.objects.get(id=room_id)
     user = User.objects.get(username=username)
     room.users.add(user)
 
 
 # Remove user from room's current_users when they leave (called by consumers.py - don't need a request parameter)
-def remove_user_from_room(username, room_name):
-    room = Room.objects.get(name=room_name)
+def remove_user_from_room(username, room_id):
+    room = Room.objects.get(id=room_id)
     user = User.objects.get(username=username)
     room.users.remove(user)
 

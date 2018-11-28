@@ -11,21 +11,21 @@ from hot_pot.views.room_views import add_user_to_room, remove_user_from_room
 class PlayerConsumer(WebsocketConsumer):
     def connect(self):
         """
-        self.scope[‘url_route’][‘kwargs’][‘room_name’]
-        Obtains the 'room_name' parameter from the URL route in chat/routing.py that opened the WebSocket connection to
+        self.scope[‘url_route’][‘kwargs’][‘room_id’]
+        Obtains the 'room_id' parameter from the URL route in chat/routing.py that opened the WebSocket connection to
         the consumer.
         Every consumer has a scope that contains information about its connection, including in particular any positional
         or keyword arguments from the URL route and the currently authenticated user if any.
         """
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'room_%s' % self.room_name
+        self.room_id = self.scope['url_route']['kwargs']['room_id']
+        self.room_group_name = 'room_%s' % self.room_id
         self.user = self.scope['user']
-        self.is_dj = user_is_dj(self.user, Room.objects.get(name=self.room_name))
+        self.is_dj = user_is_dj(self.user, Room.objects.get(id=self.room_id))
 
         print('[consumers.py] Connected user: {}, is_dj = {}'.format(self.user, self.is_dj))
 
         # Call views function to add user to the room
-        add_user_to_room(self.user.username, self.room_name)
+        add_user_to_room(self.user.username, self.room_id)
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -45,7 +45,7 @@ class PlayerConsumer(WebsocketConsumer):
         print("[consumers.py] User %s disconnected from the room" % self.user.username)
 
         # Call views function to remove user from the room
-        remove_user_from_room(self.user.username, self.room_name)
+        remove_user_from_room(self.user.username, self.room_id)
 
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
@@ -122,7 +122,7 @@ class PlayerConsumer(WebsocketConsumer):
             playlist = 'queue' if 'add_to_song_queue_message' in text_data_json else 'pool'
 
             # Get the room to associate the song with and get the queue/pool
-            room = Room.objects.get(name=self.room_name)
+            room = Room.objects.get(id=self.room_id)
 
             # Don't create the song if it already exists in room
             if not Song.objects.filter(song_id__exact=text_data_json['song_id'],
