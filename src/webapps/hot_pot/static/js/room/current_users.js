@@ -75,7 +75,7 @@ function updateCurrentUsersList() {
         if (djs.includes(username)) {
             $('#djs').append(singleUserHtml);
         } else {
-            $('#people').append(singleUserHtml);
+            $('#listeners').append(singleUserHtml);
 
         }
     }
