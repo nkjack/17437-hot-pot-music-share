@@ -39,13 +39,16 @@ a:hover, a:visited, a:link, a:active {
   z-index: 1;
   width:98%;
   color:black;
-  background-color:  white;
+  background-color: #BDC3C7;
   display: inline-block;
   padding: .3em;
   font-size: 35px;
   border: .075em solid #696969;
 }
 
+.create-room{
+  background-color: white;
+}
 .notActive {
     filter: grayscale(100%);
 }
@@ -171,7 +174,7 @@ a:hover, a:visited, a:link, a:active {
 
 .poll_list {
     overflow-y: scroll;
-    height: 500px;
+    height: 630px;
 }
 
 .video_col {

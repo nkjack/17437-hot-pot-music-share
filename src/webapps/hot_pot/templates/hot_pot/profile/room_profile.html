@@ -6,110 +6,99 @@
 
   <input type="hidden" id="room_id" value="{{ room_id }}"/>
   <div class = "container">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="general" aria-selected="true">General</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="dj-tab" data-toggle="tab"  role="tab" aria-controls="DJ" aria-selected="false">Manage DJ</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="location-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="location" aria-selected="false">Location</a>
-          </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-          <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <form enctype = "multipart/form-data"  method = "POST">{% csrf_token %}
+            <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-pool-tab" data-toggle="tab" href="#nav-pool" role="tab"
+                       aria-controls="nav-pool" aria-selected="true">General</a>
+                    <a class="nav-item nav-link" id="nav-search-tab" data-toggle="tab" href="#nav-search" role="tab"
+                       aria-controls="nav-search" aria-selected="false">DJ settings</a>
+                    <a class="nav-item nav-link" id="nav-chat-tab" data-toggle="tab" href="#nav-chat" role="tab"
+                       aria-controls="nav-chat" aria-selected="false">Location</a>
+                </div>
+            </nav>
+            <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                <!-- SONG POOL TAB CONTENT -->
+                <div class="tab-pane fade show active" id="nav-pool" role="tabpanel" aria-labelledby="nav-pool-tab">
+                    
+                    <form enctype = "multipart/form-data"  method = "POST">{% csrf_token %}
 
-                    <div class = "form-group my-3 mx-3">
+                        <div class = "form-group my-3 mx-3">
 
-                        <div class = 'error' >
-                            {{roomForm.errors}}
-                            {{roomForm.non_field_errors}}
-                        </div>
+                            <div class = 'error' >
+                                {{roomForm.errors}}
+                                {{roomForm.non_field_errors}}
+                            </div>
 
-                        <div class = "my-3">
-                            <p class = "font-weight-bold mb-0 ">{{roomForm.name.label}}</p>
-                            <p class = "mx-4">{{roomForm.name}}</p>
-                            
-                        </div>
-
-                        <div class = "my-3">
-                            <p class = "font-weight-bold mb-0 ">
-                                {{roomForm.isMarked.label}}
-                                {{roomForm.isMarked}}
-                                <button id="change-location" onclick = "change_location()"><img src="{% static '/img/geo.png' %}" width = "30"></button>
-                            </p>
-
-                            
-                        </div>
-
-                        <div class = "my-3">
-                            <p class = "font-weight-bold mb-0 ">{{roomForm.description.label}}</p>
-                            <p class = "mx-4">{{roomForm.description}}</p>
-                            
-                        </div>
-                        <div class = "my-3">
-                            <p class = "font-weight-bold mb-0 ">Room Photo</p>
-                            {% if roomForm.cover_pic.value %}
-                          <!-- <p class = "font-weight-bold mb-0 ">Profile Image</p> -->
+                            <div class = "my-3">
+                                <p class = "font-weight-bold mb-0 ">{{roomForm.name.label}}</p>
+                                <p class = "mx-4">{{roomForm.name}}</p>
                                 
-                              <img  class ="mx-4" src = '{% url "room_img" room.pk %}' alt = "" width = "80" height = "80">
-                            {% endif%}
-                            {{roomForm.cover_pic}}
-                        
+                            </div>
+
+                            <div class = "my-3">
+                                <p class = "font-weight-bold mb-0 ">{{roomForm.description.label}}</p>
+                                <p class = "mx-4">{{roomForm.description}}</p>
+                                
+                            </div>
+                            <div class = "my-3">
+                                <p class = "font-weight-bold mb-0 ">Room Photo</p>
+                                {% if roomForm.cover_pic.value %}
+                              <!-- <p class = "font-weight-bold mb-0 ">Profile Image</p> -->
+                                    
+                                  <img  class ="mx-4" src = '{% url "room_img" room.pk %}' alt = "" width = "80" height = "80">
+                                {% endif%}
+                                {{roomForm.cover_pic}}
+                            
+                            </div>
                         </div>
 
+                        <input  type="submit" class="btn btn-lg btn-block btn-primary my-3" name = 'room_profile' value ="Submit">
+                    </form>
+                </div>
+                <!-- SONG SEARCH TAB CONTENT -->
+                <div class="tab-pane fade" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
+                    
+                    <form id="form-add-dj">
+                        <label>
+                            <select id="select-add-dj">
+                                <!-- To be filled in by JS -->
+                                <!-- <option value="volvo">Volvo</option> -->
+                            </select>
+                        </label>
+
+                        <button type="button" onclick="addUsernameAsDj()">Add DJ</button>
+                    </form>
+
+                    <!-- Remove DJ form -->
+                    <form id="form-remove-dj">
+                        <label>
+                            <select id="select-remove-dj">
+                                <!-- To be filled in by JS -->
+                                <!-- <option value="volvo">Volvo</option> -->
+                            </select>
+                        </label>
+
+                        <button type="button" onclick="removeUsernameAsDj()">Remove DJ</button>
+                    </form>
+                </div>
+                <!-- CHAT TAB CONTENT -->
+                <div class="tab-pane fade" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab">
+                    <div id="location">
+                    {#noam get locaiton#}
+                    <div>
+                        {#<button type="button" onclick="getLocation()">get location</button>#}
+                        <input type="checkbox" onclick='handleGeoLocationClick(this);' name="geo_location"
+                               value="location"> my location
                     </div>
 
-                    <input  type="submit" class="btn btn-lg btn-block btn-primary my-3" name = 'room_profile' value ="Submit">
-                </form>
-          </div>
-          <div class="tab-pane fade" id="dj" role="tabpanel" aria-labelledby="dj-tab">
-              <div class="row">
-                    <div class="col">
+                    <button type="button" value="Submit" onclick='submitGeoLocation();' >Submit</button>
 
-                        <!-- Add DJ form -->
-                        <form id="form-add-dj">
-                            <label>
-                                <select id="select-add-dj">
-                                    <!-- To be filled in by JS -->
-                                    <!-- <option value="volvo">Volvo</option> -->
-                                </select>
-                            </label>
-
-                            <button type="button" onclick="addUsernameAsDj()">Add DJ</button>
-                        </form>
-
-                        <!-- Remove DJ form -->
-                        <form id="form-remove-dj">
-                            <label>
-                                <select id="select-remove-dj">
-                                    <!-- To be filled in by JS -->
-                                    <!-- <option value="volvo">Volvo</option> -->
-                                </select>
-                            </label>
-
-                            <button type="button" onclick="removeUsernameAsDj()">Remove DJ</button>
-                    </form>
+                </div>
 
                 </div>
             </div>
-          </div>
-          <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">  <div id="location" class="tab-pane fade">
-            {#noam get locaiton#}
-            <div>
-                {#<button type="button" onclick="getLocation()">get location</button>#}
-                <input type="checkbox" onclick='handleGeoLocationClick(this);' name="geo_location"
-                       value="location"> my location
-            </div>
-
-            <button type="button" value="Submit" onclick='submitGeoLocation();' >Submit</button>
-
         </div>
-        </div>
-        </div>
-	</div>
+    
 
 {% endblock %}
 {% block script %}
