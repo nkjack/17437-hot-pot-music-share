@@ -18,13 +18,12 @@ function fillSelectAddDj() {
 
             // Go through select and add non-DJs
             const select = $("#select-add-dj");
-
+            
             select.empty();
 
             for (let i = 0; i < data.users.length; i++) {
                 let username = data.users[i];
-
-                select.append(`<div class="dropdown-item" value="${username}">${username}</div>`);
+                select.append(`<option value="${username}">${username}</option>`);
             }
         })
         .fail(function (xhr, status, errorThrown) {
@@ -56,7 +55,7 @@ function fillSelectRemoveDj() {
 
             for (let i = 0; i < data.users.length; i++) {
                 let username = data.users[i];
-                select.append(`<div class="dropdown-item" value="${username}">${username}</div>`);
+                select.append(`<option value="${username}">${username}</option>`);
             }
         })
         .fail(function (xhr, status, errorThrown) {
