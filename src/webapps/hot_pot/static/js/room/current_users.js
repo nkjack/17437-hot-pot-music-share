@@ -30,9 +30,37 @@ function getCurrentUsersInRoom() {
 function updateCurrentUsersList() {
     var current_users = getCurrentUsersInRoom();
 
-    // Update HTML of user list
-    $('#people').empty(); // Empty entire list first
+    // Get all DJs for this room
+    var djs;
+    $.ajax({
+        async: false,
+        // The URL for the request
+        url: "/get-djs-in-room",
+        data: {
+            room_id: $("#room_id").val(),
+        },
+        // Whether this is a POST or GET request
+        type: "POST",
+        // The type of data we expect back
+        dataType: "json",
+    })
+        .done(function (data) {
+            djs = data.users;
+        })
+        .fail(function (xhr, status, errorThrown) {
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        });
+
+    console.log('>>>>>>>>>>>>>', djs);
+
+    // Update HTML of user and DJ lists (empty both first
+    $('#people').empty();
+    $('#djs').empty();
+
     for (let username of current_users) {
+        console.log('username = ', username);
         // Copied/pasted HTML template left by Rui in room.html (TODO: Change later?)
         let singleUserHtml =
             '<div class="media text-muted pt-3" id="user_1">\n' +
@@ -45,8 +73,14 @@ function updateCurrentUsersList() {
             '    </div>\n' +
             '</div>';
 
-        $('#people').append(singleUserHtml);
+        // Add to Listeners or DJ list
+        if (djs.includes(username)) {
+            $('#djs').append(singleUserHtml);
+        } else {
+            $('#people').append(singleUserHtml);
+
+        }
     }
 }
 
-window.setInterval(updateCurrentUsersList, 5000);
+window.setInterval(updateCurrentUsersList, 2000);

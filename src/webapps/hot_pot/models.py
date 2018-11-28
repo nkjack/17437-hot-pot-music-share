@@ -42,6 +42,7 @@ class Room(models.Model):
     thumbs_up = models.IntegerField(default=0)
     users = models.ManyToManyField(User, related_name='current_users') # Keep track of current users in the room
     djs = models.ManyToManyField(User, related_name='djs') # Keep track of the DJs for this room
+    is_hotpot_mode = models.BooleanField(default=False, blank=False) # HotPot mode means everyone is a DJ
 
     def __str__(self):
         return self.name

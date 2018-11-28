@@ -32,7 +32,8 @@ def home(request, username):
         new_room = Room.objects.create(owner=request.user,
                                        name=form.cleaned_data['name'],
                                        description=form.cleaned_data['description'],
-                                       cover_pic=form.cleaned_data['cover_pic']
+                                       cover_pic=form.cleaned_data['cover_pic'],
+                                       is_hotpot_mode=form.cleaned_data['is_hotpot_mode'],
                                        )
         new_room.save()
 
