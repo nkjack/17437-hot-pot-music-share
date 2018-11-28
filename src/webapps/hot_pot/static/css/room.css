@@ -187,6 +187,10 @@ a:hover, a:visited, a:link, a:active {
     height: 240px;
 }
 
+.search-result{
+  overflow-y: scroll;
+  height: 430px;
+}
 .search-result .close{
   float: right;
 }
