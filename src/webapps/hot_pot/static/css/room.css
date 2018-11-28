@@ -245,12 +245,12 @@ a:hover, a:visited, a:link, a:active {
 
 .chat-tab-pulse {
     background-color: #222;
-    animation-name: pulse;
+    animation-name: color-pulse;
     animation-duration: 2s;
     animation-iteration-count: infinite;
 }
 
-@keyframes pulse {
+@keyframes color-pulse {
     0% {
         background-color: #EDEDED;
     }

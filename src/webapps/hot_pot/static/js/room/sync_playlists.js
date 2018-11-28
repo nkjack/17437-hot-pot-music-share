@@ -29,11 +29,6 @@ function get_pool_songs_from_room() {
             console.log("Status: " + status);
             console.dir(xhr);
         })
-        // Code to run regardless of success or failure;
-        .always(function (xhr, status) {
-            // console.log("The request is complete!");
-            // console.alert( "The request is complete!" );
-        });
 }
 
 function updateChangesPoolSongs(data) {
@@ -46,7 +41,6 @@ function updateChangesPoolSongs(data) {
         const is_voted = data.songs[i]['is_voted'];
 
         const isHost = $('#is_dj').val();
-        // console.log('inside sync_playlists.js...' + isHost);
 
         $('#poll_list').append(getEntryListForPoolQueue(v_id,
             v_name,
@@ -78,16 +72,11 @@ function get_queue_songs_from_room() {
             updateChangesQueueSongs(json)
         })
         .fail(function (xhr, status, errorThrown) {
-            // console.log("Sorry, there was a problem!");
-            // console.log("Error: " + errorThrown);
-            // console.log("Status: " + status);
+            console.log("Sorry, there was a problem!");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
             console.dir(xhr);
         })
-        // Code to run regardless of success or failure;
-        .always(function (xhr, status) {
-            // console.log("The request is complete!");
-            // console.alert( "The request is complete!" );
-        });
 }
 
 function updateChangesQueueSongs(data) {
@@ -100,7 +89,6 @@ function updateChangesQueueSongs(data) {
             const v_rank = data.songs[i]['rank'];
 
             const isHost = $('#is_dj').val();
-            console.log('inside sync_playlists.js...' + isHost);
 
             $('#dj_list').append(getEntryListForGlobalSongQueue(v_id, v_name, isHost, i + 1, v_rank));
         }

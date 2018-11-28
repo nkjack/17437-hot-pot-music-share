@@ -11,8 +11,6 @@ function getCurrentUsersInRoom() {
         dataType: "json",
     })
         .done(function (data) {
-            console.log('AJAX get-users-from-room got response...');
-
             current_users = data.users;
 
             console.log("Got get-users-from-room response: " + current_users);
@@ -58,7 +56,6 @@ function updateCurrentUsersList() {
     $('#djs').empty();
 
     for (let username of current_users) {
-        console.log('username = ', username);
         // Copied/pasted HTML template left by Rui in room.html (TODO: Change later?)
         let singleUserHtml =
             '<div class="media text-muted pt-3" id="user_1">\n' +
