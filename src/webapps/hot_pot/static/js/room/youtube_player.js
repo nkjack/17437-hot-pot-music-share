@@ -2,20 +2,19 @@
 isHost = $('input#is_dj').val() === "True";
 
 // Youtube API Key
-ytApiKey = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'; // TODO: Make hidden;
+ytApiKey = 'AIzaSyC6zJT9fu29Wj6T67uRxfnQvc9kyP4wz3Y'; // TODO: Make hidden
 
 // Top 50 This Week & Top 100 Songs 2019 (Best New Music Hits Playlist) (to play as fallback)
 billboardPlaylistId = 'PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG';
 billboardPlaylistTrackCount = 150;
 
-// 2. This code loads the IFrame Player API code asynchronously.
+// This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
-
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// 3. This function creates an <iframe> (and YouTube player)  after the API code downloads.
+// This function creates an <iframe> (and YouTube player)  after the API code downloads.
 var player;
 
 function onYouTubeIframeAPIReady() {
@@ -41,8 +40,7 @@ function onYouTubeIframeAPIReady() {
         const randomIndex = getRandom(0, billboardPlaylistTrackCount);
 
         player = new YT.Player('player', {
-            // height: '350',
-            // width: '480',
+            // Height and width determined by CSS
             playerVars: {
                 'start': 0,
                 'listType': 'playlist',
@@ -54,8 +52,7 @@ function onYouTubeIframeAPIReady() {
 
     } else {
         player = new YT.Player('player', {
-            // height: '350',
-            // width: '480',
+            // Height and width determined by CSS
             videoId: videoId,
             playerVars: {
                 'start': 0,
@@ -108,20 +105,19 @@ function onHostPlayerStateChange(event) {
             break;
         case YT.PlayerState.BUFFERING:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.BUFFERING");
-
             break;
         case YT.PlayerState.CUED:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.CUED");
-
             break;
         case YT.PlayerState.ENDED:
             console.log("onHostPlayerStateChange, case: YT.PlayerState.ENDED");
+
             // Start playing next song in the queue
             nextVideo();
+
             break;
         default:
             console.log("onHostPlayerStateChange, case: default");
-
             return;
     }
 
@@ -267,15 +263,6 @@ function cleanVideoIdInput(input) {
     return videoId;
 }
 
-// Change video to submitted video
-function changeVideoSubmit() {
-    const input = document.getElementById('video-id-input').value;
-    const videoId = cleanVideoIdInput(input);
-
-    changeVideoById(videoId);
-}
-
-
 // Directly add a song to the song queue from text input
 function addToSongQueue() {
     const input = document.getElementById('add-to-song-queue-input').value;
@@ -296,8 +283,9 @@ function addToSongQueue() {
 
     // Give success message
     if (videoTitle) {
-        $("#direct-input-success").css({"color": "#31c122"});
-        $("#direct-input-success").text("Successfully added " + videoTitle);
+        const successMessage = $("#direct-input-success");
+        successMessage.css({"color": "#31c122"});
+        successMessage.text("Successfully added " + videoTitle);
     }
 
     // Sync up song queue
@@ -324,8 +312,9 @@ function addToSongPool() {
 
     // Give success message
     if (videoTitle) {
-        $("#direct-input-success").css({"color": "#31c122"});
-        $("#direct-input-success").text("Successfully added " + videoTitle);
+        const successMessage = $("#direct-input-success");
+        successMessage.css({"color": "#31c122"});
+        successMessage.text("Successfully added " + videoTitle);
     }
 
     // Sync up song pool

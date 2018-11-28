@@ -1,11 +1,10 @@
 # YouTube API metadata needed for search
 import os
-from mimetypes import guess_type
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.utils.timezone import localtime, now
 from googleapiclient.discovery import build
@@ -39,7 +38,7 @@ def room(request, room_id):
     context = {'username': request.user.username,
                'room_id': room_id,
                'room_name': room_name,
-               'room_owner':room.owner.username,
+               'room_owner': room.owner.username,
                'title': 'Room ' + room_name,
                'is_owner': is_owner,
                'is_dj': is_dj,
@@ -49,6 +48,7 @@ def room(request, room_id):
                }
 
     return render(request, 'room/room.html', context)
+
 
 def search_song(request):
     print("Entered search_song")

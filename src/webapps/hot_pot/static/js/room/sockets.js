@@ -78,9 +78,7 @@ socket.onmessage = function (e) {
         // Set global timestamp of last time this user received a 'sync with me' request
         lastTimeSyncdUp = window.performance.now();
     }
-
-}
-;
+};
 
 // On socket closed
 socket.onclose = function (e) {
