@@ -27,6 +27,12 @@ socket.onmessage = function (e) {
         var objDiv = document.getElementById("chat-log");
         objDiv.scrollTop = objDiv.scrollHeight;
 
+        // Pulsate chat tab if chat tab isn't focused
+        const chatTab = $('#nav-chat-tab');
+        if (chatTab.attr('aria-selected') === 'false') {
+            chatTab.addClass('chat-tab-pulse');
+        }
+
     } else if ('sync_request' in data) {
         // This is a sync request from a Listener, Host should sync Listeners now
         console.log('Received sync_request = ' + data + 'from username: ' + data['from_username']);
@@ -73,7 +79,8 @@ socket.onmessage = function (e) {
         lastTimeSyncdUp = window.performance.now();
     }
 
-};
+}
+;
 
 // On socket closed
 socket.onclose = function (e) {

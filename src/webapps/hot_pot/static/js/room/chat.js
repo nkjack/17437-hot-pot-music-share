@@ -18,3 +18,8 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
 
     messageInputDom.value = '';
 };
+
+// If chat button is clicked, remove pulse notification
+document.querySelector('#nav-chat-tab').onclick = function (e) {
+    $('#nav-chat-tab').removeClass('chat-tab-pulse');
+};

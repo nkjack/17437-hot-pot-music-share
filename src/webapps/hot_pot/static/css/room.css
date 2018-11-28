@@ -263,3 +263,22 @@ a:hover, a:visited, a:link, a:active {
 .dropdown-menu{
   width:100%;
 }
+
+.chat-tab-pulse {
+  background-color: #222;
+  animation-name: pulse;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #EDEDED;
+  }
+  50% {
+    background-color: #31ff48;
+  }
+  100% {
+    background-color: #EDEDED;
+  }
+}
