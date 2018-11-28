@@ -20,7 +20,7 @@ socket.onmessage = function (e) {
         var chat_text = data['chat_text'];
         var username = data['username'];
 
-        document.querySelector('#chat-log').value += (username + ': ' + chat_text + '\n');
+        $('#chat-log').append(`<span class="chat-msg"><strong>${username}: </strong>${chat_text}<br></span>`);
     } else if ('sync_request' in data) {
         // This is a sync request from a Listener, Host should sync Listeners now
         console.log('Received sync_request = ' + data + 'from username: ' + data['from_username']);
