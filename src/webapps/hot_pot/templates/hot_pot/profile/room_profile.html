@@ -59,39 +59,41 @@
                 <div class="tab-pane fade" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
                     
                     <form id="form-add-dj">
-                        <label>
-                            <select id="select-add-dj">
-                                <!-- To be filled in by JS -->
-                                <!-- <option value="volvo">Volvo</option> -->
-                            </select>
-                        </label>
+      
+                        <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle my-4" type="button" id="dropdownMenuButton" data-toggle="dropdown" onclick="addUsernameAsDj()">Add DJ</button>
+                             
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="select-add-dj">
+                                         
+                              </div>
+                        </div>
 
-                        <button type="button" class = "btn-search" onclick="addUsernameAsDj()">Add DJ</button>
+ 
                     </form>
 
                     <!-- Remove DJ form -->
                     <form id="form-remove-dj">
-                        <label>
-                            <select id="select-remove-dj">
-                                <!-- To be filled in by JS -->
-                                <!-- <option value="volvo">Volvo</option> -->
-                            </select>
-                        </label>
-
-                        <button type="button" onclick="removeUsernameAsDj()">Remove DJ</button>
+                        <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle my-4" type="button" id="dropdownMenuButton" data-toggle="dropdown" onclick="removeUsernameAsDj()">Remove DJ</button>
+                             
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="select-remove-dj">btn 
+                                         
+                              </div>
+                        </div>
                     </form>
                 </div>
                 <!-- LOCATION -->
                 <div class="tab-pane fade" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab">
                     <div id="location">
                     {#noam get locaiton#}
-                    <div>
+                    <div class = "my-4">
                         {#<button type="button" class = "btn" onclick="getLocation()">get location</button>#}
+                        <h3>Mark My Location
                         <input type="checkbox" onclick='handleGeoLocationClick(this);' name="geo_location"
-                               value="location"> my location
+                               value="location"> </h3>
                     </div>
 
-                    <button type="button" value="Submit" onclick='submitGeoLocation();' >Submit</button>
+                    <button type="button" value="Submit" class = "btn" onclick='submitGeoLocation();' >Submit</button>
 
                 </div>
 
