@@ -13,29 +13,27 @@
 
         <!-- To pause: document.getElementById("music").classList.toggle("paused"); -->
         <div class="row justify-content-between">
-            <div class="col-5">
+            <div class="col-md-8">
                 <div class="now-playing paused" id="music-bars">
-                  <span class="bar n1"></span>
-                  <span class="bar n2"></span>
-                  <span class="bar n3"></span>
-                  <span class="bar n4"></span>
-                  <span class="bar n5"></span>
+                    <span class="bar n1"></span>
+                    <span class="bar n2"></span>
+                    <span class="bar n3"></span>
+                    <span class="bar n4"></span>
+                    <span class="bar n5"></span>
+                    <i id="now-playing-text" class="info"><!-- Filled in by youtube_player.js --></i>
                 </div>
-                <h5 class="info mt-2"> Now Playing:</h5>
-                <i id="now-playing-text" class = "info"><!-- Filled in by youtube_player.js --></i>
             </div>
-            <div class="col-5">
-
-                <h6 class=" info"> Room: {{ room_name }}</h6>
-                <h6 class=" info">Owner: {{ room_owner }} </h6>
-                <img class="info" src="{% url 'room_img' room_id %}" width="50">
+            <div class="col-md-4">
+                <h6 class=" info">Room:  <em>{{ room_name }}</em></h6> |
+                <h6 class=" info">Owner:  <em>{{ room_owner }}</em></h6>
                 {% if is_hotpot_mode %}
-                    <p data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light info">
-                        <em>HotPot Mode</em>
-                    </p>
+                    <br>
+                    <h6 data-toggle="tooltip" title="Everyone is a DJ in this room." class="text-light info">
+                        <span class="text-secondary">HotPot Mode</span>
+                    </h6>
                 {% endif %}
+                {#                <img class="info" src="{% url 'room_img' room_id %}" width="50">#}
             </div>
-
         </div>
     </div>
 
