@@ -161,3 +161,64 @@ class ProfileForm(forms.ModelForm):
           'bio':'Description',
           'img' :'Profile Image',
       }
+
+class PasswordForm(forms.Form):
+  password1 = forms.CharField(required = True, min_length =3 , max_length = 15,
+                label = 'Password',
+                validators = [RegexValidator(regex = '^[a-zA-Z0-9_]{3,15}$',
+                               message = 'Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.',
+                               code = 'invalid password form'),
+                       ],
+                widget = forms.PasswordInput(attrs ={
+                    'maxlength' :'15', 
+                     'class' : 'form-control',
+                     'placeholder': '123456'}),
+                help_text = 'Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
+  
+
+  password2 = forms.CharField(required = True, min_length =3 , max_length = 15,
+                label = 'Confirm Password',
+                validators = [RegexValidator(regex = '^[a-zA-Z0-9_]{3,15}$',
+                               message = 'Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
+                       ],
+                widget = forms.PasswordInput(attrs = {
+                     'maxlength' :'15', 
+                     'class' : 'form-control',
+                     'placeholder': '123456'})
+                )
+
+  def clean(self):
+    cleaned_data = super(PasswordForm, self).clean()
+
+    password1 = cleaned_data.get('password1')
+    password2 = cleaned_data.get('password2')
+
+    if password1 and password2 and password1 != password2:
+      raise forms.ValidationError('Password did not match', code = 'pssword_no_match')
+
+
+    return cleaned_data
+
+class UsernameForm(forms.Form):
+
+  username = forms.CharField(required = True, min_length =3 , max_length = 15,
+              label = 'Username',
+              validators = [RegexValidator('^[a-z0-9_]{3,15}$',
+                            code = 'invalid_username',
+                             message = 'Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
+                     ],
+              widget = forms.TextInput(attrs = {
+                   'maxlength' :'15', 
+                   'class' : 'form-control',
+                   'placeholder': 'myUsername'}),
+              help_text = 'Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
+
+  def clean(self):
+    cleaned_data = super(UsernameForm, self).clean()
+
+    
+    username= self.cleaned_data.get('username')
+    if not User.objects.filter(username__exact = username ):
+      raise forms.ValidationError('There is no such account!!')
+
+    return cleaned_data

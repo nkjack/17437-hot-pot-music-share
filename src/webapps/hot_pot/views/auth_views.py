@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
-from hot_pot.forms import LoginForm, RegistrationForm
+from hot_pot.forms import LoginForm, RegistrationForm, UsernameForm,PasswordForm
 
 
 def register(request):
@@ -107,3 +107,86 @@ def confirm_email(request, username, token):
         return HttpResponseRedirect(reverse('login'))
     else:
         return HttpResponse('Invalid Link')
+
+
+def forgetPassword(request):
+    context = {'usernameForm' : ""}
+    if request.method == 'GET':
+        usernameForm = UsernameForm()
+        context['usernameForm'] = usernameForm
+        return render(request, 'user_auth/reset_password.html',context)
+    else:
+        if 'resetPassword' in request.POST or request.POST['resetPassword']:
+            usernameForm = UsernameForm(request.POST)
+            context['usernameForm'] = usernameForm
+
+            if usernameForm.is_valid():
+                username = request.POST['username']
+                user = get_object_or_404(User, username = username)
+
+                _sendPasswordEmail(request, user)
+
+                context["email"] = "Forget Your Password? Dont worry, check your mailbox and follow the instructions."
+                return render(request,'user_auth/email_confirmation.html',context)
+            else:
+
+                return render(request, 'user_auth/reset_password.html',context)   
+
+        else:
+            context['error'] = "Please press Reset button to change your password"
+            return render(requestt, 'user_auth/reset_password.html',context)  
+
+
+
+
+
+@transaction.atomic
+def resetPassword(request, username, token):
+    
+    user = get_object_or_404(User, username = username)
+    if default_token_generator.check_token(user,token):
+
+        context = {'password':''}
+        if request.method == "GET":
+            passwordForm = PasswordForm()
+            context['password'] = passwordForm
+            return render(request, 'user_auth/reset_password.html',context)
+        else:
+            if request.POST.get('resetPassword'):
+                passwordForm = PasswordForm(request.POST)
+                context['password'] = passwordForm
+
+                if passwordForm.is_valid():
+                    password = request.POST['password1']
+
+                    user.set_password(password)
+                    user.save()
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('home',args=[user.username]))
+                else:
+                    return render(request, 'user_auth/reset_password.html',context)
+
+
+            else:
+                context['error'] = "Please press Reset button to change your password"
+                return render(requestt, 'user_auth/reset_password.html',context)      
+        
+    else:
+        return HttpResponse('Invalid Link')
+
+
+def _sendPasswordEmail(request, user):
+
+    token = default_token_generator.make_token(user)
+    email_body = """
+    Want to Reset Your Password? Dont worry, please follow the instructions :
+    http://%s%s
+    """ % (request.get_host(),
+        reverse('resetPassword', args=(user.username, token)))
+
+    send_mail(subject="Verify Your Email Address",
+                          message=email_body,
+                          from_email="..",
+                          recipient_list=[user.email])
+
+    return token

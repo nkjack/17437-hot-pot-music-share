@@ -17,6 +17,10 @@ urlpatterns = \
             r'^confirm-email/username=(?P<username>[0-9A-Za-z_]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
             auth_views.confirm_email, name='confirm'),
 
+        re_path(r'^reset-password/username=(?P<username>[0-9A-Za-z_]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        auth_views.resetPassword, name = 'resetPassword'),
+        path('forget-password',auth_views.forgetPassword, name = 'forgetPassword'),
+
         path('logout', auth_views.custom_logout, name='logout'),
 
         ########
@@ -53,9 +57,9 @@ urlpatterns = \
         path('vote-up', voting_views.vote_up),
         path('vote-down', voting_views.vote_down),
 
-        # Room Thumb up
-        path('thumb-up', voting_views.thumb_up),
-        path('thumb-down', voting_views.thumb_down),
+        # # Room Thumb up
+        # path('thumb-up', voting_views.thumb_up),
+        # path('thumb-down', voting_views.thumb_down),
 
         # Add/Remove DJs
         path('add-dj-to-room', room_views.add_dj_to_room),
