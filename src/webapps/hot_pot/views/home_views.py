@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from hot_pot.forms import RoomForm, ProfileForm
 from hot_pot.models import Room, RoomHistory, Song, Playlist, Marker, Profile
 from mimetypes import guess_type
+from django.db import transaction
 
 @login_required
 def home(request, username):
@@ -43,37 +44,11 @@ def home(request, username):
                                                  visited_room=new_room)
         new_history.save()
 
-        # DEMO SONGS TODO: Delete later
-        song_1 = Song.objects.create(song_id='JQbjS0_ZfJ0',
-                                     song_name='Kendrick Lamar, SZA - All The Stars',
-                                     song_room=new_room)
-        song_1.save()
-        song_2 = Song.objects.create(song_id='09R8_2nJtjg',
-                                     song_name='Maroon 5 - Sugar',
-                                     song_room=new_room)
-        song_2.save()
-        song_3 = Song.objects.create(song_id='nfWlot6h_JM',
-                                     song_name='Taylor Swift - Shake It Off',
-                                     song_room=new_room)
-        song_3.save()
-
         song_pool = Playlist.objects.create(belongs_to_room=new_room, pl_type="pool")
         song_pool.save()
         song_queue = Playlist.objects.create(belongs_to_room=new_room, pl_type="queue")
 
-        # song_queue.songs.add(song_1)
-        # song_queue.songs.add(song_2)
-        # song_queue.songs.add(song_3)
-
         song_queue.save()
-
-        # DEMO RANDOM LOCATION TODO: Delete later
-        import random
-        lat = random.uniform(0, 1) + 40
-        lng = random.uniform(0, 1) - 80
-        m = Marker.objects.create(lat=lat, lng=lng, room=new_room)
-        m.save()
-        # 40.440624, -79.995888 pitt
 
         return HttpResponseRedirect(reverse('room', args=[new_room.id]))
     else:
@@ -186,3 +161,36 @@ def edit_user(request):
     else:
         context['error'] = 'Invalid Post Request'
         return render(request,'hot_pot/profile/user_profile.html',context)
+
+
+@login_required
+@transaction.atomic
+def add_marker_to_room(request):
+    room_id = request.POST['room_id']
+    lat = request.POST['lat']
+    lng = request.POST['lng']
+
+    room = get_object_or_404(Room, id=room_id)
+
+    m = Marker.objects.filter(room=room)
+    if m.count() > 0:
+        m.delete()
+
+    m = Marker.objects.create(lat=lat, lng=lng, room=room)
+    m.save()
+
+    return JsonResponse(data={'status': 'true', 'message': 'updated location'})
+
+
+@login_required
+@transaction.atomic
+def delete_marker_from_room(request):
+    room_id = request.POST['room_id']
+
+    room = get_object_or_404(Room, id=room_id)
+
+    m = Marker.objects.filter(room=room)
+    if m.count() > 0:
+        m.delete()
+
+    return JsonResponse(data={'status': 'true', 'message': 'deleted location'})
