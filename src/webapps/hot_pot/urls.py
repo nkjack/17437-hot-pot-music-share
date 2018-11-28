@@ -76,5 +76,8 @@ urlpatterns = \
 
         # profiles
         re_path(r'^edit-room/(?P<room_id>[^/]+)/$', home_views.edit_room, name = 'edit_room'),
-        path('edit-user', home_views.edit_user, name = 'user_profile')
+        path('edit-user', home_views.edit_user, name = 'user_profile'),
+        path('delete-marker-from-room', home_views.delete_marker_from_room),
+        path('add-marker-to-room', home_views.add_marker_to_room),
+
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

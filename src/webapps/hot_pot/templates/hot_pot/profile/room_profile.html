@@ -106,6 +106,8 @@
 		               value="location"> my location
 		    </div>
 
+            <button type="button" value="Submit" onclick='submitGeoLocation();' >Submit</button>
+
 	    </div>
 
 	  </div>
@@ -153,28 +155,67 @@
 	    fillSelectAddDj();
 	    fillSelectRemoveDj();
 	});
-    	let lat = 0;
-        let lng = 0;
-        let geo_location_is_check = false;
-        function handleGeoLocationClick(cb) {
-          //alert("Clicked, new value = " + cb.checked);
-            if (cb.checked){
-                getLocation();
-            }
-            else{
-                geo_location_is_check = false;
-                alert("geo_is_checked " + geo_location_is_check);
-            }
-        }
 
-        function getLocation() {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          } else {
-            alert("Geolocation is not supported by this browser.");
-          }
-        }
+    /**
+     * ALL FUNCTION RELATED TO GEO LOCATION TAB
+     * /
+    /**
+     * IMPORTANT GLOBAL VARIABLES lat, lng, geo_location_is_check
+     */
+    let lat = 0;
+    let lng = 0;
+    let geo_location_is_check = false;
 
+    function handleGeoLocationClick(cb) {
+      //alert("Clicked, new value = " + cb.checked);
+        if (cb.checked){
+            getLocation();
+        }
+        else{
+            geo_location_is_check = false;
+        }
+    }
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+    function showPosition(position) {
+      lat = position.coords.latitude;
+      lng = position.coords.longitude;
+      geo_location_is_check = true;
+      //console.log("lat " + lat + ", lng " + lng + " geo_is_checked " + geo_location_is_check);
+    }
+
+    function submitGeoLocation(){
+        let p_url = '/delete-marker-from-room';
+        if (geo_location_is_check) {
+            p_url = '/add-marker-to-room'
+        }
+        let room_id = $("#room_id");
+
+        $.ajax({
+        url: p_url,
+        data: {
+            lat: lat,
+            lng: lng,
+            room_id: room_id.val()
+        },
+        type: "POST",
+        dataType: "json",
+        })
+        .done(function (data) {
+            console.log(data['status']);
+            alert(data['message']);
+        })
+        .fail(function (xhr, status, errorThrown) {
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        })
+    }
         
     </script>
     <script src="{% static "js/room/djs.js" %}"></script>
