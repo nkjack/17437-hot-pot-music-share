@@ -11,7 +11,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=420, blank = True,  default="")
     age = models.IntegerField(default=0, validators = [MinValueValidator(0)])
-    img = models.ImageField(upload_to="profile-photos", blank=True, default = 'profile-photo/user_1.png')
+    img = models.ImageField(upload_to="profile-photos", blank=True, default = 'profile-photos/user_1.png')
     follows = models.ManyToManyField(User, related_name='follow')
     
     def __str__(self):

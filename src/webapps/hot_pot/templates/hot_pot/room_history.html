@@ -4,12 +4,12 @@
 {% load static %}
     <!-- This is the rooms OWNED by this user -->
     <div class="my-3 p-3 rounded box-shadow">
-        <h6 class="border-bottom border-gray pb-2 mb-0">Owned By Me</h6>
+        <h4 class="border-bottom border-gray pb-2 mb-0">Owned By Me</h4>
         
         <div class="row-card">
               
                 {% for room in owned %}
-                   <a href="{% url 'room' room.id %}" class="col-sm-2">
+                   <a href="{% url 'room' room.id %}" class="col-sm-3">
 
 
                   <div class="card bg-light rounded mx-2 my-3">
@@ -34,7 +34,7 @@
 
 <!--         This is the rooms which this user had joined -->
        <div class="my-3 p-3 rounded box-shadow">
-        <h6 class="border-bottom border-gray pb-2 mb-0">visited</h6>
+        <h4 class="border-bottom border-gray pb-2 mb-0">visited</h4>
         
         <div class="row-card">
 
