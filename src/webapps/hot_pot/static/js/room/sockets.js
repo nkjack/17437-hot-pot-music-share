@@ -20,7 +20,13 @@ socket.onmessage = function (e) {
         var chat_text = data['chat_text'];
         var username = data['username'];
 
+        // Append chat message
         $('#chat-log').append(`<span class="chat-msg"><strong>${username}: </strong>${chat_text}<br></span>`);
+
+        // Scroll the window to the bottom every time new message is received
+        var objDiv = document.getElementById("chat-log");
+        objDiv.scrollTop = objDiv.scrollHeight;
+
     } else if ('sync_request' in data) {
         // This is a sync request from a Listener, Host should sync Listeners now
         console.log('Received sync_request = ' + data + 'from username: ' + data['from_username']);

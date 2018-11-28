@@ -18,9 +18,3 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
 
     messageInputDom.value = '';
 };
-
-// Periodically scroll to the bottom of the chat log
-setInterval(function () {
-    var objDiv = document.getElementById("chat-log");
-    objDiv.scrollTop = objDiv.scrollHeight;
-}, 2000);
