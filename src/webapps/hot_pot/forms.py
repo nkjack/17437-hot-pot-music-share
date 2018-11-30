@@ -3,42 +3,48 @@ from django.core.validators import RegexValidator, EmailValidator
 
 from hot_pot.models import *
 
+USERNAME_REGEX = '^[a-zA-Z0-9_]{3,15}$'
+PASSWORD_REGEX = '^[a-zA-Z0-9\s!@#$%^&*()_\-=+\.\?]{3,128}$'
+USERNAME_MIN_LENGTH = 3
+USERNAME_MAX_LENGTH = 15
+PASSWORD_MIN_LENGTH = 3
+PASSWORD_MAX_LENGTH = 128
+PASSWORD_HELP_TEXT = 'Password must be more than 3 characters and smaller than 128 with only letters, numbers, spaeces, and any of !@#$%^&*()-=_+.?.'
 
 class RegistrationForm(forms.Form):
     email = forms.EmailField(required=True, label='Email',
                              validators=[EmailValidator()],
                              widget=forms.EmailInput(attrs={
                                  'class': 'form-control',
-                                 # 'placeholder':'executeOrder66@gmail.com'
                              }))
-    username = forms.CharField(required=True, min_length=3, max_length=15,
+    username = forms.CharField(required=True, min_length=USERNAME_MIN_LENGTH, max_length=USERNAME_MAX_LENGTH,
                                label='Username',
-                               validators=[RegexValidator('^[a-zA-Z0-9_]{3,15}$',
+                               validators=[RegexValidator(USERNAME_REGEX,
                                                           code='invalid_username',
                                                           message='Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
                                            ],
                                widget=forms.TextInput(attrs={
-                                   'maxlength': '15',
+                                   'maxlength': str(USERNAME_MAX_LENGTH),
                                    'class': 'form-control',
                                }),
                                help_text='Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
 
-    password1 = forms.CharField(required=True, min_length=3, max_length=15,
+    password1 = forms.CharField(required=True, min_length=PASSWORD_MIN_LENGTH, max_length=PASSWORD_MAX_LENGTH,
                                 label='Password',
-                                validators=[RegexValidator('^[a-zA-Z0-9_]{3,15}$',
-                                                           message='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
+                                validators=[RegexValidator(PASSWORD_REGEX,
+                                                           message='Password must be more than 3 characters and smaller than 128 with only letters, numbers, spaeces, and any of !@#$%^&*()-=_+.?.'),
                                             ],
                                 widget=forms.PasswordInput(attrs={
-                                    'maxlength': '15',
+                                    'maxlength': str(PASSWORD_MAX_LENGTH),
                                     'class': 'form-control',
                                 }),
-                                help_text='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
+                                help_text=PASSWORD_HELP_TEXT)
 
-    password2 = forms.CharField(required=True, min_length=3, max_length=15,
+    password2 = forms.CharField(required=True, min_length=PASSWORD_MIN_LENGTH, max_length=PASSWORD_MAX_LENGTH,
                                 label='Confirm Password',
 
                                 widget=forms.PasswordInput(attrs={
-                                    'maxlength': '15',
+                                    'maxlength': str(PASSWORD_MAX_LENGTH),
                                     'class': 'form-control',
                                 })
                                 )
@@ -65,7 +71,7 @@ class RegistrationForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(required=True,
 
-                               validators=[RegexValidator('^[a-z0-9_]{3,15}$',
+                               validators=[RegexValidator(USERNAME_REGEX,
                                                           code='invalid_username',
                                                           message='Invalid Username. You cannot login or register with malformatted username or password'),
                                            ],
@@ -74,8 +80,8 @@ class LoginForm(forms.Form):
                                    'placeholder': 'Username'}))
 
     password = forms.CharField(required=True,
-                               validators=[RegexValidator('^[a-zA-Z0-9_]{3,15}$',
-                                                          code='invalid_username',
+                               validators=[RegexValidator(PASSWORD_REGEX,
+                                                          code='invalid_password',
                                                           message='Invalid Password. You cannot login or register with malformatted username or password'),
                                            ],
 
@@ -161,25 +167,25 @@ class ProfileForm(forms.ModelForm):
 
 
 class PasswordForm(forms.Form):
-    password1 = forms.CharField(required=True, min_length=3, max_length=15,
+    password1 = forms.CharField(required=True, min_length=PASSWORD_MIN_LENGTH, max_length=PASSWORD_MAX_LENGTH,
                                 label='Password',
-                                validators=[RegexValidator(regex='^[a-zA-Z0-9_]{3,15}$',
-                                                           message='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.',
+                                validators=[RegexValidator(regex=PASSWORD_REGEX,
+                                                           message=PASSWORD_HELP_TEXT,
                                                            code='invalid password form'),
                                             ],
                                 widget=forms.PasswordInput(attrs={
-                                    'maxlength': '15',
+                                    'maxlength': str(PASSWORD_MAX_LENGTH),
                                     'class': 'form-control',
                                     'placeholder': '123456'}),
-                                help_text='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')
+                                help_text=PASSWORD_HELP_TEXT)
 
-    password2 = forms.CharField(required=True, min_length=3, max_length=15,
+    password2 = forms.CharField(required=True, min_length=PASSWORD_MIN_LENGTH, max_length=PASSWORD_MAX_LENGTH,
                                 label='Confirm Password',
-                                validators=[RegexValidator(regex='^[a-zA-Z0-9_]{3,15}$',
-                                                           message='Password must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
+                                validators=[RegexValidator(regex=PASSWORD_REGEX,
+                                                           message=PASSWORD_HELP_TEXT),
                                             ],
                                 widget=forms.PasswordInput(attrs={
-                                    'maxlength': '15',
+                                    'maxlength': str(PASSWORD_MAX_LENGTH),
                                     'class': 'form-control',
                                     'placeholder': '123456'})
                                 )
@@ -197,14 +203,14 @@ class PasswordForm(forms.Form):
 
 
 class UsernameForm(forms.Form):
-    username = forms.CharField(required=True, min_length=3, max_length=15,
+    username = forms.CharField(required=True, min_length=USERNAME_MIN_LENGTH, max_length=USERNAME_MAX_LENGTH,
                                label='Username',
                                validators=[RegexValidator('^[a-z0-9_]{3,15}$',
                                                           code='invalid_username',
                                                           message='Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.'),
                                            ],
                                widget=forms.TextInput(attrs={
-                                   'maxlength': '15',
+                                   'maxlength': str(USERNAME_MAX_LENGTH),
                                    'class': 'form-control',
                                    'placeholder': 'myUsername'}),
                                help_text='Username must be more than 3 characters and smaller than 15 with only letters, numbers and underscore.')

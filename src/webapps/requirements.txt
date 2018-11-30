@@ -8,3 +8,5 @@ django-redis-cache==1.8.1
 django_heroku==0.3.1
 redis==2.10.6
 channels-redis==2.3.1
+django-storages==1.7.1
+boto3==1.9.42

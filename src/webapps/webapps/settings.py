@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hot_pot',
     'channels',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,19 @@ django_heroku.settings(locals())
 if 'OPTIONS' in DATABASES['default']:
     # noinspection PyUnresolvedReferences
     del DATABASES['default']['OPTIONS']['sslmode']
+
+# S3 Storage
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'default')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS', 'default')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME', 'default')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+AWS_LOCATION = 'static'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
+DEFAULT_FILE_STORAGE = 'hot_pot.storage_backends.MediaStorage'
